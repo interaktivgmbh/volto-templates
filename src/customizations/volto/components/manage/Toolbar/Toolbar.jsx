@@ -37,6 +37,9 @@ import {
 } from '@plone/volto/helpers';
 import { Pluggable } from '@plone/volto/components/manage/Pluggable';
 
+{/* INTERAKTIV TEMPLATES */}
+import { SelectTemplateModal } from '@interaktiv.de/volto-templates/src/components/manage/toolbar/SelectTemplateModal';
+
 import penSVG from '@plone/volto/icons/pen.svg';
 import unlockSVG from '@plone/volto/icons/unlock.svg';
 import folderSVG from '@plone/volto/icons/folder.svg';
@@ -106,6 +109,10 @@ const messages = defineMessages({
   unlock: {
     id: 'Unlock',
     defaultMessage: 'Unlock',
+  },
+  selectTemplate: {
+    id: 'select Template',
+    defaultMessage: 'select Template',
   },
 });
 
@@ -193,6 +200,7 @@ class Toolbar extends Component {
       menuComponents: [],
       loadedComponents: [],
       hideToolbarBody: false,
+      showSelectTemplate: false,
     };
   }
 
@@ -314,12 +322,19 @@ class Toolbar extends Component {
   };
 
   handleClickOutside = (e) => {
+    if (this.state.showSelectTemplate) return;
     if (this.pusher && doesNodeContainClick(this.pusher, e)) return;
     this.closeMenu();
   };
 
   unlock = (e) => {
     this.props.unlockContent(getBaseUrl(this.props.pathname), true);
+  };
+
+  showSelectTemplateModal = () => {
+    this.setState(() => ({
+      showSelectTemplate: true,
+    }));
   };
 
   /**
@@ -555,6 +570,28 @@ class Toolbar extends Component {
                         />
                       )}
                     </button>
+
+                    {/* INTERAKTIV TEMPLATES */}
+                    {this.props.content &&
+                      !this.props.pathname.endsWith('/contents') &&
+                      this.state.showSelectTemplate && (
+                        <SelectTemplateModal
+                          open={this.state.showSelectTemplate}
+                        />
+                      )}
+                    <button
+                      className="select-template"
+                      aria-label={this.props.intl.formatMessage(messages.selectTemplate)}
+                      onClick={(e) => this.showSelectTemplateModal()}
+                      id="select-template"
+                    >
+                      <Icon
+                        className="select-template"
+                        name={addSVG}
+                        size="30px"
+                      />
+                    </button>
+
                   </>
                 )}
                 <Pluggable name="main.toolbar.top" />
