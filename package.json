@@ -1,0 +1,26 @@
+{
+  "name": "@interaktiv.de/volto-templates",
+  "version": "1.0.0",
+  "description": "Interaktiv Templates Volto Addon",
+  "main": "src/index.js",
+  "author": "Interaktiv GmbH",
+  "license": "MIT",
+  "keywords": [
+    "volto-addon",
+    "volto",
+    "plone",
+    "react"
+  ],
+  "scripts": {
+    "i18n": "rm -rf build/messages && NODE_ENV=production i18n --addon"
+  },
+  "dependencies": {
+    "@plone/scripts": "*",
+    "remixicon": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/jwt-decode": "~2.2.1",
+    "@types/react-router-config": "^5.0.6"
+  }
+}
