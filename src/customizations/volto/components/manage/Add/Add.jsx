@@ -140,11 +140,6 @@ class Add extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    // INTERAKTIV TEMPLATES
-
-    const template = '86fd1e49af7e42c0b7a2420578dd9240';
-
-
     this.props.getSchema(this.props.type, getBaseUrl(this.props.pathname), this.props.template);
     this.setState({ isClient: true });
   }
