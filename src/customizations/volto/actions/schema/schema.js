@@ -17,13 +17,19 @@ import {
  * @param {string} url Content url.
  * @returns {Object} Get schema action.
  */
-export function getSchema(type, url) {
+export function getSchema(type, url, template) {
   url = typeof url !== 'undefined' ? url : '';
+  // INTERAKTIV TEMPLATES
+  var path = `${url}/@types/${type}`;
+  if (template) {
+    path += `?template=${template}`;
+  }
+
   return {
     type: GET_SCHEMA,
     request: {
       op: 'get',
-      path: `${url}/@types/${type}`,
+      path: path,
     },
   };
 }

@@ -99,6 +99,7 @@ class Add extends Component {
       loaded: PropTypes.bool,
     }).isRequired,
     type: PropTypes.string,
+    template: PropTypes.string,
     location: PropTypes.objectOf(PropTypes.any),
   };
 
@@ -112,6 +113,7 @@ class Add extends Component {
     content: null,
     returnUrl: null,
     type: 'Default',
+    template: '',
   };
 
   /**
@@ -138,7 +140,12 @@ class Add extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    this.props.getSchema(this.props.type, getBaseUrl(this.props.pathname));
+    // INTERAKTIV TEMPLATES
+
+    const template = '86fd1e49af7e42c0b7a2420578dd9240';
+
+
+    this.props.getSchema(this.props.type, getBaseUrl(this.props.pathname), this.props.template);
     this.setState({ isClient: true });
   }
 
@@ -469,6 +476,7 @@ export default compose(
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
       type: qs.parse(props.location.search).type,
+      template: qs.parse(props.location.search).template,
     }),
     { createContent, getSchema, changeLanguage },
   ),
