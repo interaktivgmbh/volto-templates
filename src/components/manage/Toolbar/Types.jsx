@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { filter, find, isEmpty, map } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { flattenToAppURL, langmap, toBackendLang } from '@plone/volto/helpers';
 import config from '@plone/volto/registry';
+import { setShowTemplatesModal } from '../../../actions'
 
 const Types = ({ types, pathname, content, currentLanguage }) => {
+  const dispatch = useDispatch()
+
   const { settings } = config;
   return types.length > 0 ||
     (settings.isMultilingual && content['@components'].translations) ? (
@@ -38,6 +41,14 @@ const Types = ({ types, pathname, content, currentLanguage }) => {
                         .replace(' ', '-')}`}
                       className="item"
                       key={item.title}
+                      onClick={
+                        item['@id'].slice(item['@id'].lastIndexOf('/') + 1) === 'Document'
+                          ? (event) => {
+                              event.preventDefault()
+                              dispatch(setShowTemplatesModal(true))
+                            }
+                          : undefined
+                      }
                     >
                       <FormattedMessage id={item.title} />
                     </Link>
@@ -122,7 +133,7 @@ Types.propTypes = {
 export default connect(
   (state) => ({
     types: filter(state.types.types, 'addable'),
-    currentLanguage: state.intl.locale,
+    currentLanguage: state.intl.locale
   }),
   {},
 )(Types);
