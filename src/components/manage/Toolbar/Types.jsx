@@ -127,7 +127,7 @@ Types.propTypes = {
       addable: PropTypes.bool,
       title: PropTypes.string,
     }),
-  ).isRequired,
+  ).isRequired
 };
 
 export default connect(
