@@ -37,6 +37,8 @@ import {
 } from '@plone/volto/helpers';
 import { Pluggable } from '@plone/volto/components/manage/Pluggable';
 
+import SelectTemplateModal from './SelectTemplateModal';
+
 import penSVG from '@plone/volto/icons/pen.svg';
 import unlockSVG from '@plone/volto/icons/unlock.svg';
 import folderSVG from '@plone/volto/icons/folder.svg';
@@ -165,6 +167,7 @@ class Toolbar extends Component {
     unlockRequest: PropTypes.objectOf(PropTypes.any),
     inner: PropTypes.element.isRequired,
     hideDefaultViewButtons: PropTypes.bool,
+    showTemplatesModal: PropTypes.bool
   };
 
   /**
@@ -599,6 +602,7 @@ class Toolbar extends Component {
             </div>
           </div>
           <div className="pusher" />
+          <SelectTemplateModal show={this.props.showTemplatesModal} />
         </>
       )
     );
@@ -619,6 +623,7 @@ export default compose(
       pathname: props.pathname,
       types: filter(state.types.types, 'addable'),
       unlockRequest: state.content.unlock,
+      showTemplatesModal: state.showTemplatesModal.show
     }),
     { getTypes, listActions, setExpandedToolbar, unlockContent },
   ),
