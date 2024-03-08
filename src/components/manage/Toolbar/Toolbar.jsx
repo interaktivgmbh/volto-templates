@@ -245,6 +245,11 @@ class Toolbar extends Component {
     if (this.props.unlockRequest.loading && nextProps.unlockRequest.loaded) {
       this.props.listActions(getBaseUrl(nextProps.pathname));
     }
+
+    // Templates Modal
+    if (nextProps.showTemplatesModal && !this.props.showTemplatesModal) {
+      this.closeMenu()
+    }
   }
 
   /**
