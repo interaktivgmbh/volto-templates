@@ -167,7 +167,11 @@ class Toolbar extends Component {
     unlockRequest: PropTypes.objectOf(PropTypes.any),
     inner: PropTypes.element.isRequired,
     hideDefaultViewButtons: PropTypes.bool,
-    showTemplatesModal: PropTypes.bool
+    showTemplatesModal: PropTypes.bool,
+    backendAddons: PropTypes.objectOf({
+      availableAddons: PropTypes.arrayOf(PropTypes.object),
+      installedAddons: PropTypes.arrayOf(PropTypes.object)
+    })
   };
 
   /**
@@ -195,7 +199,7 @@ class Toolbar extends Component {
       menuStyle: {},
       menuComponents: [],
       loadedComponents: [],
-      hideToolbarBody: false,
+      hideToolbarBody: false
     };
   }
 
@@ -628,7 +632,8 @@ export default compose(
       pathname: props.pathname,
       types: filter(state.types.types, 'addable'),
       unlockRequest: state.content.unlock,
-      showTemplatesModal: state.showTemplatesModal.show
+      showTemplatesModal: state.showTemplatesModal.show,
+      backendAddons: state.addons
     }),
     { getTypes, listActions, setExpandedToolbar, unlockContent },
   ),
