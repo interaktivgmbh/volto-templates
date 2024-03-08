@@ -3,7 +3,21 @@
   "version": "1.0.0",
   "description": "Interaktiv Templates Volto Addon",
   "main": "src/index.js",
-  "author": "Interaktiv GmbH",
+  "author": {
+    "name": "Interaktiv GmbH",
+    "url": "https://interaktiv.de",
+    "email": "kontakt@interaktiv.de"
+  },
+  "contributors": [
+    {
+      "name": "Jan Mevißen",
+      "url": "https://github.com/jmevissen"
+    },
+    {
+      "name": "Mike Kühnapfel",
+      "url": "https://github.com/veyxos"
+    }
+  ],
   "license": "MIT",
   "keywords": [
     "volto-addon",
