@@ -20,8 +20,8 @@ EOT
 FROM plone/frontend-prod-config:${VOLTO_VERSION}
 
 LABEL maintainer="maintainer <maintainer@plone.org>" \
-      org.label-schema.name="ghcr.io/test" \
-      org.label-schema.description="Volto project with test" \
+      org.label-schema.name="ghcr.io/volto-templates" \
+      org.label-schema.description="Volto project with volto-templates" \
       org.label-schema.vendor="Plone CMS"
 
 COPY --from=builder /app/ /app/
