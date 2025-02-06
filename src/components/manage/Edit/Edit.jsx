@@ -273,6 +273,11 @@ class Edit extends Component {
       this.setState({ newId: data.id });
     }
     this.props.updateContent(getBaseUrl(this.props.pathname), data, headers);
+
+    if (this.props.templates.some((template) => template.UID === this.props.content['UID'])
+      && Object.keys(data).length !== 0) {
+      // TODO: update template thumbnail, if template has changes
+    }
   }
 
   /**

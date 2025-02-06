@@ -201,6 +201,10 @@ class Add extends Component {
           language: this.props.location.state.language,
         }),
     });
+
+    if(this.props.type === 'Template') {
+      // TODO: generate template thumbnail
+    }
   }
 
   /**
