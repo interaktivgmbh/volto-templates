@@ -19,7 +19,7 @@ const TemplateCard = ({ template, baseUrl, onSelect }) => (
   <Card key={template.UID}>
     <Card.Content>
       <Card.Header>{template.title}</Card.Header>
-      <Card.Description>{template.title}</Card.Description>
+      <Card.Description>{template?.template_description}</Card.Description>
     </Card.Content>
     <Card.Content extra>
       <Button

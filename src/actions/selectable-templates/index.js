@@ -7,7 +7,7 @@ export function getSelectableTemplates() {
     type: GET_SELECTABLE_TEMPLATES,
     request: {
       op: 'get',
-      path: `/@search?portal_type=Template&metadata_fields=UID`,
+      path: `/@search?portal_type=Template&metadata_fields=UID&metadata_fields=template_description`,
     },
   };
 }
