@@ -10,3 +10,134 @@ msgstr ""
 "Content-Type: \n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. Default: "Add"
+#: components/manage/Toolbar/Toolbar
+msgid "Add"
+msgstr ""
+
+#. Default: "Add Content…"
+#: components/manage/Toolbar/Types
+msgid "Add Content"
+msgstr ""
+
+#. Default: "Add Translation…"
+#: components/manage/Toolbar/Types
+msgid "Add Translation…"
+msgstr ""
+
+#. Default: "Add {type}"
+#: components/manage/Add/Add
+msgid "Add {type}"
+msgstr ""
+
+#. Default: "Back"
+#: components/manage/Toolbar/Toolbar
+msgid "Back"
+msgstr ""
+
+#. Default: "Cancel"
+#: components/manage/Add/Add
+msgid "Cancel"
+msgstr ""
+
+#. Default: "Collection"
+#: components/manage/Toolbar/Toolbar
+msgid "Collection"
+msgstr ""
+
+#. Default: "Contents"
+#: components/manage/Toolbar/Toolbar
+msgid "Contents"
+msgstr ""
+
+#. Default: "Edit"
+#: components/manage/Toolbar/Toolbar
+msgid "Edit"
+msgstr ""
+
+#. Default: "Error"
+#: components/manage/Add/Add
+msgid "Error"
+msgstr ""
+
+#. Default: "File"
+#: components/manage/Toolbar/Toolbar
+msgid "File"
+msgstr ""
+
+#. Default: "Link"
+#: components/manage/Toolbar/Toolbar
+msgid "Link"
+msgstr ""
+
+#. Default: "More"
+#: components/manage/Toolbar/Toolbar
+msgid "More"
+msgstr ""
+
+#. Default: "News Item"
+#: components/manage/Toolbar/Toolbar
+msgid "News Item"
+msgstr ""
+
+#. Default: "Page"
+#: components/manage/Toolbar/Toolbar
+msgid "Page"
+msgstr ""
+
+#. Default: "Personal Information"
+#: components/manage/Toolbar/Toolbar
+msgid "Personal Information"
+msgstr ""
+
+#. Default: "Personal Preferences"
+#: components/manage/Toolbar/Toolbar
+msgid "Personal Preferences"
+msgstr ""
+
+#. Default: "Personal tools"
+#: components/manage/Toolbar/Toolbar
+msgid "Personal tools"
+msgstr ""
+
+#. Default: "Save"
+#: components/manage/Add/Add
+msgid "Save"
+msgstr ""
+
+#. Default: "Shrink toolbar"
+#: components/manage/Toolbar/Toolbar
+msgid "Shrink toolbar"
+msgstr ""
+
+#. Default: "Translate to {lang}"
+#: components/manage/Add/Add
+#: components/manage/Toolbar/Types
+msgid "Translate to {lang}"
+msgstr ""
+
+#. Default: "Unlock"
+#: components/manage/Toolbar/Toolbar
+msgid "Unlock"
+msgstr ""
+
+#. Default: "Continue without template"
+#: messages
+msgid "modalWithoutTemplateButton"
+msgstr "Ohne Vorlage fortfahren"
+
+#. Default: "No available templates"
+#: messages
+msgid "noAvailableTemplates"
+msgstr "Keine Vorlagen verfügbar"
+
+#. Default: "Select template"
+#: messages
+msgid "selectTemplateButton"
+msgstr "Vorlage auswählen"
+
+#. Default: "Select a template"
+#: messages
+msgid "templateModalTitle"
+msgstr "Wähle eine Vorlage aus"
