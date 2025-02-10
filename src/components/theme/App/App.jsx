@@ -20,6 +20,7 @@ import config from '@plone/volto/registry';
 import { PluggablesProvider } from '@plone/volto/components/manage/Pluggable';
 import { visitBlocks } from '@plone/volto/helpers/Blocks/Blocks';
 import { injectIntl } from 'react-intl';
+import { createFileName } from 'use-react-screenshot';
 
 import Error from '@plone/volto/error';
 
@@ -52,6 +53,7 @@ import MultilingualRedirector from '@plone/volto/components/theme/MultilingualRe
 import WorkingCopyToastsFactory from '@plone/volto/components/manage/WorkingCopyToastsFactory/WorkingCopyToastsFactory';
 import LockingToastsFactory from '@plone/volto/components/manage/LockingToastsFactory/LockingToastsFactory';
 import qs from 'query-string';
+import { withScreenshot } from '../../../hoc/withScreenshot';
 
 /**
  * @export
@@ -66,6 +68,8 @@ export class App extends Component {
    */
 
   static propTypes = {
+    takeScreenshot: PropTypes.func.isRequired,
+    thumbnailRefTrigger: PropTypes.number,
     pathname: PropTypes.string.isRequired,
   };
 
@@ -78,6 +82,7 @@ export class App extends Component {
   constructor(props) {
     super(props);
     this.mainRef = React.createRef();
+    this.thumbnailRef = React.createRef();
   }
 
   /**
@@ -113,6 +118,22 @@ export class App extends Component {
       }
     }
   };
+
+  downloadThumbnail = (image, { name = 'img', extension = 'jpg' } = {}) => {
+    const a = document.createElement('a');
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.thumbnailRefTrigger !== this.props.thumbnailRefTrigger && this.thumbnailRef.current) {
+      setTimeout(() => {
+        this.props.takeScreenshot(this.thumbnailRef.current)
+          .then((image) => this.downloadThumbnail(image));
+      }, 1500);
+    }
+  }
 
   /**
    * Render method.
@@ -160,34 +181,36 @@ export class App extends Component {
           })}
         />
         <SkipLinks />
-        <Header pathname={path} />
-        <Breadcrumbs pathname={path} />
-        <MultilingualRedirector
-          pathname={this.props.pathname}
-          contentLanguage={this.props.content?.language?.token}
-        >
-          <Segment
-            basic
-            className="content-area"
-            onClick={this.dispatchContentClick}
+        <div ref={this.thumbnailRef}>
+          <Header pathname={path} />
+          <Breadcrumbs pathname={path} />
+          <MultilingualRedirector
+            pathname={this.props.pathname}
+            contentLanguage={this.props.content?.language?.token}
           >
-            <main ref={this.mainRef}>
-              <OutdatedBrowser />
-              {this.props.connectionRefused ? (
-                <ConnectionRefusedView />
-              ) : this.state.hasError ? (
-                <Error
-                  message={this.state.error.message}
-                  stackTrace={this.state.errorInfo.componentStack}
-                />
-              ) : (
-                renderRoutes(this.props.route.routes, {
-                  staticContext: this.props.staticContext,
-                })
-              )}
-            </main>
-          </Segment>
-        </MultilingualRedirector>
+            <Segment
+              basic
+              className="content-area"
+              onClick={this.dispatchContentClick}
+            >
+              <main ref={this.mainRef}>
+                <OutdatedBrowser />
+                {this.props.connectionRefused ? (
+                  <ConnectionRefusedView />
+                ) : this.state.hasError ? (
+                  <Error
+                    message={this.state.error.message}
+                    stackTrace={this.state.errorInfo.componentStack}
+                  />
+                ) : (
+                  renderRoutes(this.props.route.routes, {
+                    staticContext: this.props.staticContext,
+                  })
+                )}
+              </main>
+            </Segment>
+          </MultilingualRedirector>
+        </div>
         <Footer />
         <LockingToastsFactory
           content={this.props.content}
@@ -317,6 +340,7 @@ export function connectAppComponent(AppComponent) {
           __SERVER__ && dispatch(getWorkflow(getBaseUrl(location.pathname))),
       },
     ]),
+    withScreenshot,
     injectIntl,
     connect(
       (state, props) => ({
@@ -329,6 +353,7 @@ export function connectAppComponent(AppComponent) {
         apiError: state.apierror.error,
         connectionRefused: state.apierror.connectionRefused,
         type: qs.parse(props.location.search).type,
+        thumbnailRefTrigger: state.templateThumbnail.trigger,
       }),
       {},
     ),
