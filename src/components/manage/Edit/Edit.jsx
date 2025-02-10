@@ -48,6 +48,7 @@ import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
 
 import config from '@plone/volto/registry';
+import { triggerThumbnail } from '../../../actions';
 
 const messages = defineMessages({
   edit: {
@@ -84,6 +85,7 @@ class Edit extends Component {
    * @static
    */
   static propTypes = {
+    triggerThumbnail: PropTypes.func.isRequired,
     updateContent: PropTypes.func.isRequired,
     getContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
@@ -277,6 +279,7 @@ class Edit extends Component {
     if (this.props.templates.some((template) => template.UID === this.props.content['UID'])
       && Object.keys(data).length !== 0) {
       // TODO: update template thumbnail, if template has changes
+      this.props.triggerThumbnail();
     }
   }
 
@@ -556,6 +559,7 @@ export default compose(
       lockContent,
       unlockContent,
       setFormData,
+      triggerThumbnail
     },
   ),
   preloadLazyLibs('cms'),
