@@ -40,6 +40,10 @@
     "release-alpha": "release-it --preRelease=alpha",
     "release-rc": "release-it --preRelease=rc"
   },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "use-react-screenshot": "^4.0.0"
+  },
   "devDependencies": {
     "@babel/eslint-parser": "7.23.10",
     "@plone/scripts": "^3.5.0",
