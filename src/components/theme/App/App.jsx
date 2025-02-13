@@ -21,6 +21,7 @@ import { PluggablesProvider } from '@plone/volto/components/manage/Pluggable';
 import { visitBlocks } from '@plone/volto/helpers/Blocks/Blocks';
 import { injectIntl } from 'react-intl';
 import { createFileName } from 'use-react-screenshot';
+import { v4 as uuidv4 } from 'uuid';
 
 import Error from '@plone/volto/error';
 
@@ -41,6 +42,7 @@ import {
   isCmsUi,
 } from '@plone/volto/helpers';
 import {
+  createContent,
   getBreadcrumbs,
   getContent,
   getNavigation,
@@ -68,6 +70,8 @@ export class App extends Component {
    */
 
   static propTypes = {
+    getContent: PropTypes.func.isRequired,
+    createContent: PropTypes.func.isRequired,
     takeScreenshot: PropTypes.func.isRequired,
     thumbnailRefTrigger: PropTypes.number,
     pathname: PropTypes.string.isRequired,
@@ -130,8 +134,25 @@ export class App extends Component {
     if (prevProps.thumbnailRefTrigger !== this.props.thumbnailRefTrigger && this.thumbnailRef.current) {
       setTimeout(() => {
         this.props.takeScreenshot(this.thumbnailRef.current)
-          .then((image) => this.downloadThumbnail(image));
-      }, 1500);
+          .then((image) => {
+            const fields = image.match(/^data:(.*);(.*),(.*)$/);
+            this.props.createContent(
+              getBaseUrl(this.props.pathname),
+              {
+                '@type': 'Image',
+                title: 'thumbnail',
+                image: {
+                  data: fields[3],
+                  encoding: fields[2],
+                  'content-type': fields[1],
+                  filename: 'thumbnail',
+                },
+                thumbnailUpload: true,
+              },
+              `thumbnail-upload-${uuidv4()}`,
+            );
+          });
+      }, 500);
     }
   }
 
@@ -355,7 +376,7 @@ export function connectAppComponent(AppComponent) {
         type: qs.parse(props.location.search).type,
         thumbnailRefTrigger: state.templateThumbnail.trigger,
       }),
-      {},
+      { createContent, getContent },
     ),
   )(AppComponent);
 }
