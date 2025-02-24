@@ -123,36 +123,29 @@ export class App extends Component {
     }
   };
 
-  downloadThumbnail = (image, { name = 'img', extension = 'jpg' } = {}) => {
-    const a = document.createElement('a');
-    a.href = image;
-    a.download = createFileName(extension, name);
-    a.click();
-  };
-
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.thumbnailRefTrigger !== this.props.thumbnailRefTrigger && this.thumbnailRef.current) {
       setTimeout(() => {
         this.props.takeScreenshot(this.thumbnailRef.current)
-          .then((image) => {
-            const fields = image.match(/^data:(.*);(.*),(.*)$/);
-            this.props.createContent(
-              getBaseUrl(this.props.pathname),
-              {
-                '@type': 'Image',
-                title: 'thumbnail',
-                image: {
-                  data: fields[3],
-                  encoding: fields[2],
-                  'content-type': fields[1],
-                  filename: 'thumbnail',
-                },
-                thumbnailUpload: true,
+        .then((image) => {
+          const fields = image.match(/^data:(.*);(.*),(.*)$/);
+          this.props.createContent(
+            getBaseUrl(this.props.pathname),
+            {
+              '@type': 'Image',
+              title: 'thumbnail',
+              image: {
+                data: fields[3],
+                encoding: fields[2],
+                'content-type': fields[1],
+                filename: 'thumbnail',
               },
-              `thumbnail-upload-${uuidv4()}`,
-            );
-          });
-      }, 500);
+              thumbnailUpload: true,
+            },
+            `thumbnail-upload-${uuidv4()}`,
+          );
+        });
+      }, 500)
     }
   }
 
