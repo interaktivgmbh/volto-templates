@@ -18,7 +18,9 @@ import { useHistory } from 'react-router';
 
 const TemplateCard = ({ template, baseUrl, onSelect }) => (
   <Card key={template.UID}>
-    <Image src={template?.template_thumbnail ? `${template?.template_thumbnail}/@@images/image/great`: '/white-image.png'} wrapped ui={false} />
+    {template?.template_thumbnail && (
+          <Image src={`${template?.template_thumbnail}/@@images/image/large`} wrapped ui={false} />
+    )}
     <Card.Content>
       <Card.Header>{template.title}</Card.Header>
       <Card.Description>{template?.template_description}</Card.Description>
@@ -76,7 +78,6 @@ const TemplateModal = ({ show = false }) => {
 
   useEffect(() => {
     dispatch(getSelectableTemplates());
-    console.log(templates)
   }, [dispatch]);
 
   if (!show) return null;
