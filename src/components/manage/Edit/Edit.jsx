@@ -276,9 +276,9 @@ class Edit extends Component {
     }
     this.props.updateContent(getBaseUrl(this.props.pathname), data, headers);
 
+    // triggers the thumbnail creation, if template has changes
     if (this.props.templates.some((template) => template.UID === this.props.content['UID'])
       && Object.keys(data).length !== 0) {
-      // TODO: update template thumbnail, if template has changes
       this.props.triggerThumbnail();
     }
   }
