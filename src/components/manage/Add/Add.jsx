@@ -204,10 +204,8 @@ class Add extends Component {
         }),
     });
 
-    if(this.props.type === 'Template') {
-      // TODO: generate template thumbnail
-
       // Triggers the process to fetch the ref with the current content at the time of saving.
+    if(this.props.type === 'Template') {
       this.props.triggerThumbnail();
     }
   }
