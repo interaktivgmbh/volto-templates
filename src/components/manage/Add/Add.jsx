@@ -206,6 +206,7 @@ class Add extends Component {
 
       // Triggers the process to fetch the ref with the current content at the time of saving.
     if(this.props.type === 'Template') {
+      this.setState({ formSelected: null });
       this.props.triggerThumbnail();
     }
   }

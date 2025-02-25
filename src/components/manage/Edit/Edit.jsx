@@ -279,6 +279,7 @@ class Edit extends Component {
     // triggers the thumbnail creation, if template has changes
     if (this.props.templates.some((template) => template.UID === this.props.content['UID'])
       && Object.keys(data).length !== 0) {
+       this.setState({ formSelected: null });
       this.props.triggerThumbnail();
     }
   }
