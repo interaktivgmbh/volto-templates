@@ -38,6 +38,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: components/manage/Add/Add
+#: components/manage/Edit/Edit
 msgid "Cancel"
 msgstr ""
 
@@ -56,8 +57,14 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+#. Default: "Edit {title}"
+#: components/manage/Edit/Edit
+msgid "Edit {title}"
+msgstr ""
+
 #. Default: "Error"
 #: components/manage/Add/Add
+#: components/manage/Edit/Edit
 msgid "Error"
 msgstr ""
 
@@ -103,12 +110,18 @@ msgstr ""
 
 #. Default: "Save"
 #: components/manage/Add/Add
+#: components/manage/Edit/Edit
 msgid "Save"
 msgstr ""
 
 #. Default: "Shrink toolbar"
 #: components/manage/Toolbar/Toolbar
 msgid "Shrink toolbar"
+msgstr ""
+
+#. Default: "There are some errors."
+#: components/manage/Edit/Edit
+msgid "There are some errors."
 msgstr ""
 
 #. Default: "Translate to {lang}"
@@ -121,6 +134,11 @@ msgstr ""
 #: components/manage/Toolbar/Toolbar
 msgid "Unlock"
 msgstr ""
+
+#. Default: "Cancel"
+#: messages
+msgid "modalCancelButton"
+msgstr "Abbrechen"
 
 #. Default: "Continue without template"
 #: messages

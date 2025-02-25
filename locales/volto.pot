@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plone\n"
-"POT-Creation-Date: 2025-01-30T11:10:43.388Z\n"
+"POT-Creation-Date: 2025-02-25T14:43:02.377Z\n"
 "Last-Translator: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -40,6 +40,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: components/manage/Add/Add
+#: components/manage/Edit/Edit
 msgid "Cancel"
 msgstr ""
 
@@ -58,8 +59,14 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+#. Default: "Edit {title}"
+#: components/manage/Edit/Edit
+msgid "Edit {title}"
+msgstr ""
+
 #. Default: "Error"
 #: components/manage/Add/Add
+#: components/manage/Edit/Edit
 msgid "Error"
 msgstr ""
 
@@ -105,12 +112,18 @@ msgstr ""
 
 #. Default: "Save"
 #: components/manage/Add/Add
+#: components/manage/Edit/Edit
 msgid "Save"
 msgstr ""
 
 #. Default: "Shrink toolbar"
 #: components/manage/Toolbar/Toolbar
 msgid "Shrink toolbar"
+msgstr ""
+
+#. Default: "There are some errors."
+#: components/manage/Edit/Edit
+msgid "There are some errors."
 msgstr ""
 
 #. Default: "Translate to {lang}"
@@ -122,6 +135,11 @@ msgstr ""
 #. Default: "Unlock"
 #: components/manage/Toolbar/Toolbar
 msgid "Unlock"
+msgstr ""
+
+#. Default: "Cancel"
+#: messages
+msgid "modalCancelButton"
 msgstr ""
 
 #. Default: "Continue without template"
