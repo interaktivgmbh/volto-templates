@@ -124,8 +124,7 @@ export class App extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.thumbnailRefTrigger !== this.props.thumbnailRefTrigger && this.thumbnailRef.current) {
-      setTimeout(() => {
-        this.props.takeScreenshot(this.thumbnailRef.current)
+      this.props.takeScreenshot(this.thumbnailRef.current)
         .then((image) => {
           const fields = image.match(/^data:(.*);(.*),(.*)$/);
           this.props.createContent(
@@ -144,7 +143,6 @@ export class App extends Component {
             `thumbnail-upload-${uuidv4()}`,
           );
         });
-      }, 500)
     }
   }
 
