@@ -49,7 +49,12 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
 );
 
 TemplateCard.propTypes = {
-  template: propTypes.object.isRequired,
+  template: propTypes.shape({
+    UID: propTypes.string.isRequired,
+    title: propTypes.string.isRequired,
+    template_thumbnail: propTypes.string,
+    template_description: propTypes.string,
+  }).isRequired,
   baseUrl: propTypes.string.isRequired,
   onSelect: propTypes.func.isRequired,
 };
