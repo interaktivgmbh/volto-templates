@@ -7,7 +7,7 @@ import {
   CardGroup,
   Card,
   Button,
-  Image
+  Image,
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectableTemplates, setShowTemplatesModal } from '../../actions';
@@ -16,10 +16,22 @@ import propTypes from 'prop-types';
 import messages from '../../messages';
 import { useHistory } from 'react-router';
 
-const TemplateCard = ({ template, baseUrl, onSelect }) => (
+const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
   <Card key={template.UID}>
     {template?.template_thumbnail && (
-          <Image src={`${template?.template_thumbnail}/@@images/image/large`} wrapped ui={false} />
+      <div
+        className="card-image-wrapper"
+        onClick={() =>
+          window.open(`${template?.template_thumbnail}/@@images/image/large`,
+            '_blank',
+            'noopener,noreferrer')}
+      >
+        <Image
+          src={`${template?.template_thumbnail}/@@images/image/large`}
+          wrapped
+          ui={false}
+        />
+      </div>
     )}
     <Card.Content>
       <Card.Header>{template.title}</Card.Header>
@@ -30,7 +42,7 @@ const TemplateCard = ({ template, baseUrl, onSelect }) => (
         className="select-template-button"
         onClick={() => onSelect(`${baseUrl}&template=${template.UID}`)}
       >
-        {useIntl().formatMessage(messages.selectTemplateButton)}
+        {intl.formatMessage(messages.selectTemplateButton)}
       </Button>
     </Card.Content>
   </Card>
@@ -42,16 +54,16 @@ TemplateCard.propTypes = {
   onSelect: propTypes.func.isRequired,
 };
 
-const ModalButtons = ({ onCancel, onContinueWithoutTemplate, baseUrl }) => (
+const ModalButtons = ({ onCancel, onContinueWithoutTemplate, baseUrl, intl }) => (
   <ModalActions>
     <Button onClick={onCancel}>
-      {useIntl().formatMessage(messages.modalCancelButton)}
+      {intl.formatMessage(messages.modalCancelButton)}
     </Button>
     <Button
       className="button"
       onClick={() => onContinueWithoutTemplate(baseUrl)}
     >
-      {useIntl().formatMessage(messages.modalWithoutTemplateButton)}
+      {intl.formatMessage(messages.modalWithoutTemplateButton)}
     </Button>
   </ModalActions>
 );
@@ -65,7 +77,7 @@ ModalButtons.propTypes = {
 const TemplateModal = ({ show = false }) => {
   const dispatch = useDispatch();
   const { items: templates = [] } = useSelector(
-    (state) => state?.selectabletemplates || {}
+    (state) => state?.selectabletemplates || {},
   );
   const intl = useIntl();
   const history = useHistory();
@@ -96,6 +108,7 @@ const TemplateModal = ({ show = false }) => {
                 template={template}
                 baseUrl={baseUrl}
                 onSelect={handleButtonClick}
+                intl={intl}
               />
             ))
           )}
@@ -105,6 +118,7 @@ const TemplateModal = ({ show = false }) => {
         onCancel={() => dispatch(setShowTemplatesModal(false))}
         onContinueWithoutTemplate={handleButtonClick}
         baseUrl={baseUrl}
+        intl={intl}
       />
     </Modal>
   );
