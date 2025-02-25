@@ -103,7 +103,7 @@ const TemplateModal = ({ show = false }) => {
     <Modal open={show} className="select-template-modal">
       <Header>{intl.formatMessage(messages.templateModalTitle)}</Header>
       <ModalContent>
-        <CardGroup className="selectable-templates">
+        <CardGroup itemsPerRow={3} className="selectable-templates">
           {templates.length === 0 ? (
             <strong>{intl.formatMessage(messages.noAvailableTemplates)}</strong>
           ) : (
