@@ -20,7 +20,6 @@ import config from '@plone/volto/registry';
 import { PluggablesProvider } from '@plone/volto/components/manage/Pluggable';
 import { visitBlocks } from '@plone/volto/helpers/Blocks/Blocks';
 import { injectIntl } from 'react-intl';
-import { createFileName } from 'use-react-screenshot';
 import { v4 as uuidv4 } from 'uuid';
 
 import Error from '@plone/volto/error';
