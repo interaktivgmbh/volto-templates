@@ -72,7 +72,7 @@ export class App extends Component {
     getContent: PropTypes.func.isRequired,
     createContent: PropTypes.func.isRequired,
     takeScreenshot: PropTypes.func.isRequired,
-    thumbnailRefTrigger: PropTypes.number,
+    thumbnailCreationTrigger: PropTypes.number,
     pathname: PropTypes.string.isRequired,
   };
 
@@ -123,7 +123,7 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.thumbnailRefTrigger !== this.props.thumbnailRefTrigger && this.thumbnailRef.current) {
+    if (prevProps.thumbnailCreationTrigger !== this.props.thumbnailCreationTrigger && this.thumbnailRef.current) {
       this.props.takeScreenshot(this.thumbnailRef.current)
         .then((image) => {
           const fields = image.match(/^data:(.*);(.*),(.*)$/);
@@ -364,7 +364,7 @@ export function connectAppComponent(AppComponent) {
         apiError: state.apierror.error,
         connectionRefused: state.apierror.connectionRefused,
         type: qs.parse(props.location.search).type,
-        thumbnailRefTrigger: state.templateThumbnail.trigger,
+        thumbnailCreationTrigger: state.templateThumbnail.trigger,
       }),
       { createContent, getContent },
     ),
