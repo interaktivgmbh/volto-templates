@@ -1,7 +1,7 @@
-import { TRIGGER_THUMBNAIL } from '../../constants/ActionTypes';
+import { TRIGGER_THUMBNAIL_CREATION } from '../../constants/ActionTypes';
 
-export function triggerThumbnail() {
+export function triggerThumbnailCreation() {
   return {
-    type: TRIGGER_THUMBNAIL
+    type: TRIGGER_THUMBNAIL_CREATION
   }
 }

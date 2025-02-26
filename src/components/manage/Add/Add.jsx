@@ -44,7 +44,7 @@ import config from '@plone/volto/registry';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
-import { triggerThumbnail } from '../../../actions';
+import { triggerThumbnailCreation } from '../../../actions';
 
 const messages = defineMessages({
   add: {
@@ -81,7 +81,7 @@ class Add extends Component {
    * @static
    */
   static propTypes = {
-    triggerThumbnail: PropTypes.func.isRequired,
+    triggerThumbnailCreation: PropTypes.func.isRequired,
     createContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
     pathname: PropTypes.string.isRequired,
@@ -207,7 +207,7 @@ class Add extends Component {
       // Triggers the process to fetch the ref with the current content at the time of saving.
     if(this.props.type === 'Template') {
       this.setState({ formSelected: null });
-      this.props.triggerThumbnail();
+      this.props.triggerThumbnailCreation();
     }
   }
 
@@ -481,7 +481,7 @@ export default compose(
       type: qs.parse(props.location.search).type,
       template: qs.parse(props.location.search).template,
     }),
-    { createContent, getSchema, changeLanguage, triggerThumbnail },
+    { createContent, getSchema, changeLanguage, triggerThumbnailCreation },
   ),
   preloadLazyLibs('cms'),
 )(Add);
