@@ -52,6 +52,11 @@ msgstr ""
 msgid "Contents"
 msgstr ""
 
+#. Default: "Create template based on {page}"
+#: components/theme/modals/CreateTemplateModal
+msgid "Create template based on {page}"
+msgstr "Vorlage wird basierend auf {page} erstellt"
+
 #. Default: "Edit"
 #: components/manage/Toolbar/Toolbar
 msgid "Edit"
@@ -135,6 +140,16 @@ msgstr ""
 msgid "Unlock"
 msgstr ""
 
+#. Default: "Create template"
+#: messages
+msgid "createTemplateButton"
+msgstr "Template erstellen"
+
+#. Default: "Create a new template"
+#: messages
+msgid "createTemplateModalTitle"
+msgstr "Erstelle eine neue Vorlage"
+
 #. Default: "Cancel"
 #: messages
 msgid "modalCancelButton"
@@ -154,6 +169,21 @@ msgstr "Keine Vorlagen verfügbar"
 #: messages
 msgid "selectTemplateButton"
 msgstr "Vorlage auswählen"
+
+#. Default: "Description"
+#: messages
+msgid "templateFormDescription"
+msgstr "Beschreibung"
+
+#. Default: "This field is required"
+#: messages
+msgid "templateFormRequiredField"
+msgstr "Dieses Feld ist erforderlich"
+
+#. Default: "Title"
+#: messages
+msgid "templateFormTitle"
+msgstr "Titel"
 
 #. Default: "Select a template"
 #: messages

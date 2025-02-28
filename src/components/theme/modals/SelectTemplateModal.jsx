@@ -10,10 +10,10 @@ import {
   Image,
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectableTemplates, setShowTemplatesModal } from '../../actions';
+import { getSelectableTemplates, setShowTemplatesModal } from '../../../actions';
 import { useIntl } from 'react-intl';
 import propTypes from 'prop-types';
-import messages from '../../messages';
+import messages from '../../../messages';
 import { useHistory } from 'react-router';
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
@@ -79,7 +79,7 @@ ModalButtons.propTypes = {
   baseUrl: propTypes.string.isRequired,
 };
 
-const TemplateModal = ({ show = false }) => {
+const SelectTemplateModal = ({ show = false }) => {
   const dispatch = useDispatch();
   const { items: templates = [] } = useSelector(
     (state) => state?.selectabletemplates || {},
@@ -129,8 +129,8 @@ const TemplateModal = ({ show = false }) => {
   );
 };
 
-TemplateModal.propTypes = {
+SelectTemplateModal.propTypes = {
   show: propTypes.bool,
 };
 
-export default TemplateModal;
+export default SelectTemplateModal;
