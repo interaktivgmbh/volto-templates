@@ -95,7 +95,7 @@ const TemplateModal = ({ show = false }) => {
 
   useEffect(() => {
     dispatch(getSelectableTemplates());
-  }, [dispatch]);
+  }, [show]);
 
   if (!show) return null;
 
