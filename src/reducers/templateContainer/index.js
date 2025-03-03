@@ -4,7 +4,7 @@ export const initialState = {
   error: null,
   loaded: false,
   loading: false,
-  items: [],
+  data: [],
 };
 
 export default function templateContainer(state = initialState, action = {}) {
@@ -22,7 +22,7 @@ export default function templateContainer(state = initialState, action = {}) {
         error: null,
         loaded: true,
         loading: false,
-        items: action.result.items,
+        data: action.result,
       };
     case `${GET_TEMPLATE_CONTAINERS}_FAIL`:
       return {
