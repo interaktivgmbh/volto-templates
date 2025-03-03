@@ -6,7 +6,7 @@ export function getTemplateContainers(url) {
     type: GET_TEMPLATE_CONTAINERS,
     request: {
       op: 'get',
-      path: `/@templateContainer?url=${url}`,
+      path: `/@template-container?url=${url}`,
     },
   };
 }
