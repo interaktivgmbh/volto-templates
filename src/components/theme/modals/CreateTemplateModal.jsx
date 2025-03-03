@@ -2,10 +2,11 @@ import {Button, Header, Modal, ModalActions, ModalContent} from 'semantic-ui-rea
 import messages from '../../../messages';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {createContent} from '@plone/volto/actions';
+import {createContent, getContent} from '@plone/volto/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {getTemplateContainers} from '../../../actions';
+import {getTemplateContainers, triggerThumbnailCreation} from '../../../actions';
 import {getBaseUrl, flattenToAppURL} from '@plone/volto/helpers';
+import {useHistory} from 'react-router';
 
 
 const ModalButtons = ({onCancel, onSubmit, disabled, intl}) => (
@@ -29,6 +30,7 @@ const ModalButtons = ({onCancel, onSubmit, disabled, intl}) => (
 export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
   const intl = useIntl();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [missingInputValues, setMissingInputValues] = useState([]);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
@@ -38,13 +40,9 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
 
   const pathname = flattenToAppURL(getBaseUrl(location.pathname));
 
-  const {nearest_container} = useSelector(
-    (state) => state?.templateContainer.data || {},
-  );
+  const {nearest_container} = useSelector((state) => state?.templateContainer.data || {});
 
-  const {data: content} = useSelector(
-    (state) => state?.content || {},
-  );
+  const {data: content} = useSelector((state) => state?.content || {});
 
   useEffect(() => {
     dispatch(getTemplateContainers(pathname));
@@ -65,11 +63,16 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
         blocks: content?.blocks || [],
         blocks_layout: content?.blocks_layout || {},
         '@type': "Template",
-      }));
+      })).then((content) => {
+        if (content && content['@id']) {
+          setTitle("")
+          setDescription("")
+          setIsSubmitDisabled(false)
 
-      setTitle("")
-      setDescription("")
-      setIsSubmitDisabled(false)
+          history.push(flattenToAppURL(getBaseUrl(content['@id'])));
+          dispatch(triggerThumbnailCreation())
+        }
+      });
     }
   };
 
