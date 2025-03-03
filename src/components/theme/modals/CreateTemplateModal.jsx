@@ -1,20 +1,24 @@
-import { Button, Header, Modal, ModalActions, ModalContent } from 'semantic-ui-react';
+import {Button, Header, Modal, ModalActions, ModalContent} from 'semantic-ui-react';
 import messages from '../../../messages';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { createContent } from '@plone/volto/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { getTemplateContainers } from '../../../actions';
-import { getBaseUrl, flattenToAppURL } from '@plone/volto/helpers';
+import React, {useEffect, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {createContent} from '@plone/volto/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {getTemplateContainers} from '../../../actions';
+import {getBaseUrl, flattenToAppURL} from '@plone/volto/helpers';
 
-const ModalButtons = ({ onCancel, onSubmit, intl }) => (
+
+const ModalButtons = ({onCancel, onSubmit, disabled, intl}) => (
   <ModalActions>
-    <Button onClick={onCancel}>
+    <Button onClick={onCancel}
+            disabled={disabled}
+    >
       {intl.formatMessage(messages.modalCancelButton)}
     </Button>
     <Button
       className="button"
       onClick={onSubmit}
+      disabled={disabled}
     >
       {intl.formatMessage(messages.createTemplateButton)}
     </Button>
@@ -22,7 +26,7 @@ const ModalButtons = ({ onCancel, onSubmit, intl }) => (
 );
 
 
-export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
+export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
@@ -34,9 +38,17 @@ export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
 
   const pathname = flattenToAppURL(getBaseUrl(location.pathname));
 
-  const { items: containers = [] } = useSelector(
-    (state) => state?.templateContainer || [],
+  const {nearest_container} = useSelector(
+    (state) => state?.templateContainer.data || {},
   );
+
+  const {data: content} = useSelector(
+    (state) => state?.content || {},
+  );
+
+  useEffect(() => {
+    dispatch(getTemplateContainers(pathname));
+  }, [open])
 
   const onSubmit = () => {
     setIsSubmitDisabled(true);
@@ -46,9 +58,18 @@ export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
       setIsSubmitDisabled(false);
     } else {
       setMissingInputValues([]);
-      console.log('Submit....');
-      dispatch(getTemplateContainers(pathname));
-      console.log(containers);
+
+      dispatch(createContent(flattenToAppURL(nearest_container), {
+        title: title,
+        template_description: description || '',
+        blocks: content?.blocks || [],
+        blocks_layout: content?.blocks_layout || {},
+        '@type': "Template",
+      }));
+
+      setTitle("")
+      setDescription("")
+      setIsSubmitDisabled(false)
     }
   };
 
@@ -60,7 +81,7 @@ export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
           <FormattedMessage
             id="Create template based on {page}"
             defaultMessage="Create template based on {page}"
-            values={{ page: pageTitle }}
+            values={{page: pageTitle}}
           />
         </p>
         <div className="fields">
@@ -72,6 +93,7 @@ export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
               type="text"
               id="title"
               name="template-title"
+              disabled={isSubmitDisabled}
               placeholder={intl.formatMessage(messages.templateFormTitle)}
               onChange={(evt) => setTitle(evt.target.value)}
               onFocus={() =>
@@ -81,7 +103,9 @@ export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
               }
             />
             {missingInputValues.includes('template-title') ? (
-              <p className="required-field-popup">{intl.formatMessage(messages.templateFormRequiredField)}</p>
+              <p className="required-field-popup">
+                {intl.formatMessage(messages.templateFormRequiredField)}
+              </p>
             ) : null}
           </div>
           <div className="field">
@@ -92,16 +116,21 @@ export const CreateTemplateModal = ({ open, onCancel, pageTitle }) => {
               type="text"
               id="description"
               name="template-description"
+              disabled={isSubmitDisabled}
               placeholder={intl.formatMessage(messages.templateFormDescription)}
               onChange={(evt) => setDescription(evt.target.value)}
             />
           </div>
         </div>
       </ModalContent>
-      <ModalButtons onCancel={onCancel} onSubmit={onSubmit} intl={intl} />;
+      <ModalButtons
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        disabled={isSubmitDisabled}
+        intl={intl}
+      />
     </Modal>
-  )
-    ;
+  );
 };
 
 export default CreateTemplateModal;
