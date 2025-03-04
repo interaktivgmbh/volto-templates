@@ -2,5 +2,5 @@
 export { getSelectableTemplates } from './selectable-templates/';
 export * from './showTemplatesModal'
 
-export { triggerThumbnailCreation } from './templateThumbnail';
+export { toggleThumbnailCreation } from './thumbnailCreation';
 export { getTemplateContainers } from './templateContainer'

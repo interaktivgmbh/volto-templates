@@ -3,18 +3,18 @@
  * @module components/manage/Edit/Edit
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Helmet} from '@plone/volto/helpers';
-import {connect} from 'react-redux';
-import {compose} from 'redux';
-import {asyncConnect, hasApiExpander} from '@plone/volto/helpers';
-import {defineMessages, injectIntl} from 'react-intl';
-import {Button, Grid, Menu} from 'semantic-ui-react';
-import {Portal} from 'react-portal';
+import { Helmet } from '@plone/volto/helpers';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { asyncConnect, hasApiExpander } from '@plone/volto/helpers';
+import { defineMessages, injectIntl } from 'react-intl';
+import { Button, Grid, Menu } from 'semantic-ui-react';
+import { Portal } from 'react-portal';
 import qs from 'query-string';
-import {find} from 'lodash';
-import {toast} from 'react-toastify';
+import { find } from 'lodash';
+import { toast } from 'react-toastify';
 
 import {
   Forbidden,
@@ -41,14 +41,14 @@ import {
   getBaseUrl,
   hasBlocksData,
 } from '@plone/volto/helpers';
-import {preloadLazyLibs} from '@plone/volto/helpers/Loadable';
-import {tryParseJSON} from '@plone/volto/helpers';
+import { preloadLazyLibs } from '@plone/volto/helpers/Loadable';
+import { tryParseJSON } from '@plone/volto/helpers';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
 
 import config from '@plone/volto/registry';
-import {triggerThumbnailCreation} from '../../../actions';
+import {toggleThumbnailCreation} from "../../../actions";
 
 const messages = defineMessages({
   edit: {
@@ -85,7 +85,8 @@ class Edit extends Component {
    * @static
    */
   static propTypes = {
-    triggerThumbnailCreation: PropTypes.func.isRequired,
+    templates: PropTypes.arrayOf(PropTypes.object),
+    toggleThumbnailCreation: PropTypes.func.isRequired,
     updateContent: PropTypes.func.isRequired,
     getContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
@@ -224,7 +225,7 @@ class Edit extends Component {
         erroMessage = error;
       }
 
-      this.setState({error: error});
+      this.setState({ error: error });
 
       toast.error(
         <Toast
@@ -238,10 +239,10 @@ class Edit extends Component {
     if (
       nextProps.compare_to &&
       ((this.state.compareTo &&
-          nextProps.compare_to['@id'] !== this.state.compareTo['@id']) ||
+        nextProps.compare_to['@id'] !== this.state.compareTo['@id']) ||
         !this.state.compareTo)
     ) {
-      this.setState({compareTo: nextProps.compare_to});
+      this.setState({ compareTo: nextProps.compare_to });
     }
   }
 
@@ -253,7 +254,7 @@ class Edit extends Component {
   componentWillUnmount() {
     if (this.props.content?.lock?.locked) {
       const baseUrl = getBaseUrl(this.props.pathname);
-      const {newId} = this.state;
+      const { newId } = this.state;
       // Unlock the page, taking a possible id change into account
       this.props.unlockContent(
         newId ? baseUrl.replace(/\/[^/]*$/, '/' + newId) : baseUrl,
@@ -269,17 +270,17 @@ class Edit extends Component {
    */
   onSubmit(data) {
     const lock_token = this.props.content?.lock?.token;
-    const headers = lock_token ? {'Lock-Token': lock_token} : {};
+    const headers = lock_token ? { 'Lock-Token': lock_token } : {};
     // if the id has changed, remember it for unlock control
     if ('id' in data) {
-      this.setState({newId: data.id});
+      this.setState({ newId: data.id });
     }
     this.props.updateContent(getBaseUrl(this.props.pathname), data, headers);
 
     // triggers the thumbnail creation, if template has changes
-    if (this.props.content['@type'] === 'Template' && Object.keys(data).length !== 0) {
-      this.setState({formSelected: null});
-      this.props.triggerThumbnailCreation();
+    if (this.props.templates.some((template) => template.UID === this.props.content['UID'])) {
+       this.setState({ formSelected: null });
+      this.props.toggleThumbnailCreation("RUNNING")
     }
   }
 
@@ -296,7 +297,7 @@ class Edit extends Component {
   }
 
   setComparingLanguage(lang, content_id) {
-    this.setState({comparingLanguage: lang});
+    this.setState({ comparingLanguage: lang });
     this.props.getContent(
       flattenToAppURL(content_id),
       null,
@@ -307,14 +308,13 @@ class Edit extends Component {
 
   form = React.createRef();
   toolbarRef = React.createRef;
-
   /**
    * Render method.
    * @method render
    * @returns {string} Markup for the component.
    */
   render() {
-    const editPermission = find(this.props.objectActions, {id: 'edit'});
+    const editPermission = find(this.props.objectActions, { id: 'edit' });
 
     const pageEdit = (
       <Form
@@ -332,14 +332,14 @@ class Edit extends Component {
         title={
           this.props?.schema?.title
             ? this.props.intl.formatMessage(messages.edit, {
-              title: this.props.schema.title,
-            })
+                title: this.props.schema.title,
+              })
             : null
         }
         loading={this.props.updateRequest.loading}
         isFormSelected={this.state.formSelected === 'editForm'}
         onSelectForm={() => {
-          this.setState({formSelected: 'editForm'});
+          this.setState({ formSelected: 'editForm' });
         }}
         global
       />
@@ -355,13 +355,13 @@ class Edit extends Component {
                   title={
                     this.props?.schema?.title
                       ? this.props.intl.formatMessage(messages.edit, {
-                        title: this.props.schema.title,
-                      })
+                          title: this.props.schema.title,
+                        })
                       : null
                   }
                 >
                   {this.props.content?.language && (
-                    <html lang={this.props.content.language.token}/>
+                    <html lang={this.props.content.language.token} />
                   )}
                 </Helmet>
 
@@ -411,7 +411,7 @@ class Edit extends Component {
 
             {editPermission && this.state.visual && this.state.isClient && (
               <Portal node={document.getElementById('sidebar')}>
-                <Sidebar/>
+                <Sidebar />
               </Portal>
             )}
           </>
@@ -519,7 +519,7 @@ export default compose(
   asyncConnect([
     {
       key: 'actions',
-      promise: async ({location, store: {dispatch}}) => {
+      promise: async ({ location, store: { dispatch } }) => {
         // Do not trigger the actions action if the expander is present
         if (!hasApiExpander('actions', getBaseUrl(location.pathname))) {
           return await dispatch(listActions(getBaseUrl(location.pathname)));
@@ -528,7 +528,7 @@ export default compose(
     },
     {
       key: 'content',
-      promise: async ({location, store: {dispatch}}) => {
+      promise: async ({ location, store: { dispatch } }) => {
         const content = await dispatch(
           getContent(getBaseUrl(location.pathname)),
         );
@@ -551,6 +551,7 @@ export default compose(
       updateRequest: state.content.update,
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
+      templates: state?.selectabletemplates?.items || [],
     }),
     {
       updateContent,
@@ -559,7 +560,7 @@ export default compose(
       lockContent,
       unlockContent,
       setFormData,
-      triggerThumbnailCreation
+      toggleThumbnailCreation
     },
   ),
   preloadLazyLibs('cms'),
