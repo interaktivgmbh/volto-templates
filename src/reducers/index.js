@@ -3,13 +3,13 @@ import defaultReducers from '@plone/volto/reducers';
 
 import selectabletemplates from './selectable-templates';
 import showTemplatesModal from './showTemplatesModal'
-import templateThumbnail from './templateThumbnail';
+import thumbnailCreation from './thumbnailCreation';
 
 const reducers = {
   ...defaultReducers,
   selectabletemplates,
   showTemplatesModal,
-  templateThumbnail
+  thumbnailCreation,
 };
 
 export default reducers;
