@@ -18,7 +18,7 @@ const TemplateToolbar = () => {
   const [openModal, setOpenModal] = React.useState(false);
 
   const {nearest_container} = useSelector(
-    (state) => state?.templateContainer.data || {},
+    (state) => state?.templateContainer || {},
   );
 
   useEffect(() => {

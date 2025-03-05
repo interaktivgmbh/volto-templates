@@ -40,7 +40,7 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
 
   const pathname = flattenToAppURL(getBaseUrl(location.pathname));
 
-  const {nearest_container} = useSelector((state) => state?.templateContainer.data || {});
+  const {nearest_container} = useSelector((state) => state?.templateContainer || {});
 
   const {data: content} = useSelector((state) => state?.content || {});
 
