@@ -281,7 +281,7 @@ class Edit extends Component {
     if (this.props.templates.some((template) => template.UID === this.props.content['UID'])
       && Object.keys(data).length !== 0) {
       this.setState({formSelected: null});
-      this.props.toggleThumbnailCreation("RUNNING")
+      this.props.toggleThumbnailCreation()
     }
   }
 

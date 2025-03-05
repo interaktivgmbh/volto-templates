@@ -10,7 +10,7 @@ import {
   Image,
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectableTemplates, setShowTemplatesModal } from '../../actions';
+import {getSelectableTemplates, toggleShowTemplatesModal} from '../../actions';
 import { useIntl } from 'react-intl';
 import propTypes from 'prop-types';
 import messages from '../../messages';
@@ -82,14 +82,14 @@ ModalButtons.propTypes = {
 const TemplateModal = ({ show = false }) => {
   const dispatch = useDispatch();
   const { items: templates = [] } = useSelector(
-    (state) => state?.selectabletemplates || {},
+    (state) => state?.templates.selectableTemplates || {},
   );
   const intl = useIntl();
   const history = useHistory();
   const baseUrl = `${intl.locale}/add?type=Document`;
 
   const handleButtonClick = (url) => {
-    dispatch(setShowTemplatesModal(false));
+    dispatch(toggleShowTemplatesModal());
     history.push(url);
   };
 
@@ -120,7 +120,7 @@ const TemplateModal = ({ show = false }) => {
         </CardGroup>
       </ModalContent>
       <ModalButtons
-        onCancel={() => dispatch(setShowTemplatesModal(false))}
+        onCancel={() => dispatch(toggleShowTemplatesModal())}
         onContinueWithoutTemplate={handleButtonClick}
         baseUrl={baseUrl}
         intl={intl}

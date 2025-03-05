@@ -632,7 +632,7 @@ export default compose(
       pathname: props.pathname,
       types: filter(state.types.types, 'addable'),
       unlockRequest: state.content.unlock,
-      showTemplatesModal: state.showTemplatesModal.show,
+      showTemplatesModal: state.templates.showTemplatesModal,
       backendAddons: state.addons
     }),
     { getTypes, listActions, setExpandedToolbar, unlockContent },
