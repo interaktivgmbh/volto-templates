@@ -44,7 +44,7 @@ import config from '@plone/volto/registry';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
-import { toggleThumbnailCreation } from '../../../actions';
+import {toggleThumbnailCreation} from '../../../actions';
 
 const messages = defineMessages({
   add: {
@@ -207,7 +207,7 @@ class Add extends Component {
       // Triggers the process to fetch the ref with the current content at the time of saving.
     if(this.props.type === 'Template') {
       this.setState({ formSelected: null });
-      this.props.toggleThumbnailCreation("RUNNING")
+      this.props.toggleThumbnailCreation()
     }
   }
 

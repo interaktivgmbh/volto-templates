@@ -10,10 +10,10 @@ import {
   Image,
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectableTemplates, setShowTemplatesModal } from '../../../actions';
+import {getSelectableTemplates, toggleShowTemplatesModal} from '../../actions';
 import { useIntl } from 'react-intl';
 import propTypes from 'prop-types';
-import messages from '../../../messages';
+import messages from '../../messages';
 import { useHistory } from 'react-router';
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
@@ -79,17 +79,17 @@ ModalButtons.propTypes = {
   baseUrl: propTypes.string.isRequired,
 };
 
-const SelectTemplateModal = ({ show = false }) => {
+const TemplateModal = ({ show = false }) => {
   const dispatch = useDispatch();
   const { items: templates = [] } = useSelector(
-    (state) => state?.selectabletemplates || {},
+    (state) => state?.templates.selectableTemplates || {},
   );
   const intl = useIntl();
   const history = useHistory();
   const baseUrl = `${intl.locale}/add?type=Document`;
 
   const handleButtonClick = (url) => {
-    dispatch(setShowTemplatesModal(false));
+    dispatch(toggleShowTemplatesModal());
     history.push(url);
   };
 
@@ -120,7 +120,7 @@ const SelectTemplateModal = ({ show = false }) => {
         </CardGroup>
       </ModalContent>
       <ModalButtons
-        onCancel={() => dispatch(setShowTemplatesModal(false))}
+        onCancel={() => dispatch(toggleShowTemplatesModal())}
         onContinueWithoutTemplate={handleButtonClick}
         baseUrl={baseUrl}
         intl={intl}
@@ -129,8 +129,8 @@ const SelectTemplateModal = ({ show = false }) => {
   );
 };
 
-SelectTemplateModal.propTypes = {
+TemplateModal.propTypes = {
   show: propTypes.bool,
 };
 
-export default SelectTemplateModal;
+export default TemplateModal;

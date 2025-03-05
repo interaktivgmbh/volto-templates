@@ -1,16 +1,12 @@
 /* istanbul ignore file */
 import defaultReducers from '@plone/volto/reducers';
 
-import selectabletemplates from './selectable-templates';
-import showTemplatesModal from './showTemplatesModal'
-import thumbnailCreation from './thumbnailCreation';
+import templates from './templates';
 import templateContainer from './templateContainer';
 
 const reducers = {
   ...defaultReducers,
-  selectabletemplates,
-  showTemplatesModal,
-  thumbnailCreation,
+  templates,
   templateContainer,
 };
 

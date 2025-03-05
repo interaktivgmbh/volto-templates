@@ -145,7 +145,6 @@ export class App extends Component {
             `thumbnail-upload-${uuidv4()}`,
           );
         });
-      this.props.toggleThumbnailCreation('RESET');
     }
   }
 
@@ -367,7 +366,7 @@ export function connectAppComponent(AppComponent) {
         apiError: state.apierror.error,
         connectionRefused: state.apierror.connectionRefused,
         type: qs.parse(props.location.search).type,
-        thumbnailCreation: state.thumbnailCreation.processRunning,
+        thumbnailCreation: state.templates.thumbnailCreationFlag,
       }),
       {createContent, getContent, toggleThumbnailCreation },
     ),

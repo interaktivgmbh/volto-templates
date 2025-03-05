@@ -6,13 +6,13 @@ import { filter, find, isEmpty, map } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { flattenToAppURL, langmap, toBackendLang } from '@plone/volto/helpers';
 import config from '@plone/volto/registry';
-import { setShowTemplatesModal } from '../../../actions'
+import {toggleShowTemplatesModal} from '../../../actions'
 
 const Types = ({ types, pathname, content, currentLanguage }) => {
   const dispatch = useDispatch()
 
   const { items: templates = [] } = useSelector(
-    (state) => state?.selectabletemplates || {}
+    (state) => state?.templates.selectableTemplates || {}
   );
 
   const { settings } = config;
@@ -49,7 +49,7 @@ const Types = ({ types, pathname, content, currentLanguage }) => {
                         item['@id'].slice(item['@id'].lastIndexOf('/') + 1) === 'Document' && templates.length !== 0
                           ? (event) => {
                               event.preventDefault()
-                              dispatch(setShowTemplatesModal(true))
+                              dispatch(toggleShowTemplatesModal())
                             }
                           : undefined
                       }
