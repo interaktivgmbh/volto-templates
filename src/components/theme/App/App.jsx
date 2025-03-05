@@ -71,10 +71,10 @@ export class App extends Component {
 
   static propTypes = {
     toggleThumbnailCreation: PropTypes.func.isRequired,
+    thumbnailCreationFlag: PropTypes.bool,
     getContent: PropTypes.func.isRequired,
     createContent: PropTypes.func.isRequired,
     takeScreenshot: PropTypes.func.isRequired,
-    thumbnailCreation: PropTypes.bool,
     pathname: PropTypes.string.isRequired,
   };
 
@@ -125,26 +125,43 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.thumbnailCreation !== this.props.thumbnailCreation && this.thumbnailRef.current) {
-      this.props.takeScreenshot(this.thumbnailRef.current)
-        .then((image) => {
-          const fields = image.match(/^data:(.*);(.*),(.*)$/);
-          this.props.createContent(
-            getBaseUrl(this.props.pathname),
-            {
-              '@type': 'Image',
-              title: 'thumbnail',
-              image: {
-                data: fields[3],
-                encoding: fields[2],
-                'content-type': fields[1],
-                filename: 'thumbnail',
+    const {
+      thumbnailCreationFlag,
+      pathname,
+      location,
+      content,
+      takeScreenshot,
+      createContent
+    } = this.props;
+
+    if (prevProps.thumbnailCreationFlag !== thumbnailCreationFlag && this.thumbnailRef.current) {
+
+      const isAddTemplateRoute = pathname.includes("add") && location.search === "?type=Template";
+      const shouldCreateThumbnail = isAddTemplateRoute
+        ? content?.["@type"] === "TemplatesContainer"
+        : content?.parent?.["@type"] === "TemplatesContainer";
+
+      if (shouldCreateThumbnail) {
+        takeScreenshot(this.thumbnailRef.current)
+          .then((image) => {
+            const fields = image.match(/^data:(.*);(.*),(.*)$/);
+            createContent(
+              getBaseUrl(this.props.pathname),
+              {
+                '@type': 'Image',
+                title: 'thumbnail',
+                image: {
+                  data: fields[3],
+                  encoding: fields[2],
+                  'content-type': fields[1],
+                  filename: 'thumbnail',
+                },
+                thumbnailUpload: true,
               },
-              thumbnailUpload: true,
-            },
-            `thumbnail-upload-${uuidv4()}`,
-          );
-        });
+              `thumbnail-upload-${uuidv4()}`
+            );
+          });
+      }
     }
   }
 
@@ -366,7 +383,7 @@ export function connectAppComponent(AppComponent) {
         apiError: state.apierror.error,
         connectionRefused: state.apierror.connectionRefused,
         type: qs.parse(props.location.search).type,
-        thumbnailCreation: state.templates.thumbnailCreationFlag,
+        thumbnailCreationFlag: state.templates.thumbnailCreationFlag,
       }),
       {createContent, getContent, toggleThumbnailCreation },
     ),
