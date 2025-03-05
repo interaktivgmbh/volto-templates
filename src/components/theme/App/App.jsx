@@ -124,7 +124,7 @@ export class App extends Component {
     }
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+componentDidUpdate(prevProps, prevState, snapshot) {
     const {
       thumbnailCreationFlag,
       pathname,
@@ -142,25 +142,22 @@ export class App extends Component {
         : content?.parent?.["@type"] === "TemplatesContainer";
 
       if (shouldCreateThumbnail) {
-        takeScreenshot(this.thumbnailRef.current)
-          .then((image) => {
-            const fields = image.match(/^data:(.*);(.*),(.*)$/);
-            createContent(
-              getBaseUrl(this.props.pathname),
-              {
-                '@type': 'Image',
-                title: 'thumbnail',
-                image: {
-                  data: fields[3],
-                  encoding: fields[2],
-                  'content-type': fields[1],
-                  filename: 'thumbnail',
-                },
-                thumbnailUpload: true,
+        takeScreenshot(this.thumbnailRef.current).then((image) => {
+          const fields = image.match(/^data:(.*);(.*),(.*)$/);
+          createContent(getBaseUrl(this.props.pathname), {
+              '@type': 'Image',
+              title: 'thumbnail',
+              image: {
+                data: fields[3],
+                encoding: fields[2],
+                'content-type': fields[1],
+                filename: 'thumbnail',
               },
-              `thumbnail-upload-${uuidv4()}`
-            );
-          });
+              thumbnailUpload: true,
+            },
+            `thumbnail-upload-${uuidv4()}`
+          );
+        });
       }
     }
   }
