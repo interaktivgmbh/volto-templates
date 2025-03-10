@@ -48,6 +48,7 @@ import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
 
 import config from '@plone/volto/registry';
+import {generateThumbnail} from "../../../actions";
 
 const messages = defineMessages({
   edit: {
@@ -84,6 +85,7 @@ class Edit extends Component {
    * @static
    */
   static propTypes = {
+    generateThumbnail: PropTypes.func.isRequired,
     templates: PropTypes.arrayOf(PropTypes.object),
     updateContent: PropTypes.func.isRequired,
     getContent: PropTypes.func.isRequired,
@@ -275,10 +277,9 @@ class Edit extends Component {
     }
     this.props.updateContent(getBaseUrl(this.props.pathname), data, headers);
 
-    // TODO: Template generation
     if (this.props.templates.some((template) => template.UID === this.props.content['UID'])
       && Object.keys(data).length !== 0) {
-      this.setState({formSelected: null});
+      this.props.generateThumbnail(getBaseUrl(this.props.pathname), true);
     }
   }
 
@@ -559,6 +560,7 @@ export default compose(
       lockContent,
       unlockContent,
       setFormData,
+      generateThumbnail,
     },
   ),
   preloadLazyLibs('cms'),
