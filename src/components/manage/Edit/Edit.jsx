@@ -551,7 +551,7 @@ export default compose(
       updateRequest: state.content.update,
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
-      templates: state?.selectabletemplates?.items || [],
+      templates: state?.templates.selectableTemplates?.items || [],
     }),
     {
       updateContent,
