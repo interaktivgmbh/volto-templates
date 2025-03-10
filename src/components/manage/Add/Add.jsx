@@ -3,20 +3,20 @@
  * @module components/manage/Add/Add
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { BodyClass, Helmet } from '@plone/volto/helpers';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { keys, isEmpty } from 'lodash';
-import { defineMessages, injectIntl } from 'react-intl';
-import { Button, Grid, Menu } from 'semantic-ui-react';
-import { Portal } from 'react-portal';
-import { v4 as uuid } from 'uuid';
+import {BodyClass, Helmet} from '@plone/volto/helpers';
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import {keys, isEmpty} from 'lodash';
+import {defineMessages, injectIntl} from 'react-intl';
+import {Button, Grid, Menu} from 'semantic-ui-react';
+import {Portal} from 'react-portal';
+import {v4 as uuid} from 'uuid';
 import qs from 'query-string';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
-import { createContent, getSchema, changeLanguage } from '@plone/volto/actions';
+import {createContent, getSchema, changeLanguage} from '@plone/volto/actions';
 import {
   Form,
   Icon,
@@ -38,7 +38,7 @@ import {
   getDefaultBlocks,
 } from '@plone/volto/helpers';
 
-import { preloadLazyLibs } from '@plone/volto/helpers/Loadable';
+import {preloadLazyLibs} from '@plone/volto/helpers/Loadable';
 
 import config from '@plone/volto/registry';
 
@@ -143,7 +143,7 @@ class Add extends Component {
    */
   componentDidMount() {
     this.props.getSchema(this.props.type, getBaseUrl(this.props.pathname), this.props.template);
-    this.setState({ isClient: true });
+    this.setState({isClient: true});
   }
 
   /**
@@ -172,7 +172,7 @@ class Add extends Component {
         new DOMParser().parseFromString(message, 'text/html')?.all[0]
           ?.textContent || message;
 
-      this.setState({ error: error });
+      this.setState({error: error});
 
       toast.error(
         <Toast
@@ -202,11 +202,12 @@ class Add extends Component {
           translation_of: this.props.location.state.translationOf,
           language: this.props.location.state.language,
         }),
+    }).then((response) => {
+      if (this.props.type === 'Template') {
+        this.props.generateThumbnail(flattenToAppURL(response['@id']))
+      }
     });
 
-    if(this.props.type === 'Template') {
-      this.props.generateThumbnail(getBaseUrl(this.props.pathname))
-    }
   }
 
   /**
@@ -337,8 +338,8 @@ class Add extends Component {
             formData={{
               ...(blocksFieldname && {
                 [blocksFieldname]:
-                  initialBlocks ||
-                  this.props.schema.properties[blocksFieldname]?.default,
+                initialBlocks ||
+                this.props.schema.properties[blocksFieldname]?.default,
               }),
               ...(blocksLayoutFieldname && {
                 [blocksLayoutFieldname]: {
@@ -363,14 +364,14 @@ class Add extends Component {
             title={
               this.props?.schema?.title
                 ? this.props.intl.formatMessage(messages.add, {
-                    type: this.props.schema.title,
-                  })
+                  type: this.props.schema.title,
+                })
                 : null
             }
             loading={this.props.createRequest.loading}
             isFormSelected={this.state.formSelected === 'addForm'}
             onSelectForm={() => {
-              this.setState({ formSelected: 'addForm' });
+              this.setState({formSelected: 'addForm'});
             }}
             global
           />
@@ -413,7 +414,7 @@ class Add extends Component {
           )}
           {visual && this.state.isClient && (
             <Portal node={document.getElementById('sidebar')}>
-              <Sidebar />
+              <Sidebar/>
             </Portal>
           )}
         </div>
@@ -421,7 +422,7 @@ class Add extends Component {
 
       return translationObject ? (
         <>
-          <BodyClass className="babel-view" />
+          <BodyClass className="babel-view"/>
           <Grid
             celled="internally"
             stackable
@@ -462,7 +463,7 @@ class Add extends Component {
         pageAdd
       );
     }
-    return <div />;
+    return <div/>;
   }
 }
 
@@ -479,7 +480,7 @@ export default compose(
       type: qs.parse(props.location.search).type,
       template: qs.parse(props.location.search).template,
     }),
-    { createContent, getSchema, changeLanguage, generateThumbnail },
+    {createContent, getSchema, changeLanguage, generateThumbnail},
   ),
   preloadLazyLibs('cms'),
 )(Add);
