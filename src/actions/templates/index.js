@@ -20,9 +20,3 @@ export function toggleShowTemplatesModal() {
     type: TOGGLE_SHOW_TEMPLATES_MODAL
   }
 }
-
-export function toggleThumbnailCreation() {
-  return {
-    type: TOGGLE_THUMBNAIL_CREATION,
-  }
-}
