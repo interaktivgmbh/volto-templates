@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plone\n"
-"POT-Creation-Date: 2025-02-25T14:43:02.377Z\n"
+"POT-Creation-Date: 2025-02-26T14:28:52.358Z\n"
 "Last-Translator: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -52,6 +52,11 @@ msgstr ""
 #. Default: "Contents"
 #: components/manage/Toolbar/Toolbar
 msgid "Contents"
+msgstr ""
+
+#. Default: "Create template based on {page}"
+#: components/theme/modals/CreateTemplateModal
+msgid "Create template based on {page}"
 msgstr ""
 
 #. Default: "Edit"
@@ -137,6 +142,16 @@ msgstr ""
 msgid "Unlock"
 msgstr ""
 
+#. Default: "Create template"
+#: messages
+msgid "createTemplateButton"
+msgstr ""
+
+#. Default: "Create a new template"
+#: messages
+msgid "createTemplateModalTitle"
+msgstr ""
+
 #. Default: "Cancel"
 #: messages
 msgid "modalCancelButton"
@@ -155,6 +170,21 @@ msgstr ""
 #. Default: "Select template"
 #: messages
 msgid "selectTemplateButton"
+msgstr ""
+
+#. Default: "Description"
+#: messages
+msgid "templateFormDescription"
+msgstr ""
+
+#. Default: "This field is required"
+#: messages
+msgid "templateFormRequiredField"
+msgstr ""
+
+#. Default: "Title"
+#: messages
+msgid "templateFormTitle"
 msgstr ""
 
 #. Default: "Select a template"

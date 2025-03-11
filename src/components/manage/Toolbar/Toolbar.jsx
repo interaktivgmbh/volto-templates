@@ -37,7 +37,7 @@ import {
 } from '@plone/volto/helpers';
 import { Pluggable } from '@plone/volto/components/manage/Pluggable';
 
-import TemplateModal from '../../modal/TemplateModal';
+import SelectTemplateModal from '../../theme/modals/SelectTemplateModal';
 
 import penSVG from '@plone/volto/icons/pen.svg';
 import unlockSVG from '@plone/volto/icons/unlock.svg';
@@ -47,6 +47,7 @@ import moreSVG from '@plone/volto/icons/more.svg';
 import userSVG from '@plone/volto/icons/user.svg';
 import backSVG from '@plone/volto/icons/back.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
+import TemplateToolbar from '../../theme/TemplateToolbar/TemplateToolbar';
 
 const messages = defineMessages({
   edit: {
@@ -539,6 +540,7 @@ class Toolbar extends Component {
                           />
                         </button>
                       )}
+                    <TemplateToolbar />
                     <div className="toolbar-button-spacer" />
                     <button
                       className="more"
@@ -611,7 +613,7 @@ class Toolbar extends Component {
             </div>
           </div>
           <div className="pusher" />
-          <TemplateModal show={this.props.showTemplatesModal} />
+          <SelectTemplateModal show={this.props.showTemplatesModal} />
         </>
       )
     );

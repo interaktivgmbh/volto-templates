@@ -1,4 +1,4 @@
-import {defineMessages} from "react-intl";
+import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
   templateModalTitle: {
@@ -20,7 +20,27 @@ const messages = defineMessages({
   modalCancelButton: {
     id: 'modalCancelButton',
     defaultMessage: 'Cancel',
+  },
+  createTemplateButton: {
+    id: 'createTemplateButton',
+    defaultMessage: 'Create template',
+  },
+  templateFormTitle: {
+    id: 'templateFormTitle',
+    defaultMessage: 'Title'
+  },
+  templateFormDescription: {
+    id: 'templateFormDescription',
+    defaultMessage: 'Description'
+  },
+  createTemplateModalTitle: {
+    id: 'createTemplateModalTitle',
+    defaultMessage: 'Create a new template'
+  },
+  templateFormRequiredField: {
+    id: 'templateFormRequiredField',
+    defaultMessage: 'This field is required'
   }
-})
+});
 
 export default messages;
