@@ -27,7 +27,7 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
             'noopener,noreferrer')}
       >
         <Image
-          src={`${template?.template_thumbnail}/@@images/image/large`}
+          src={`${template?.template_thumbnail}/@@images/image/large?ts=${new Date().getTime()}`}
           wrapped
           ui={false}
         />

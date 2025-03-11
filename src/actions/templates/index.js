@@ -1,6 +1,6 @@
 import {
   GET_SELECTABLE_TEMPLATES,
-  TOGGLE_SHOW_TEMPLATES_MODAL, TOGGLE_THUMBNAIL_CREATION
+  TOGGLE_SHOW_TEMPLATES_MODAL
 } from "../../constants/ActionTypes";
 
 export function getSelectableTemplates() {
