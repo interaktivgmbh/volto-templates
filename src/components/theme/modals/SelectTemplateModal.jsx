@@ -1,20 +1,13 @@
 import React, { useEffect } from 'react';
-import {
-  Modal,
-  Header,
-  ModalContent,
-  ModalActions,
-  CardGroup,
-  Card,
-  Button,
-  Image,
-} from 'semantic-ui-react';
+import { Button, Card, CardGroup, Header, Image, Modal, ModalActions, ModalContent, } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import {getSelectableTemplates, toggleShowTemplatesModal} from '../../../actions';
+import { getSelectableTemplates, toggleShowTemplatesModal } from '../../../actions';
 import { useIntl } from 'react-intl';
 import propTypes from 'prop-types';
 import messages from '../../../messages';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
+import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
+
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
   <Card key={template.UID}>
@@ -22,9 +15,11 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
       <div
         className="card-image-wrapper"
         onClick={() =>
-          window.open(`${template?.template_thumbnail}/@@images/image/large`,
+          window.open(
+            `${template?.template_thumbnail}/@@images/image/large`,
             '_blank',
-            'noopener,noreferrer')}
+            'noopener,noreferrer'
+          )}
       >
         <Image
           src={`${template?.template_thumbnail}/@@images/image/large?ts=${new Date().getTime()}`}
@@ -86,7 +81,8 @@ const TemplateModal = ({ show = false }) => {
   );
   const intl = useIntl();
   const history = useHistory();
-  const baseUrl = `${intl.locale}/add?type=Document`;
+  const location = useLocation();
+  const baseUrl = flattenToAppURL(getBaseUrl(location.pathname)) + '/add?type=Document';
 
   const handleButtonClick = (url) => {
     dispatch(toggleShowTemplatesModal());
@@ -97,7 +93,9 @@ const TemplateModal = ({ show = false }) => {
     dispatch(getSelectableTemplates());
   }, [show]);
 
-  if (!show) return null;
+  if (!show) {
+    return null;
+  }
 
   return (
     <Modal open={show} className="select-template-modal">
