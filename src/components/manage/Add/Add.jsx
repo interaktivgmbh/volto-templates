@@ -44,7 +44,6 @@ import config from '@plone/volto/registry';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
-import {generateThumbnail} from "../../../actions";
 
 const messages = defineMessages({
   add: {
@@ -81,7 +80,6 @@ class Add extends Component {
    * @static
    */
   static propTypes = {
-    generateThumbnail: PropTypes.func.isRequired,
     createContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
     pathname: PropTypes.string.isRequired,
@@ -204,7 +202,7 @@ class Add extends Component {
         }),
     }).then((response) => {
       if (this.props.type === 'Template') {
-        this.props.generateThumbnail(flattenToAppURL(response['@id']))
+        // TODO: Trigger thumbnail generation on template creation
       }
     });
 
@@ -480,7 +478,7 @@ export default compose(
       type: qs.parse(props.location.search).type,
       template: qs.parse(props.location.search).template,
     }),
-    {createContent, getSchema, changeLanguage, generateThumbnail},
+    {createContent, getSchema, changeLanguage},
   ),
   preloadLazyLibs('cms'),
 )(Add);
