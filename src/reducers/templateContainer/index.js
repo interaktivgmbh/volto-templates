@@ -1,30 +1,29 @@
-import { GET_SELECTABLE_TEMPLATES } from '../../constants/ActionTypes';
+import { GET_TEMPLATE_CONTAINERS } from '../../constants/ActionTypes';
 
 export const initialState = {
   error: null,
   loaded: false,
   loading: false,
-  items: [],
 };
 
-export default function selectabletemplates(state = initialState, action = {}) {
+export default function templateContainer(state = initialState, action = {}) {
   switch (action.type) {
-    case `${GET_SELECTABLE_TEMPLATES}_PENDING`:
+    case `${GET_TEMPLATE_CONTAINERS}_PENDING`:
       return {
         ...state,
         error: null,
         loaded: false,
         loading: true,
       };
-    case `${GET_SELECTABLE_TEMPLATES}_SUCCESS`:
+    case `${GET_TEMPLATE_CONTAINERS}_SUCCESS`:
       return {
         ...state,
         error: null,
         loaded: true,
         loading: false,
-        items: action.result.items,
+        ...action.result,
       };
-    case `${GET_SELECTABLE_TEMPLATES}_FAIL`:
+    case `${GET_TEMPLATE_CONTAINERS}_FAIL`:
       return {
         ...state,
         error: 'failed',

@@ -1,15 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
 import { filter, find, isEmpty, map } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { flattenToAppURL, langmap, toBackendLang } from '@plone/volto/helpers';
 import config from '@plone/volto/registry';
-import { setShowTemplatesModal } from '../../../actions'
+import {toggleShowTemplatesModal} from '../../../actions'
 
 const Types = ({ types, pathname, content, currentLanguage }) => {
   const dispatch = useDispatch()
+
+  const { items: templates = [] } = useSelector(
+    (state) => state?.templates.selectableTemplates || {}
+  );
 
   const { settings } = config;
   return types.length > 0 ||
@@ -42,10 +46,10 @@ const Types = ({ types, pathname, content, currentLanguage }) => {
                       className="item"
                       key={item.title}
                       onClick={
-                        item['@id'].slice(item['@id'].lastIndexOf('/') + 1) === 'Document'
+                        item['@id'].slice(item['@id'].lastIndexOf('/') + 1) === 'Document' && templates.length !== 0
                           ? (event) => {
                               event.preventDefault()
-                              dispatch(setShowTemplatesModal(true))
+                              dispatch(toggleShowTemplatesModal())
                             }
                           : undefined
                       }

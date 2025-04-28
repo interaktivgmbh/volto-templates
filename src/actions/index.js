@@ -1,3 +1,4 @@
 /* istanbul ignore file */
-export { getSelectableTemplates } from './selectable-templates/';
-export * from './showTemplatesModal'
+export * from './templates'
+export { generateThumbnail } from './templateThumbnail'
+export { getTemplateContainers } from './templateContainer'
