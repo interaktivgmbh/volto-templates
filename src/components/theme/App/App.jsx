@@ -48,7 +48,7 @@ import LockingToastsFactory from '@plone/volto/components/manage/LockingToastsFa
 import RouteAnnouncer from '@plone/volto/components/theme/RouteAnnouncer/RouteAnnouncer';
 import withScreenshot from "../../../hoc/withScreenshot";
 import {createFileName} from "use-react-screenshot";
-import {createThumbnail, setThumbnailCallback} from "../../../actions";
+import {setThumbnailCallback} from "../../../actions";
 
 /**
  * @export
@@ -384,7 +384,7 @@ export function connectAppComponent(AppComponent) {
                 apiError: state.apierror.error,
                 connectionRefused: state.apierror.connectionRefused,
             }),
-            {setThumbnailCallback, createContent, createThumbnail},
+            {setThumbnailCallback, createContent},
         ),
     )(AppComponent);
 }
