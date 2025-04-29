@@ -1,8 +1,8 @@
 import {
+    CREATE_TEMPLATE_THUMBNAIL,
     GET_SELECTABLE_TEMPLATES,
     SET_TEMPLATE_THUMBNAIL_CALLBACK,
     TOGGLE_SHOW_TEMPLATES_MODAL,
-    TRIGGER_TEMPLATE_THUMBNAIL
 } from "../../constants/ActionTypes";
 
 export function getSelectableTemplates() {
@@ -32,7 +32,7 @@ export function setThumbnailCallback(callback) {
 
 export function createThumbnail(url) {
     return {
-        type: TRIGGER_TEMPLATE_THUMBNAIL,
+        type: CREATE_TEMPLATE_THUMBNAIL,
         payload: url,
     }
 }

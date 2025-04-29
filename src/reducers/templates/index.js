@@ -20,7 +20,7 @@ export default function templates(state = initialState, action) {
         ...state,
         thumbnailCallback: action.payload,
       }
-      case 'TRIGGER_TEMPLATE_THUMBNAIL':
+      case 'CREATE_TEMPLATE_THUMBNAIL':
         if (state.thumbnailCallback) {
           state.thumbnailCallback(action.payload);
         }
