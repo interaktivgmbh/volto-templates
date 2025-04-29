@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {createContent, getContent} from '@plone/volto/actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {getTemplateContainers} from '../../../actions';
+import {createThumbnail, getTemplateContainers} from '../../../actions';
 import {getBaseUrl, flattenToAppURL} from '@plone/volto/helpers';
 import {useHistory} from 'react-router';
 
@@ -69,8 +69,8 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
           setDescription("")
           setIsSubmitDisabled(false)
 
-          history.push(flattenToAppURL(getBaseUrl(content['@id'])));
-          // TODO: Trigger thumbnail generation for content based template
+          history.push(flattenToAppURL(content['@id']));
+          dispatch(createThumbnail(flattenToAppURL(content['@id'])))
         }
       });
     }
