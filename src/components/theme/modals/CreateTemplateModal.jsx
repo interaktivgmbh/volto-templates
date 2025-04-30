@@ -38,15 +38,9 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const pathname = flattenToAppURL(getBaseUrl(location.pathname));
-
   const {nearest_container} = useSelector((state) => state?.templateContainer || {});
 
   const {data: content} = useSelector((state) => state?.content || {});
-
-  useEffect(() => {
-    dispatch(getTemplateContainers(pathname));
-  }, [open])
 
   const onSubmit = () => {
     setIsSubmitDisabled(true);
