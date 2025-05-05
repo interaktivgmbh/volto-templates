@@ -135,7 +135,7 @@ export class App extends Component {
                 if (!this.props.pathname.includes('/edit') && pathname.includes(url)) {
                     this.props.takeScreenshot(this.thumbnailRef.current).then((image) => {
                         const fields = image.match(/^data:(.*);(.*),(.*)$/);
-                        this.props.createContent(getBaseUrl(pathname), {
+                        this.props.createContent(url, {
                             '@type': 'Image',
                             image: {
                                 data: fields[3],
