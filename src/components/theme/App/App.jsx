@@ -135,16 +135,14 @@ export class App extends Component {
                 if (!this.props.pathname.includes('/edit') && pathname.includes(url)) {
                     this.props.takeScreenshot(this.thumbnailRef.current).then((image) => {
                         const fields = image.match(/^data:(.*);(.*),(.*)$/);
-                        this.props.createContent(url, {
-                            '@type': 'Image',
-                            image: {
+                        this.props.updateContent(url, {
+                            template_thumbnail: {
                                 data: fields[3],
                                 encoding: fields[2],
                                 'content-type': fields[1],
                                 filename: 'thumbnail',
                             },
-                            thumbnailUpload: true,
-                        }, `thumbnail-upload-${url}`);
+                        });
                     });
 
                     clearInterval(interval);
