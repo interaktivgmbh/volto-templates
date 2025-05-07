@@ -49,6 +49,7 @@ import RouteAnnouncer from '@plone/volto/components/theme/RouteAnnouncer/RouteAn
 import withScreenshot from "../../../hoc/withScreenshot";
 import {createFileName} from "use-react-screenshot";
 import {setThumbnailCallback} from "../../../actions";
+import {initThumbnailHandler} from "../../../helpers";
 
 /**
  * @export
@@ -123,34 +124,12 @@ export class App extends Component {
 
     componentDidMount() {
         // INTERAKTIV START
-        this.props.setThumbnailCallback((url) => {
-            const maxRetries = 5;
-            let attempts = 0;
-
-            const interval = setInterval(() => {
-                attempts++;
-
-                const pathname = this.props.pathname;
-
-                if (!this.props.pathname.includes('/edit') && pathname.includes(url)) {
-                    this.props.takeScreenshot(this.thumbnailRef.current).then((image) => {
-                        const fields = image.match(/^data:(.*);(.*),(.*)$/);
-                        this.props.updateContent(url, {
-                            template_thumbnail: {
-                                data: fields[3],
-                                encoding: fields[2],
-                                'content-type': fields[1],
-                                filename: 'thumbnail',
-                            },
-                        });
-                    });
-
-                    clearInterval(interval);
-                } else if (attempts >= maxRetries) {
-                    console.warn('Max retries reached. Stopping interval.');
-                    clearInterval(interval);
-                }
-            }, 500);
+        initThumbnailHandler({
+            setThumbnailCallback: this.props.setThumbnailCallback,
+            getPathname: () => this.props.pathname,
+            takeScreenshot: this.props.takeScreenshot,
+            updateContent: this.props.updateContent,
+            thumbnailRef: this.thumbnailRef,
         });
         // INTERAKTIV END
     }
