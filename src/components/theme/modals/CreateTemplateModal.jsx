@@ -9,9 +9,9 @@ import {getBaseUrl, flattenToAppURL} from '@plone/volto/helpers';
 import {useHistory} from 'react-router';
 
 
-const ModalButtons = ({onCancel, onSubmit, disabled, intl}) => (
+const ModalButtons = ({onClose, onSubmit, disabled, intl}) => (
   <ModalActions>
-    <Button onClick={onCancel}
+    <Button onClick={onClose}
             disabled={disabled}
     >
       {intl.formatMessage(messages.modalCancelButton)}
@@ -27,7 +27,7 @@ const ModalButtons = ({onCancel, onSubmit, disabled, intl}) => (
 );
 
 
-export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
+export const CreateTemplateModal = ({open, onClose, pageTitle}) => {
   const intl = useIntl();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -65,6 +65,8 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
 
           history.push(flattenToAppURL(content['@id']));
           dispatch(createThumbnail(flattenToAppURL(content['@id'])))
+
+          onClose()
         }
       });
     }
@@ -121,7 +123,7 @@ export const CreateTemplateModal = ({open, onCancel, pageTitle}) => {
         </div>
       </ModalContent>
       <ModalButtons
-        onCancel={onCancel}
+        onClose={onClose}
         onSubmit={onSubmit}
         disabled={isSubmitDisabled}
         intl={intl}
