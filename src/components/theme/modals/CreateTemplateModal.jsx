@@ -8,7 +8,15 @@ import {createThumbnail} from '../../../actions';
 import {flattenToAppURL} from '@plone/volto/helpers';
 import {useHistory} from 'react-router';
 
+/**
+ * @typedef {object} ModalButtonsProps
+ * @property {() => void} onClose
+ * @property {() => void} onSubmit
+ * @property {boolean} disabled
+ * @property {import('react-intl').IntlShape} intl
+ */
 
+/** @type {import('react').FC<ModalButtonsProps>} */
 const ModalButtons = ({onClose, onSubmit, disabled, intl}) => (
     <ModalActions>
         <Button onClick={onClose}
@@ -26,7 +34,14 @@ const ModalButtons = ({onClose, onSubmit, disabled, intl}) => (
     </ModalActions>
 );
 
+/**
+ * @typedef {object} CreateTemplateModalProps
+ * @property {boolean} open
+ * @property {() => void} onClose
+ * @property {string} pageTitle
+ */
 
+/** @type {import('react').FC<CreateTemplateModalProps>} */
 export const CreateTemplateModal = ({open, onClose, pageTitle}) => {
     const intl = useIntl();
     const dispatch = useDispatch();
