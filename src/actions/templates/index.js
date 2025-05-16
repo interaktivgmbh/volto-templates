@@ -6,8 +6,6 @@ import {
 } from "../../constants/ActionTypes";
 
 export function getSelectableTemplates() {
-    const path = '/@search';
-
     return {
         type: GET_SELECTABLE_TEMPLATES,
         request: {
