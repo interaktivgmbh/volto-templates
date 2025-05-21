@@ -46,7 +46,10 @@ export function initThumbnailHandler({
                                     'content-type': contentType,
                                     filename: 'thumbnail',
                                 },
-                            });
+                            })
+                                .catch((err) => {
+                                    console.warn('Error whle trying to set thumbnail.', err);
+                                });
                         })
                         .catch((err) => {
                             console.warn('Error whle trying to set thumbnail.', err);
