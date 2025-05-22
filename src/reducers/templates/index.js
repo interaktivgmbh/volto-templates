@@ -8,10 +8,24 @@ export const initialState = {
     items: [],
   },
   showTemplatesModal: false,
+  thumbnailCallback: null,
 };
 
 export default function templates(state = initialState, action) {
   switch (action.type) {
+    /* TEMPLATE THUMBNAIL */
+
+    case 'SET_TEMPLATE_THUMBNAIL_CALLBACK':
+      return {
+        ...state,
+        thumbnailCallback: action.payload,
+      }
+      case 'CREATE_TEMPLATE_THUMBNAIL':
+        if (state.thumbnailCallback) {
+          state.thumbnailCallback(action.payload);
+        }
+        return state;
+
     case 'TOGGLE_SHOW_TEMPLATES_MODAL':
       return {
         ...state,

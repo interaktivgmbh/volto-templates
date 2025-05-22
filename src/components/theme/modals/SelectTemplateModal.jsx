@@ -16,13 +16,13 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
         className="card-image-wrapper"
         onClick={() =>
           window.open(
-            `${template?.template_thumbnail}/@@images/image/large`,
+              template?.template_thumbnail,
             '_blank',
             'noopener,noreferrer'
           )}
       >
         <Image
-          src={`${template?.template_thumbnail}/@@images/image/large?ts=${new Date().getTime()}`}
+          src={`${template?.template_thumbnail}?ts=${new Date().getTime()}`}
           wrapped
           ui={false}
         />

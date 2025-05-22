@@ -36,14 +36,14 @@ const TemplateToolbar = () => {
       <button
         title={intl.formatMessage(messages.createTemplateButton)}
         aria-label={intl.formatMessage(messages.createTemplateButton)}
+        onClick={() => setOpenModal(true)}
       >
         <Icon
           name={collectionSVG}
           size="30px"
-          onClick={() => setOpenModal(true)}
         />
       </button>
-      <CreateTemplateModal open={openModal} onCancel={() => setOpenModal(false)} pageTitle={content.title}/>
+      <CreateTemplateModal open={openModal} onClose={() => setOpenModal(false)} pageTitle={content.title}/>
     </>
   );
 
