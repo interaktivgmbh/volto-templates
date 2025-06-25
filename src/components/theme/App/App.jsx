@@ -47,7 +47,6 @@ import WorkingCopyToastsFactory from '@plone/volto/components/manage/WorkingCopy
 import LockingToastsFactory from '@plone/volto/components/manage/LockingToastsFactory/LockingToastsFactory';
 import RouteAnnouncer from '@plone/volto/components/theme/RouteAnnouncer/RouteAnnouncer';
 import withScreenshot from "../../../hoc/withScreenshot";
-import {createFileName} from "use-react-screenshot";
 import {setThumbnailCallback} from "../../../actions";
 import {initThumbnailHandler} from "../../../helpers";
 
