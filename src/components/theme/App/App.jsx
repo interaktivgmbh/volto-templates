@@ -115,13 +115,6 @@ export class App extends Component {
         }
     };
 
-    downloadThumbnail = (image, {name = 'img', extension = 'jpg'} = {}) => {
-        const a = document.createElement('a');
-        a.href = image;
-        a.download = createFileName(extension, name);
-        a.click();
-    }
-
     componentDidMount() {
         // INTERAKTIV START
         initThumbnailHandler({
