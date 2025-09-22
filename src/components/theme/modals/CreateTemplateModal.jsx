@@ -1,12 +1,13 @@
 import { Button, Header, Modal, ModalActions, ModalContent } from 'semantic-ui-react';
 import messages from '../../../messages';
-import React, { useState } from 'react';
+import React, { useState, useRef, forwardRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createContent } from '@plone/volto/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { createThumbnail } from '../../../actions';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import { useHistory } from 'react-router';
+import { useModalKeyHandler } from '../../../helpers/hooks';
 
 /**
  * @typedef {object} ModalButtonsProps
@@ -17,7 +18,10 @@ import { useHistory } from 'react-router';
  */
 
 /** @type {import('react').FC<ModalButtonsProps>} */
-const ModalButtons = ({ onClose, onSubmit, disabled, intl }) => (
+const ModalButtons = forwardRef((props, ref) => {
+  const { onClose, onSubmit, disabled, intl } = props;
+
+  return (
   <ModalActions>
     <Button onClick={onClose}
             disabled={disabled}
@@ -28,11 +32,13 @@ const ModalButtons = ({ onClose, onSubmit, disabled, intl }) => (
       className="button"
       onClick={onSubmit}
       disabled={disabled}
+      ref={!disabled ? ref : null}
     >
       {intl.formatMessage(messages.createTemplateButton)}
     </Button>
   </ModalActions>
-);
+  );
+});
 
 /**
  * @typedef {object} CreateTemplateModalProps
@@ -52,6 +58,9 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  const firstRef = useRef();
+  const lastRef = useRef();
 
   const { nearest_container } = useSelector((state) => state?.templateContainer || {});
 
@@ -87,6 +96,8 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
     }
   };
 
+  useModalKeyHandler(firstRef, lastRef, open, onClose);
+
   return (
     <Modal open={open} className="create-template-modal">
       <Header>{intl.formatMessage(messages.createTemplateModalTitle)}</Header>
@@ -115,6 +126,7 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
                   prev.filter((val) => val !== 'template-title'),
                 )
               }
+              ref={firstRef}
             />
             {missingInputValues.includes('template-title') ? (
               <p className="required-field-popup">
@@ -142,6 +154,7 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
         onSubmit={onSubmit}
         disabled={isSubmitDisabled}
         intl={intl}
+        ref={lastRef}
       />
     </Modal>
   );
