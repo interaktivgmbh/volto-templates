@@ -17,14 +17,20 @@ import { useModalKeyHandler } from '../../../helpers/hooks';
  * @property {import('react-intl').IntlShape} intl
  */
 
-/** @type {import('react').FC<ModalButtonsProps>} */
+/**
+ * @type {import('react').ForwardRefExoticComponent<
+ *   ModalButtonsProps & import('react').RefAttributes<HTMLButtonElement>
+ * >}
+ */
 const ModalButtons = forwardRef((props, ref) => {
   const { onClose, onSubmit, disabled, intl } = props;
 
   return (
   <ModalActions>
-    <Button onClick={onClose}
-            disabled={disabled}
+    <Button
+      onClick={onClose}
+      disabled={disabled}
+      aria-label={intl.formatMessage(messages.modalCancelButton)}
     >
       {intl.formatMessage(messages.modalCancelButton)}
     </Button>
@@ -33,6 +39,7 @@ const ModalButtons = forwardRef((props, ref) => {
       onClick={onSubmit}
       disabled={disabled}
       ref={!disabled ? ref : null}
+      aria-label={intl.formatMessage(messages.createTemplateButton)}
     >
       {intl.formatMessage(messages.createTemplateButton)}
     </Button>
