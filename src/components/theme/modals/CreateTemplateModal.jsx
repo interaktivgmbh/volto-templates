@@ -1,6 +1,6 @@
 import { Button, Header, Modal, ModalActions, ModalContent } from 'semantic-ui-react';
 import messages from '../../../messages';
-import React, { useState, useRef, forwardRef } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createContent } from '@plone/volto/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,24 +26,24 @@ const ModalButtons = forwardRef((props, ref) => {
   const { onClose, onSubmit, disabled, intl } = props;
 
   return (
-  <ModalActions>
-    <Button
-      onClick={onClose}
-      disabled={disabled}
-      aria-label={intl.formatMessage(messages.modalCancelButton)}
-    >
-      {intl.formatMessage(messages.modalCancelButton)}
-    </Button>
-    <Button
-      className="button"
-      onClick={onSubmit}
-      disabled={disabled}
-      ref={!disabled ? ref : null}
-      aria-label={intl.formatMessage(messages.createTemplateButton)}
-    >
-      {intl.formatMessage(messages.createTemplateButton)}
-    </Button>
-  </ModalActions>
+    <ModalActions>
+      <Button
+        onClick={onClose}
+        disabled={disabled}
+        aria-label={intl.formatMessage(messages.modalCancelButton)}
+      >
+        {intl.formatMessage(messages.modalCancelButton)}
+      </Button>
+      <Button
+        className="button"
+        onClick={onSubmit}
+        disabled={disabled}
+        ref={!disabled ? ref : null}
+        aria-label={intl.formatMessage(messages.createTemplateButton)}
+      >
+        {intl.formatMessage(messages.createTemplateButton)}
+      </Button>
+    </ModalActions>
   );
 });
 
@@ -55,23 +55,22 @@ const ModalButtons = forwardRef((props, ref) => {
  */
 
 /** @type {import('react').FC<CreateTemplateModalProps>} */
-export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
+export const CreateTemplateModal = forwardRef((props, ref) => {
+  const { open, onClose, pageTitle } = props;
+
   const intl = useIntl();
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [missingInputValues, setMissingInputValues] = useState([]);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const firstRef = useRef();
   const lastRef = useRef();
 
-  const { nearest_container } = useSelector((state) => state?.templateContainer || {});
-
-  const { data: content } = useSelector((state) => state?.content || {});
+  const { nearest_container } = useSelector((state) => state?.templateContainer) || {};
+  const { data: content } = useSelector((state) => state?.content) || {};
 
   const onSubmit = () => {
     setIsSubmitDisabled(true);
@@ -103,7 +102,7 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
     }
   };
 
-  useModalKeyHandler(firstRef, lastRef, open, onClose);
+  useModalKeyHandler(ref, lastRef, open, onClose);
 
   return (
     <Modal open={open} className="create-template-modal">
@@ -133,7 +132,7 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
                   prev.filter((val) => val !== 'template-title'),
                 )
               }
-              ref={firstRef}
+              ref={ref}
             />
             {missingInputValues.includes('template-title') ? (
               <p className="required-field-popup">
@@ -165,6 +164,6 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
       />
     </Modal>
   );
-};
+});
 
 export default CreateTemplateModal;
