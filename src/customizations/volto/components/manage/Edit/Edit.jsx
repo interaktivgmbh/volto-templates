@@ -1,3 +1,3 @@
-import Edit from '../../../../../components/manage/Edit/Edit'
+import Edit from '../../../../../components/manage/Edit/Edit';
 
-export default Edit
+export default Edit;

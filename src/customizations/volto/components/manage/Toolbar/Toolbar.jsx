@@ -1,3 +1,3 @@
-import Toolbar from '../../../../../components/manage/Toolbar/Toolbar'
+import Toolbar from '../../../../../components/manage/Toolbar/Toolbar';
 
-export default Toolbar
+export default Toolbar;

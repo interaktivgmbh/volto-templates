@@ -1,1 +1,1 @@
-export * from '../../../../actions/schema/schema'
+export * from '../../../../actions/schema/schema';

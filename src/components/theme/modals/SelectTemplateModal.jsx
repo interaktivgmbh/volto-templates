@@ -1,13 +1,25 @@
-import React, { useEffect } from 'react';
-import { Button, Card, CardGroup, Header, Image, Modal, ModalActions, ModalContent, } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getSelectableTemplates, toggleShowTemplatesModal } from '../../../actions';
+import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import propTypes from 'prop-types';
-import messages from '../../../messages';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
+import {
+  Button,
+  Card,
+  CardGroup,
+  Header,
+  Image,
+  Modal,
+  ModalActions,
+  ModalContent,
+} from 'semantic-ui-react';
+import propTypes from 'prop-types';
 import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
 
+import {
+  getSelectableTemplates,
+  toggleShowTemplatesModal,
+} from '../../../actions';
+import messages from '../../../messages';
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
   <Card key={template.UID}>
@@ -16,10 +28,11 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
         className="card-image-wrapper"
         onClick={() =>
           window.open(
-              template?.template_thumbnail,
+            template?.template_thumbnail,
             '_blank',
-            'noopener,noreferrer'
-          )}
+            'noopener,noreferrer',
+          )
+        }
       >
         <Image
           src={`${template?.template_thumbnail}?ts=${new Date().getTime()}`}
@@ -54,7 +67,12 @@ TemplateCard.propTypes = {
   onSelect: propTypes.func.isRequired,
 };
 
-const ModalButtons = ({ onCancel, onContinueWithoutTemplate, baseUrl, intl }) => (
+const ModalButtons = ({
+  onCancel,
+  onContinueWithoutTemplate,
+  baseUrl,
+  intl,
+}) => (
   <ModalActions>
     <Button onClick={onCancel}>
       {intl.formatMessage(messages.modalCancelButton)}
@@ -82,7 +100,8 @@ const TemplateModal = ({ show = false }) => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
-  const baseUrl = flattenToAppURL(getBaseUrl(location.pathname)) + '/add?type=Document';
+  const baseUrl =
+    flattenToAppURL(getBaseUrl(location.pathname)) + '/add?type=Document';
 
   const handleButtonClick = (url) => {
     dispatch(toggleShowTemplatesModal());

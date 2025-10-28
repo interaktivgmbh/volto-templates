@@ -10,9 +10,10 @@ import { Link } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { doesNodeContainClick } from 'semantic-ui-react/dist/commonjs/lib';
+import doesNodeContainClick from 'semantic-ui-react/dist/commonjs/lib/doesNodeContainClick';
 import { withCookies } from 'react-cookie';
-import { filter, find } from 'lodash';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
 import cx from 'classnames';
 import config from '@plone/volto/registry';
 
@@ -22,19 +23,15 @@ import Types from '@plone/volto/components/manage/Toolbar/Types';
 import PersonalInformation from '@plone/volto/components/manage/Preferences/PersonalInformation';
 import PersonalPreferences from '@plone/volto/components/manage/Preferences/PersonalPreferences';
 import StandardWrapper from '@plone/volto/components/manage/Toolbar/StandardWrapper';
-import {
-  getTypes,
-  listActions,
-  setExpandedToolbar,
-  unlockContent,
-} from '@plone/volto/actions';
-import { Icon } from '@plone/volto/components';
-import {
-  BodyClass,
-  getBaseUrl,
-  getCookieOptions,
-  hasApiExpander,
-} from '@plone/volto/helpers';
+import { getTypes } from '@plone/volto/actions/types/types';
+import { listActions } from '@plone/volto/actions/actions/actions';
+import { setExpandedToolbar } from '@plone/volto/actions/toolbar/toolbar';
+import { unlockContent } from '@plone/volto/actions/content/content';
+import Icon from '@plone/volto/components/theme/Icon/Icon';
+import BodyClass from '@plone/volto/helpers/BodyClass/BodyClass';
+import { getBaseUrl } from '@plone/volto/helpers/Url/Url';
+import { getCookieOptions } from '@plone/volto/helpers/Cookies/cookies';
+import { hasApiExpander } from '@plone/volto/helpers/Utils/Utils';
 import { Pluggable } from '@plone/volto/components/manage/Pluggable';
 
 import SelectTemplateModal from '../../theme/modals/SelectTemplateModal';
@@ -171,8 +168,8 @@ class Toolbar extends Component {
     showTemplatesModal: PropTypes.bool,
     backendAddons: PropTypes.objectOf({
       availableAddons: PropTypes.arrayOf(PropTypes.object),
-      installedAddons: PropTypes.arrayOf(PropTypes.object)
-    })
+      installedAddons: PropTypes.arrayOf(PropTypes.object),
+    }),
   };
 
   /**
@@ -189,7 +186,9 @@ class Toolbar extends Component {
     types: [],
   };
 
+  toolbarRef = React.createRef();
   toolbarWindow = React.createRef();
+  buttonRef = React.createRef();
 
   constructor(props) {
     super(props);
@@ -200,7 +199,7 @@ class Toolbar extends Component {
       menuStyle: {},
       menuComponents: [],
       loadedComponents: [],
-      hideToolbarBody: false
+      hideToolbarBody: false,
     };
   }
 
@@ -253,7 +252,7 @@ class Toolbar extends Component {
 
     // Templates Modal
     if (nextProps.showTemplatesModal && !this.props.showTemplatesModal) {
-      this.closeMenu()
+      this.closeMenu();
     }
   }
 
@@ -275,8 +274,9 @@ class Toolbar extends Component {
     );
   };
 
-  closeMenu = () =>
+  closeMenu = () => {
     this.setState(() => ({ showMenu: false, loadedComponents: [] }));
+  };
 
   loadComponent = (type) => {
     const { loadedComponents } = this.state;
@@ -296,6 +296,15 @@ class Toolbar extends Component {
           state.loadedComponents[state.loadedComponents.length - 2]
         ].hideToolbarBody || false,
     }));
+  };
+
+  toggleButtonPressed = (e) => {
+    const target = e.target;
+    const button =
+      target.tagName === 'BUTTON'
+        ? target
+        : this.findAncestor(e.target, 'button');
+    this.buttonRef.current = button;
   };
 
   toggleMenu = (e, selector) => {
@@ -323,11 +332,29 @@ class Toolbar extends Component {
         menuStyle: { top: 0 },
       }));
     }
+    this.toggleButtonPressed(e);
     this.loadComponent(selector);
   };
 
+  findAncestor = (el, sel) => {
+    while (
+      (el = el.parentElement) &&
+      !(el.matches || el.matchesSelector).call(el, sel)
+    );
+    return el;
+  };
+
   handleClickOutside = (e) => {
+    const target = e.target;
     if (this.pusher && doesNodeContainClick(this.pusher, e)) return;
+
+    // if the click is on the same button, do not close the menu as it
+    // may be handled by the toggleMenu action
+    const button =
+      doesNodeContainClick(this.toolbarRef.current, e) &&
+      this.findAncestor(target, 'button');
+    if (button && button === this.buttonRef.current) return;
+
     this.closeMenu();
   };
 
@@ -440,7 +467,10 @@ class Toolbar extends Component {
               )}
             </div>
           </div>
-          <div className={this.state.expanded ? 'toolbar expanded' : 'toolbar'}>
+          <div
+            className={this.state.expanded ? 'toolbar expanded' : 'toolbar'}
+            ref={this.toolbarRef}
+          >
             <div className="toolbar-body">
               <div className="toolbar-actions">
                 {this.props.hideDefaultViewButtons && this.props.inner && (
@@ -604,7 +634,7 @@ class Toolbar extends Component {
                 aria-label={this.props.intl.formatMessage(
                   messages.shrinkToolbar,
                 )}
-                className={cx({
+                className={cx('toolbar-handler-button', {
                   [this.props.content?.review_state]:
                     this.props.content?.review_state,
                 })}
@@ -635,7 +665,7 @@ export default compose(
       types: filter(state.types.types, 'addable'),
       unlockRequest: state.content.unlock,
       showTemplatesModal: state.templates.showTemplatesModal,
-      backendAddons: state.addons
+      backendAddons: state.addons,
     }),
     { getTypes, listActions, setExpandedToolbar, unlockContent },
   ),

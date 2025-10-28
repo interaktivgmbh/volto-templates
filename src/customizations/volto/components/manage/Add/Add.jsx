@@ -1,3 +1,3 @@
-import Add from '../../../../../components/manage/Add/Add'
+import Add from '../../../../../components/manage/Add/Add';
 
-export default Add
+export default Add;
