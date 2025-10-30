@@ -1,9 +1,12 @@
+import withClientSideContent from '@plone/volto/helpers/Content/withClientSideContent';
+
 import reducers from './reducers';
 
 import TemplatesScreenshot from './appextras/TemplatesScreenshot';
 import TemplatesToolbar from './appextras/TemplatesToolbar';
-import TemplatesEdit from './appextras/TemplatesEdit';
-import templates_thumbnail from './middlewares/templates_thumbnail';
+
+import TemplateAdd from './TemplateAdd';
+import TemplateEdit from './TemplateEdit';
 
 import packSVG from '@plone/volto/icons/pack.svg';
 
@@ -16,10 +19,6 @@ const applyConfig = (config) => {
   config.settings.appExtras = [
     ...(config.settings.appExtras || []),
     {
-      match: ['*/edit', '*/add'],
-      component: TemplatesEdit,
-    },
-    {
       match: '',
       component: TemplatesScreenshot,
     },
@@ -29,25 +28,32 @@ const applyConfig = (config) => {
     },
   ];
 
-  // Add content icons
+  // Add Templates related icons
   config.settings.contentIcons = {
     ...config.settings.contentIcons,
     TemplatesContainer: packSVG,
     Template: packSVG,
   };
 
-  // Add store extenders
-  config.settings.storeExtenders = [
-    ...(config.settings.storeExtenders || []),
-    templates_thumbnail,
+  // Add
+  config.addonRoutes = [
+    ...(config.addonRoutes || []),
+    {
+      path: ['/template-add', '/**/template-add'],
+      component: withClientSideContent(TemplateAdd),
+    },
+    {
+      path: ['/template-edit', '/**/template-edit'],
+      component: withClientSideContent(TemplateEdit),
+    },
   ];
 
-  Object.values(config.blocks.blocksConfig).forEach((block) => {
-    const Edit = block.edit;
-    block.edit = (props) => {
-      return <Edit {...props} manage />;
-    };
-  });
+  // Add template edit to non content routes
+  config.settings.nonContentRoutes = [
+    ...config.settings.nonContentRoutes,
+    /\/template-add$/,
+    /\/template-edit$/,
+  ];
 
   return config;
 };
