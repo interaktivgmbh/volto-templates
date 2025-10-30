@@ -25,6 +25,19 @@ $icons: (
   }
 }
 
+body:not(.dimmable.dimmed.scrolling) {
+  .select-template-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+.select-template-modal {
+  .actions::after {
+    display: none;
+  }
+}
+
 .create-template-modal {
   .content {
     .info-title {

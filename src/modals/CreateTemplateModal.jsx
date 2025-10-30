@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import {
   Button,
   Header,
@@ -5,14 +9,10 @@ import {
   ModalActions,
   ModalContent,
 } from 'semantic-ui-react';
-import messages from '../../../messages';
-import { useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { createContent } from '@plone/volto/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { createThumbnail } from '../../../actions';
 import { flattenToAppURL } from '@plone/volto/helpers';
-import { useHistory } from 'react-router';
+import messages from '../messages';
+import { createThumbnail } from '../actions';
 
 /**
  * @typedef {object} ModalButtonsProps

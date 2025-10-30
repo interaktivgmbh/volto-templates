@@ -15,11 +15,8 @@ import {
 import propTypes from 'prop-types';
 import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
 
-import {
-  getSelectableTemplates,
-  toggleShowTemplatesModal,
-} from '../../../actions';
-import messages from '../../../messages';
+import { getSelectableTemplates, toggleShowTemplatesModal } from '../actions';
+import messages from '../messages';
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => (
   <Card key={template.UID}>

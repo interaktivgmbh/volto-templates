@@ -35,7 +35,9 @@ export function initThumbnailHandler({
 
         // Used RegEx to differentiate between edit view and random paths containing the substring /edit
         if (!/\/edit(?:$|#|\?|\/)/.test(url) && pathname.includes(url)) {
-          takeScreenshot(thumbnailRef.current)
+          takeScreenshot(
+            isElement(thumbnailRef) ? thumbnailRef : thumbnailRef.current,
+          )
             .then((image) => {
               const { data, encoding, contentType } = image.match(
                 /^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/,
@@ -61,4 +63,17 @@ export function initThumbnailHandler({
       }, 500);
     },
   );
+}
+
+function isElement(obj) {
+  try {
+    return obj instanceof HTMLElement;
+  } catch (e) {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      obj.nodeType === 1 &&
+      typeof obj.nodeName === 'string'
+    );
+  }
 }
