@@ -318,6 +318,17 @@ class Edit extends Component {
   render() {
     const editPermission = find(this.props.objectActions, { id: 'edit' });
 
+    const isTemplate = this.props.content?.['@type'] === 'Template';
+
+    if (!isTemplate) {
+      return (
+        <Forbidden
+          pathname={this.props.pathname}
+          staticContext={this.props.staticContext}
+        />
+      );
+    }
+
     const pageEdit = (
       <Form
         isEditForm

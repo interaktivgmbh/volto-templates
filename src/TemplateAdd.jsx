@@ -417,6 +417,7 @@ class Add extends Component {
             history={this.props.history}
             location={this.props.location}
             token={this.props.token}
+            isAdminForm={this.props.type === 'Template'}
           />
           {this.state.isClient &&
             createPortal(
@@ -462,7 +463,10 @@ class Add extends Component {
             )}
           {visual &&
             this.state.isClient &&
-            createPortal(<Sidebar />, document.getElementById('sidebar'))}
+            createPortal(
+              <Sidebar settingsTab={this.props.type === 'Template'} />,
+              document.getElementById('sidebar'),
+            )}
         </div>
       );
 

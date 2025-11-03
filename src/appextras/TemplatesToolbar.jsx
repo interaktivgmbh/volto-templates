@@ -67,8 +67,14 @@ function RouteChangeHandler() {
         {
           path: ['/add', '/**/add'],
           callback: (tx) => {
-            if (!tx.search.includes('type=Document')) {
+            if (!/type=(Document|Template)/.test(tx.search)) {
               return true;
+            }
+            if (tx.search.includes('type=Template')) {
+              history.push(`${path}/template-add${tx.search}`, {
+                byTemplate: true,
+              });
+              return false;
             }
             dispatch(toggleShowTemplatesModal());
             return false;
