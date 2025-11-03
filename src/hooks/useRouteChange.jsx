@@ -16,8 +16,8 @@ export default function useRouteChange(onChange, onBlock) {
 
     // ✅ If blocking logic is provided
     if (onBlock) {
-      unblock = history.block((tx) => {
-        const result = onBlock(tx);
+      unblock = history.block((tx, action) => {
+        const result = onBlock(tx, action);
         if (result === false) {
           // completely cancel navigation
           return false;

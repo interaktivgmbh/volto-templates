@@ -19,22 +19,22 @@ function getSpreadObject(condition, obj) {
   return condition ? obj : [];
 }
 
-function CreateTemplateAction(props) {
+function CreateTemplateAction({ setOpenCreateModal }) {
   const dispatch = useDispatch();
-  const { location, content, setOpenCreateModal } = props;
   const intl = useIntl();
 
+  const content = useSelector((state) => state.content?.data) || {};
   const { nearest_container } = useSelector(
     (state) => state?.templateContainer || {},
   );
 
-  const pathname = flattenToAppURL(getBaseUrl(location.pathname));
+  const pathname = flattenToAppURL(getBaseUrl(content['@id']));
 
   useEffect(() => {
     if (!nearest_container) {
       dispatch(getTemplateContainers(pathname));
     }
-  }, []);
+  }, [nearest_container, pathname]);
 
   if (!content || content['@type'] !== 'Document' || !nearest_container) {
     return null;
@@ -67,15 +67,10 @@ function RouteChangeHandler() {
         {
           path: ['/add', '/**/add'],
           callback: (tx) => {
-            const search = tx.search.replace('?', '');
-            if (!search.includes('type=Document')) {
+            if (!tx.search.includes('type=Document')) {
               return true;
             }
-            if (!search.includes('template=')) {
-              dispatch(toggleShowTemplatesModal());
-              return false;
-            }
-            history.replace(`${path}/template-add${tx.search}`);
+            dispatch(toggleShowTemplatesModal());
             return false;
           },
         },
@@ -84,7 +79,9 @@ function RouteChangeHandler() {
         {
           path: ['/edit', '/**/edit'],
           callback: (tx) => {
-            history.replace(`${path}/template-edit${tx.search}`);
+            history.push(`${path}/template-edit${tx.search}`, {
+              byTemplate: true,
+            });
             return false;
           },
         },
@@ -94,11 +91,16 @@ function RouteChangeHandler() {
   );
 
   const onBlock = useCallback(
-    (tx) => {
+    (tx, action) => {
+      console.log(tx);
+      if (tx.state?.byTemplate || action === 'POP') {
+        return true;
+      }
+
       const match = matchRoutes(routes, tx.pathname);
 
       if (match.length === 1) {
-        return match[0].route?.callback(tx) ?? true;
+        return match[0].route?.callback(tx, action) ?? true;
       }
 
       return true;
@@ -111,7 +113,8 @@ function RouteChangeHandler() {
   return null;
 }
 
-function TemplatesToolbar(props) {
+function TemplatesToolbar() {
+  const el = useRef(null);
   const onClickHandler = useRef(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const content = useSelector((state) => state.content?.data) || {};
@@ -120,25 +123,26 @@ function TemplatesToolbar(props) {
   );
 
   useEffect(() => {
-    if (showTemplatesModal) {
-      onClickHandler.current();
+    if (showTemplatesModal && onClickHandler.current) {
+      const toolbarMenu = document.querySelector(
+        '#toolbar .toolbar-content .pusher-puller',
+      );
+      if (toolbarMenu.hasChildNodes()) {
+        onClickHandler.current();
+      }
     }
   }, [showTemplatesModal]);
 
   return (
     <>
       <Plug pluggable="main.toolbar.top">
-        <CreateTemplateAction
-          location={props.location}
-          content={content}
-          setOpenCreateModal={setOpenCreateModal}
-        />
+        <CreateTemplateAction setOpenCreateModal={setOpenCreateModal} />
         <RouteChangeHandler />
       </Plug>
       <Plug pluggable="main.toolbar.bottom">
         {(props) => {
           onClickHandler.current = props.onClickHandler;
-          return null;
+          return <button ref={el} style={{ display: 'none' }} />;
         }}
       </Plug>
       <CreateTemplateModal
