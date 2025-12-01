@@ -19,7 +19,7 @@ function getSpreadObject(condition, obj) {
   return condition ? obj : [];
 }
 
-function CreateTemplateAction({ setOpenCreateModal, backRef, inputRef }) {
+function CreateTemplateAction({ setOpenCreateModal, backRef }) {
   const dispatch = useDispatch();
   const intl = useIntl();
 
@@ -29,11 +29,6 @@ function CreateTemplateAction({ setOpenCreateModal, backRef, inputRef }) {
   );
 
   const pathname = flattenToAppURL(getBaseUrl(content['@id']));
-
-  const onOpen = () => {
-    setOpenCreateModal(true);
-    inputRef.current?.focus();
-  };
 
   useEffect(() => {
     if (!nearest_container) {
@@ -104,7 +99,6 @@ function RouteChangeHandler() {
 
   const onBlock = useCallback(
     (tx, action) => {
-      console.log(tx);
       if (tx.state?.byTemplate || action === 'POP') {
         return true;
       }
@@ -152,13 +146,17 @@ function TemplatesToolbar() {
     }
   }, [showTemplatesModal]);
 
+  useEffect(() => {
+    if (!openCreateModal) return;
+    inputRef.current?.focus();
+  }, [openCreateModal]);
+
   return (
     <>
       <Plug pluggable="main.toolbar.top">
         <CreateTemplateAction
           setOpenCreateModal={setOpenCreateModal}
           backRef={backRef}
-          inputRef={inputRef}
         />
         <RouteChangeHandler />
       </Plug>
