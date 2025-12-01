@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, forwardRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -13,6 +13,7 @@ import { createContent } from '@plone/volto/actions';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import messages from '../messages';
 import { createThumbnail } from '../actions';
+import { useModalKeyHandler } from '../hooks/useModalKeyHandler';
 
 /**
  * @typedef {object} ModalButtonsProps
@@ -22,17 +23,35 @@ import { createThumbnail } from '../actions';
  * @property {import('react-intl').IntlShape} intl
  */
 
-/** @type {import('react').FC<ModalButtonsProps>} */
-const ModalButtons = ({ onClose, onSubmit, disabled, intl }) => (
-  <ModalActions>
-    <Button onClick={onClose} disabled={disabled}>
-      {intl.formatMessage(messages.modalCancelButton)}
-    </Button>
-    <Button className="button" onClick={onSubmit} disabled={disabled}>
-      {intl.formatMessage(messages.createTemplateButton)}
-    </Button>
-  </ModalActions>
-);
+/**
+ * @type {import('react').ForwardRefExoticComponent<
+ *   ModalButtonsProps & import('react').RefAttributes<HTMLButtonElement>
+ * >}
+ */
+const ModalButtons = forwardRef((props, ref) => {
+  const { onClose, onSubmit, disabled, intl } = props;
+
+  return (
+    <ModalActions>
+      <Button
+        onClick={onClose}
+        disabled={disabled}
+        aria-label={intl.formatMessage(messages.modalCancelButton)}
+      >
+        {intl.formatMessage(messages.modalCancelButton)}
+      </Button>
+      <Button
+        className="button"
+        onClick={onSubmit}
+        disabled={disabled}
+        ref={!disabled ? ref : null}
+        aria-label={intl.formatMessage(messages.createTemplateButton)}
+      >
+        {intl.formatMessage(messages.createTemplateButton)}
+      </Button>
+    </ModalActions>
+  );
+});
 
 /**
  * @typedef {object} CreateTemplateModalProps
@@ -42,7 +61,9 @@ const ModalButtons = ({ onClose, onSubmit, disabled, intl }) => (
  */
 
 /** @type {import('react').FC<CreateTemplateModalProps>} */
-export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
+export const CreateTemplateModal = forwardRef((props, ref) => {
+  const { open, onClose, pageTitle } = props;
+
   const intl = useIntl();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -53,8 +74,10 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  const lastRef = useRef();
+
   const { nearest_container } = useSelector(
-    (state) => state?.templateContainer || {},
+    (state) => state?.templateContainer || {}
   );
 
   const { data: content } = useSelector((state) => state?.content || {});
@@ -75,7 +98,7 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
           blocks: content?.blocks || [],
           blocks_layout: content?.blocks_layout || {},
           '@type': 'Template',
-        }),
+        })
       ).then((content) => {
         if (content && content['@id']) {
           setTitle('');
@@ -90,6 +113,8 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
       });
     }
   };
+
+  useModalKeyHandler(ref, lastRef, open, onClose);
 
   return (
     <Modal open={open} className="create-template-modal">
@@ -116,9 +141,10 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
               onChange={(evt) => setTitle(evt.target.value)}
               onFocus={() =>
                 setMissingInputValues((prev) =>
-                  prev.filter((val) => val !== 'template-title'),
+                  prev.filter((val) => val !== 'template-title')
                 )
               }
+              ref={ref}
             />
             {missingInputValues.includes('template-title') ? (
               <p className="required-field-popup">
@@ -146,9 +172,10 @@ export const CreateTemplateModal = ({ open, onClose, pageTitle }) => {
         onSubmit={onSubmit}
         disabled={isSubmitDisabled}
         intl={intl}
+        ref={lastRef}
       />
     </Modal>
   );
-};
+});
 
 export default CreateTemplateModal;

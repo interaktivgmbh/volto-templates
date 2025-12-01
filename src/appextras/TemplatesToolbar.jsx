@@ -19,16 +19,21 @@ function getSpreadObject(condition, obj) {
   return condition ? obj : [];
 }
 
-function CreateTemplateAction({ setOpenCreateModal }) {
+function CreateTemplateAction({ setOpenCreateModal, backRef, inputRef }) {
   const dispatch = useDispatch();
   const intl = useIntl();
 
   const content = useSelector((state) => state.content?.data) || {};
   const { nearest_container } = useSelector(
-    (state) => state?.templateContainer || {},
+    (state) => state?.templateContainer || {}
   );
 
   const pathname = flattenToAppURL(getBaseUrl(content['@id']));
+
+  const onOpen = () => {
+    setOpenCreateModal(true);
+    inputRef.current?.focus();
+  };
 
   useEffect(() => {
     if (!nearest_container) {
@@ -45,6 +50,7 @@ function CreateTemplateAction({ setOpenCreateModal }) {
       title={intl.formatMessage(messages.createTemplateButton)}
       aria-label={intl.formatMessage(messages.createTemplateButton)}
       onClick={() => setOpenCreateModal(true)}
+      ref={backRef}
     >
       <Icon name={collectionSVG} size="30px" />
     </button>
@@ -56,7 +62,7 @@ function RouteChangeHandler() {
   const history = useHistory();
   const content = useSelector((state) => state.content?.data) || {};
   const { items: templates = [] } = useSelector(
-    (state) => state?.templates.selectableTemplates || {},
+    (state) => state?.templates.selectableTemplates || {}
   );
   const isTemplate = content?.['@type'] === 'Template';
   const path = getBaseUrl(history.location.pathname);
@@ -93,7 +99,7 @@ function RouteChangeHandler() {
         },
       ]),
     ],
-    [isTemplate, history, path, templates],
+    [isTemplate, history, path, templates]
   );
 
   const onBlock = useCallback(
@@ -111,7 +117,7 @@ function RouteChangeHandler() {
 
       return true;
     },
-    [routes],
+    [routes]
   );
 
   useRouteChange(null, routes.length > 0 ? onBlock : null);
@@ -122,16 +128,23 @@ function RouteChangeHandler() {
 function TemplatesToolbar() {
   const el = useRef(null);
   const onClickHandler = useRef(null);
+  const inputRef = useRef(null);
+  const backRef = useRef(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const content = useSelector((state) => state.content?.data) || {};
   const showTemplatesModal = useSelector(
-    (state) => state.templates.showTemplatesModal,
+    (state) => state.templates.showTemplatesModal
   );
+
+  const onCloseCreateModal = () => {
+    setOpenCreateModal(false);
+    backRef.current?.focus();
+  };
 
   useEffect(() => {
     if (showTemplatesModal && onClickHandler.current) {
       const toolbarMenu = document.querySelector(
-        '#toolbar .toolbar-content .pusher-puller',
+        '#toolbar .toolbar-content .pusher-puller'
       );
       if (toolbarMenu.hasChildNodes()) {
         onClickHandler.current();
@@ -142,7 +155,11 @@ function TemplatesToolbar() {
   return (
     <>
       <Plug pluggable="main.toolbar.top">
-        <CreateTemplateAction setOpenCreateModal={setOpenCreateModal} />
+        <CreateTemplateAction
+          setOpenCreateModal={setOpenCreateModal}
+          backRef={backRef}
+          inputRef={inputRef}
+        />
         <RouteChangeHandler />
       </Plug>
       <Plug pluggable="main.toolbar.bottom">
@@ -153,8 +170,9 @@ function TemplatesToolbar() {
       </Plug>
       <CreateTemplateModal
         open={openCreateModal}
-        onClose={() => setOpenCreateModal(false)}
+        onClose={onCloseCreateModal}
         pageTitle={content.title}
+        ref={inputRef}
       />
       <SelectTemplateModal show={showTemplatesModal} />
     </>
