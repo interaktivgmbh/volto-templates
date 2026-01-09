@@ -1,5 +1,4 @@
-// @ts-ignore
-import withClientSideContent from '@plone/volto/helpers/Content/withClientSideContent';
+import withClientSideContent from './helpers';
 
 import reducers from './reducers';
 
