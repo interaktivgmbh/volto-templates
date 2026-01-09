@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@interaktivgmbh/volto-templates':
+        specifier: workspace:*
+        version: link:packages/@interaktivgmbh/volto-templates
       '@plone/registry':
         specifier: workspace:*
         version: link:core/packages/registry

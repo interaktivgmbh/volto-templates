@@ -34,7 +34,8 @@
   },
   "dependencies": {
     "@plone/volto": "workspace:*",
-    "@plone/registry": "workspace:*"
+    "@plone/registry": "workspace:*",
+    "@interaktivgmbh/volto-templates": "workspace:*"
   },
   "devDependencies": {
     "mrs-developer": "^2.2.0"
