@@ -26,6 +26,7 @@ function TemplatesScreenshot(props) {
       takeScreenshot: props.takeScreenshot,
       thumbnailRef: document.getElementById('main'),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   return null;

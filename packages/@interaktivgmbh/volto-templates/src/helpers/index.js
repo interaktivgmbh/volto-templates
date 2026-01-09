@@ -28,7 +28,6 @@ export function initThumbnailHandler({
         const pathname = getPathname();
 
         if (++attempts === maxRetries) {
-          console.warn('Max retries reached. Stopping interval.');
           clearInterval(interval);
           return;
         }
@@ -37,26 +36,20 @@ export function initThumbnailHandler({
         if (!/\/edit(?:$|#|\?|\/)/.test(url) && pathname.includes(url)) {
           takeScreenshot(
             isElement(thumbnailRef) ? thumbnailRef : thumbnailRef.current,
-          )
-            .then((image) => {
-              const { data, encoding, contentType } = image.match(
-                /^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/,
-              ).groups;
+          ).then((image) => {
+            const { data, encoding, contentType } = image.match(
+              /^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/,
+            ).groups;
 
-              updateContent(url, {
-                template_thumbnail: {
-                  data,
-                  encoding,
-                  'content-type': contentType,
-                  filename: 'thumbnail',
-                },
-              }).catch((err) => {
-                console.warn('Error whle trying to set thumbnail.', err);
-              });
-            })
-            .catch((err) => {
-              console.warn('Error whle trying to set thumbnail.', err);
+            updateContent(url, {
+              template_thumbnail: {
+                data,
+                encoding,
+                'content-type': contentType,
+                filename: 'thumbnail',
+              },
             });
+          });
 
           clearInterval(interval);
         }

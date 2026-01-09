@@ -34,6 +34,8 @@ function CreateTemplateAction({ setOpenCreateModal, backRef }) {
     if (!nearest_container) {
       dispatch(getTemplateContainers(pathname));
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nearest_container, pathname]);
 
   if (!content || content['@type'] !== 'Document' || !nearest_container) {
@@ -94,6 +96,8 @@ function RouteChangeHandler() {
         },
       ]),
     ],
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isTemplate, history, path, templates],
   );
 
