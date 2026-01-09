@@ -28,7 +28,9 @@
   },
   "addons": [],
   "theme": "",
-  "dependencies": {},
+  "dependencies": {
+    "use-react-screenshot": "^4.0.0"
+  },
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -37,6 +39,7 @@
     "@plone/registry": "workspace:*",
     "@plone/scripts": "workspace:*",
     "@plone/types": "workspace:*",
+    "@plone/volto": "workspace:*",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "typescript": "^5.7.3",
