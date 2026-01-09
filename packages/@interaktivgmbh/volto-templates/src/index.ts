@@ -1,4 +1,4 @@
-import withClientSideContent from '@plone/volto/src/helpers/Content/withClientSideContent';
+import withClientSideContent from '@plone/volto/helpers/Content/withClientSideContent';
 
 import reducers from './reducers';
 
