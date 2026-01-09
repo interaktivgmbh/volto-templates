@@ -14,7 +14,7 @@ importers:
     dependencies:
       '@interaktivgmbh/volto-templates':
         specifier: workspace:*
-        version: link:packages/@interaktivgmbh/volto-templates
+        version: link:packages/volto-templates
       '@plone/registry':
         specifier: workspace:*
         version: link:core/packages/registry
@@ -1261,7 +1261,7 @@ importers:
         specifier: ^17.1.1
         version: 17.1.1(typescript@5.9.3)
 
-  packages/@interaktivgmbh/volto-templates:
+  packages/volto-templates:
     dependencies:
       react:
         specifier: ^18.2.0
@@ -1275,16 +1275,16 @@ importers:
     devDependencies:
       '@plone/registry':
         specifier: workspace:*
-        version: link:../../../core/packages/registry
+        version: link:../../core/packages/registry
       '@plone/scripts':
         specifier: workspace:*
-        version: link:../../../core/packages/scripts
+        version: link:../../core/packages/scripts
       '@plone/types':
         specifier: workspace:*
-        version: link:../../../core/packages/types
+        version: link:../../core/packages/types
       '@plone/volto':
         specifier: workspace:*
-        version: link:../../../core/packages/volto
+        version: link:../../core/packages/volto
       '@types/react':
         specifier: ^18.3.1
         version: 18.3.27
@@ -27478,7 +27478,7 @@ snapshots:
       got: 12.6.1
       registry-auth-token: 5.1.0
       registry-url: 6.0.1
-      semver: 7.6.0
+      semver: 7.7.3
 
   pacote@12.0.3:
     dependencies:
@@ -29684,7 +29684,7 @@ snapshots:
 
   semver-diff@4.0.0:
     dependencies:
-      semver: 7.6.0
+      semver: 7.7.3
 
   semver@5.7.2: {}
 
@@ -31159,7 +31159,7 @@ snapshots:
       is-yarn-global: 0.4.1
       latest-version: 7.0.0
       pupa: 3.3.0
-      semver: 7.5.4
+      semver: 7.7.3
       semver-diff: 4.0.0
       xdg-basedir: 5.1.0
 
