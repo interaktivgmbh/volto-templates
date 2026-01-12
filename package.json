@@ -1,8 +1,9 @@
 {
-  "name": "@interaktiv.de/volto-templates",
+  "name": "@interaktivgmbh/volto-templates-dev",
   "version": "1.0.0",
-  "description": "Interaktiv Templates Volto Addon",
-  "main": "src/index.js",
+  "description": "The Volto add-on for interaktiv.templates",
+  "author": "Interaktiv GmbH",
+  "homepage": "https://github.com/interaktivgmbh/volto-templates",
   "license": "MIT",
   "keywords": [
     "volto-addon",
@@ -10,50 +11,40 @@
     "plone",
     "react"
   ],
-  "author": {
-    "name": "Interaktiv GmbH",
-    "url": "https://interaktiv.de",
-    "email": "kontakt@interaktiv.de"
-  },
-  "contributors": [
-    {
-      "name": "Jan Mevißen",
-      "url": "https://github.com/jmevissen"
-    },
-    {
-      "name": "Mike Kühnapfel",
-      "url": "https://github.com/veyxos"
-    },
-    {
-      "name": "Maurice Reim",
-      "url": "https://github.com/mxurice-rm"
-    }
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "i18n": "rm -rf build/messages && NODE_ENV=production i18n --addon",
-    "dry-release": "release-it --dry-run",
-    "release": "release-it",
-    "release-major-alpha": "release-it major --preRelease=alpha",
-    "release-alpha": "release-it --preRelease=alpha",
-    "release-rc": "release-it --preRelease=rc"
+    "preinstall": "npx only-allow pnpm",
+    "start": "VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto start",
+    "start:prod": "pnpm --filter @plone/volto start:prod",
+    "build": "VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto build",
+    "build:deps": "pnpm --filter @plone/registry --filter @plone/components build",
+    "i18n": "pnpm --filter @interaktivgmbh/volto-templates i18n && VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto i18n",
+    "test": "RAZZLE_JEST_CONFIG=$(pwd)/jest-addon.config.js pnpm --filter @plone/volto test -- --passWithNoTests",
+    "lint": "VOLTOCONFIG=$(pwd)/volto.config.js eslint --max-warnings=0 'packages/**/src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "VOLTOCONFIG=$(pwd)/volto.config.js eslint --fix 'packages/**/src/**/*.{js,jsx,ts,tsx}'",
+    "prettier": "prettier --check 'packages/**/src/**/*.{js,jsx,ts,tsx}'",
+    "prettier:fix": "prettier --write 'packages/**/src/**/*.{js,jsx,ts,tsx}' ",
+    "stylelint": "stylelint 'packages/**/src/**/*.{css,scss,less}' --allow-empty-input",
+    "stylelint:fix": "stylelint 'packages/**/src/**/*.{css,scss,less}' --fix --allow-empty-input",
+    "dry-release": "pnpm --filter @interaktivgmbh/volto-templates dry-release",
+    "release": "pnpm --filter @interaktivgmbh/volto-templates release",
+    "release-major-alpha": "pnpm --filter @interaktivgmbh/volto-templates release-major-alpha",
+    "release-alpha": "pnpm --filter @interaktivgmbh/volto-templates release-alpha",
+    "storybook": "VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto storybook dev -p 6006 -c $(pwd)/.storybook",
+    "storybook-build": "VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto build-storybook -c $(pwd)/.storybook"
   },
   "dependencies": {
-    "html2canvas": "^1.4.1",
-    "remixicon": "^3.6.0",
-    "use-react-screenshot": "^4.0.0",
-    "react-portal": "^4.2.0"
-  },
-  "peerDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@plone/volto": "workspace:*",
+    "@plone/registry": "workspace:*",
+    "@interaktivgmbh/volto-templates": "workspace:*"
   },
   "devDependencies": {
-    "@plone/scripts": "*",
-    "@types/express": "^4.17.14",
-    "@types/jwt-decode": "~2.2.1",
-    "@types/react-router-config": "^5.0.6"
-  }
+    "mrs-developer": "^2.2.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
+      "react-refresh": "^0.14.2"
+    }
+  },
+  "packageManager": "pnpm@9.1.1"
 }

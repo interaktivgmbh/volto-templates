@@ -1,41 +1,38 @@
-# Volto Templates
+# Interaktiv Templates
 
-The Volto Templates Addon allows authors to create and select templates for Volto pages.
+[![npm](https://img.shields.io/npm/v/volto-templates)](https://www.npmjs.com/package/volto-templates)
+[![Code analysis checks](https://github.com/interaktivgmbh/volto-templates/actions/workflows/code.yml/badge.svg)](https://github.com/interaktivgmbh/volto-templates/actions/workflows/code.yml)
 
-## Requirements
+The Volto add-on for [interaktiv.templates](https://github.com/interaktivgmbh/interaktiv.templates)
 
-This addon need [`interaktiv.templates`](https://github.com/interaktivgmbh/interaktiv.templates) to be installed on the Plone backend.
+## Features
+
+- Create reusable page templates either from scratch or based on existing Documents using a toolbar button
+- When creating new Documents, available templates are automatically presented in a modal
+- Templates support block restrictions to control which blocks users can add or modify
+- Screenshot thumbnails are automatically generated for visual template preview
+- Templates can be organized in containers for better structure and management
 
 ## Installation
 
-Add `@interaktiv.de/volto-templates` to your package.json:
+Add `@interaktivgmbh/volto-templates` to your package.json:
 
-```json
+```JSON
 "addons": [
-  "@interaktiv.de/volto-templates"
-]
+    "@interaktivgmbh/volto-templates"
+],
 
 "dependencies": {
-  "@interaktiv.de/volto-templates": "*"
+    "@interaktivgmbh/volto-templates": "1.0.0"
 }
 ```
 
-Download and install now by runnning
-
-```sh
-yarn install
-```
-
-Start Volto with:
-
-```sh
-yarn start
-```
+This addon requires the [interaktiv.templates](https://github.com/interaktivgmbh/interaktiv.templates) package to be installed on your Plone site.
 
 ## License
 
-This project is licensed under the MIT license.
+The project is licensed under the MIT license.
 
----
+## Credits and acknowledgements 🙏
 
-<small>Made with &#x2764;&#xfe0f; by [Interaktiv](https://interaktiv.de) and the [Plone Community](https://community.plone.org/)</small>
+Generated using [Cookieplone (0.9.10)](https://github.com/plone/cookieplone) and [cookieplone-templates (96574af)](https://github.com/plone/cookieplone-templates/commit/96574af4136cae375cc74be36daed12df6ed6f82) on 2026-01-09 13:47:39.745815. A special thanks to all contributors and supporters!
