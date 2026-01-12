@@ -1,6 +1,6 @@
 # Interaktiv Templates
 
-[![npm](https://img.shields.io/npm/v/volto-templates)](https://www.npmjs.com/package/volto-templates)
+[![npm](https://img.shields.io/npm/v/@interaktivgmbh/volto-templates)](https://www.npmjs.com/package/@interaktivgmbh/volto-templates)
 [![Code analysis checks](https://github.com/interaktivgmbh/volto-templates/actions/workflows/code.yml/badge.svg)](https://github.com/interaktivgmbh/volto-templates/actions/workflows/code.yml)
 
 The Volto add-on for [interaktiv.templates](https://github.com/interaktivgmbh/interaktiv.templates)
