@@ -1,0 +1,135 @@
+/**
+ * @param {object} arg0
+ * @param {(cb: ((url: string) => void)) => void} arg0.setThumbnailCallback
+ * @param {() => string} arg0.getPathname
+ * @param {(element: HTMLElement) => Promise<string>} arg0.takeScreenshot
+ * @param {(url: string, content: { template_thumbnail?: { data: string, encoding: string, 'content-type': string, filename: string}}) => void} arg0.updateContent
+ * @param {import('react').RefObject<HTMLElement>} arg0.thumbnailRef
+ * @returns {void}
+ */
+export function initThumbnailHandler({
+  setThumbnailCallback,
+  getPathname,
+  takeScreenshot,
+  updateContent,
+  thumbnailRef,
+}) {
+  const maxRetries = 5;
+
+  setThumbnailCallback(
+    /**
+     * @param {string} url
+     * @returns {void}
+     */
+    (url) => {
+      let attempts = 0;
+
+      const interval = setInterval(() => {
+        const pathname = getPathname();
+
+        if (++attempts === maxRetries) {
+          console.warn('Max retries reached. Stopping interval.');
+          clearInterval(interval);
+          return;
+        }
+
+        // Used RegEx to differentiate between edit view and random paths containing the substring /edit
+        if (!/\/edit(?:$|#|\?|\/)/.test(url) && pathname.includes(url)) {
+          takeScreenshot(thumbnailRef.current)
+            .then((image) => {
+              const {
+                data,
+                encoding,
+                contentType,
+              } = image.match(/^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/).groups;
+
+              updateContent(url, {
+                template_thumbnail: {
+                  data,
+                  encoding,
+                  'content-type': contentType,
+                  filename: 'thumbnail',
+                },
+              })
+                .catch((err) => {
+                  console.warn('Error whle trying to set thumbnail.', err);
+                });
+            })
+            .catch((err) => {
+              console.warn('Error whle trying to set thumbnail.', err);
+            });
+
+          clearInterval(interval);
+        }
+      }, 500);
+    },
+  );
+}
+
+/**
+ * Helper function to extract the actual DOM element from various ref structures
+ * Based on the common patterns used in the codebase
+ * @param {any} element - The element reference
+ * @returns {HTMLElement|null} The actual DOM element
+ */
+export const getActualElement = (element) => {
+  if (!element) return null;
+
+  if (element.nodeType === Node.ELEMENT_NODE) {
+    return element;
+  }
+
+  if (element.current?.ref?.current) {
+    return element.current.ref.current;
+  }
+
+  if (element.current?.inputRef?.current) {
+    return element.current.inputRef.current;
+  }
+
+  if (element.current) {
+    if (element.current.nodeType === Node.ELEMENT_NODE) {
+      return element.current;
+    }
+  }
+
+  if (element.ref?.current) {
+    return element.ref.current;
+  }
+
+  if (element.inputRef?.current) {
+    return element.inputRef.current;
+  }
+
+  return null;
+};
+
+/**
+ * General key handler used for modals
+ * @param {KeyboardEvent} event the keydown event
+ * @param {any} firstRef the ref of the first focusable element
+ * @param {any} lastRef the ref of the last focusable element
+ * @param {function} onClose function to be called when the Esc key is pressed
+ */
+export const modalKeyHandler = (event, firstRef, lastRef, onClose) => {
+  if (!firstRef || !lastRef) return;
+
+  const activeElement = document.activeElement;
+
+  // focus trap: trap the focus between first and last ref
+  if (!event.shiftKey && event.key === 'Tab' && activeElement === lastRef) {
+    event.preventDefault();
+    firstRef.focus();
+    return;
+  }
+
+  if (event.shiftKey && event.key === 'Tab' && activeElement === firstRef) {
+    event.preventDefault();
+    lastRef.focus();
+  }
+
+  // close modal on esc
+  if (event.key === 'Esc' || event.key === 'Escape') {
+    onClose();
+  }
+};
