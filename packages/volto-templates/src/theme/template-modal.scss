@@ -1,9 +1,9 @@
 @use 'sass:map';
 
 $icons: (
-        arrow-right-up-line: '\ea70',
-        arrow-right-line: '\ea6c',
-        asterisk: '\ea81',
+  arrow-right-up-line: '\ea70',
+  arrow-right-line: '\ea6c',
+  asterisk: '\ea81',
 ) !default;
 
 @mixin use-icon($name, $family: 'remixicon') {
@@ -80,17 +80,16 @@ $icons: (
           font-size: 19px;
           line-height: 1.21428571em;
           outline: none;
-          transition: color 0.1s ease,
-          border-color 0.1s ease;
+          transition:
+            color 0.1s ease,
+            border-color 0.1s ease;
         }
-
       }
 
       @media (max-width: 768px) {
         flex-direction: column;
         gap: 15px;
       }
-
     }
   }
 }

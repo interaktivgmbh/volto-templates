@@ -28,7 +28,6 @@ export function initThumbnailHandler({
         const pathname = getPathname();
 
         if (++attempts === maxRetries) {
-          console.warn('Max retries reached. Stopping interval.');
           clearInterval(interval);
           return;
         }
@@ -48,13 +47,9 @@ export function initThumbnailHandler({
                   'content-type': contentType,
                   filename: 'thumbnail',
                 },
-              }).catch((err) => {
-                console.warn('Error whle trying to set thumbnail.', err);
-              });
+              }).catch(() => {});
             })
-            .catch((err) => {
-              console.warn('Error whle trying to set thumbnail.', err);
-            });
+            .catch(() => {});
 
           clearInterval(interval);
         }

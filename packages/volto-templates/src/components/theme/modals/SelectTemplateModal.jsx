@@ -124,6 +124,8 @@ const TemplateModal = ({ show = false }) => {
 
   useEffect(() => {
     dispatch(getSelectableTemplates());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   if (!show) {

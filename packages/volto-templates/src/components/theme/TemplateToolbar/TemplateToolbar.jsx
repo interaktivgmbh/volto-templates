@@ -38,6 +38,8 @@ const TemplateToolbar = () => {
     if (!nearest_container) {
       dispatch(getTemplateContainers(pathname));
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!content || content['@type'] !== 'Document' || !nearest_container) {
