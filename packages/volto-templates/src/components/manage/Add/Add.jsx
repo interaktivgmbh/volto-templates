@@ -24,7 +24,7 @@ import { compose } from 'redux';
 import { isEmpty, keys } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Button, Grid, Menu } from 'semantic-ui-react';
-import { Portal } from 'react-portal';
+import { createPortal } from 'react-dom';
 import { v4 as uuid } from 'uuid';
 import qs from 'query-string';
 import { toast } from 'react-toastify';
@@ -381,8 +381,8 @@ class Add extends Component {
             }}
             global
           />
-          {this.state.isClient && (
-            <Portal node={document.getElementById('toolbar')}>
+          {this.state.isClient &&
+            createPortal(
               <Toolbar
                 pathname={this.props.pathname}
                 hideDefaultViewButtons
@@ -415,14 +415,12 @@ class Add extends Component {
                     </Button>
                   </>
                 }
-              />
-            </Portal>
-          )}
-          {visual && this.state.isClient && (
-            <Portal node={document.getElementById('sidebar')}>
-              <Sidebar />
-            </Portal>
-          )}
+              />,
+              document.getElementById('toolbar'),
+            )}
+          {visual &&
+            this.state.isClient &&
+            createPortal(<Sidebar />, document.getElementById('sidebar'))}
         </div>
       );
 
