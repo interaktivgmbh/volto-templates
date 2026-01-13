@@ -41,6 +41,10 @@ const messages = defineMessages({
     id: 'templateFormRequiredField',
     defaultMessage: 'This field is required',
   },
+  openImageInNewTab: {
+    id: 'openImageInNewTab',
+    defaultMessage: 'Open image in new tab',
+  },
 });
 
 export default messages;

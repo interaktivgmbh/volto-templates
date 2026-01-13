@@ -1,4 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router';
 import {
   Button,
   Card,
@@ -9,16 +12,11 @@ import {
   ModalActions,
   ModalContent,
 } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  getSelectableTemplates,
-  toggleShowTemplatesModal,
-} from '../../../actions';
-import { useIntl } from 'react-intl';
 import propTypes from 'prop-types';
-import messages from '../../../messages';
-import { useHistory, useLocation } from 'react-router';
 import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
+
+import { getSelectableTemplates, toggleShowTemplatesModal } from '../actions';
+import messages from '../messages';
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
   const handleImageClick = () => {
@@ -119,7 +117,7 @@ const TemplateModal = ({ show = false }) => {
 
   const handleButtonClick = (url) => {
     dispatch(toggleShowTemplatesModal());
-    history.push(url);
+    history.push(url, { byTemplate: true });
   };
 
   useEffect(() => {

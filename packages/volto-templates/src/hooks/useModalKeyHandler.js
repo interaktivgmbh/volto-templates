@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getActualElement, modalKeyHandler } from './index';
+import { getActualElement, modalKeyHandler } from '../helpers';
 
 /**
  * Custom hook for handling modal keyboard navigation
@@ -40,3 +40,5 @@ export const useModalKeyHandler = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, firstElement?.current, lastElement?.current]);
 };
+
+export default useModalKeyHandler;
