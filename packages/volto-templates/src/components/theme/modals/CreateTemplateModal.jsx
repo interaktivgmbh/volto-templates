@@ -1,19 +1,13 @@
-import { useState, useRef, forwardRef } from 'react';
+import { Button, Header, Modal, ModalActions, ModalContent } from 'semantic-ui-react';
+import messages from '../../../messages';
+import React, { forwardRef, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import {
-  Button,
-  Header,
-  Modal,
-  ModalActions,
-  ModalContent,
-} from 'semantic-ui-react';
 import { createContent } from '@plone/volto/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { createThumbnail } from '../../../actions';
 import { flattenToAppURL } from '@plone/volto/helpers';
-import messages from '../messages';
-import { createThumbnail } from '../actions';
-import { useModalKeyHandler } from '../hooks/useModalKeyHandler';
+import { useHistory } from 'react-router';
+import { useModalKeyHandler } from '../../../helpers/hooks';
 
 /**
  * @typedef {object} ModalButtonsProps
@@ -70,17 +64,13 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
 
   const [missingInputValues, setMissingInputValues] = useState([]);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const lastRef = useRef();
 
-  const { nearest_container } = useSelector(
-    (state) => state?.templateContainer || {},
-  );
-
-  const { data: content } = useSelector((state) => state?.content || {});
+  const { nearest_container } = useSelector((state) => state?.templateContainer) || {};
+  const { data: content } = useSelector((state) => state?.content) || {};
 
   const onSubmit = () => {
     setIsSubmitDisabled(true);
@@ -91,15 +81,13 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
     } else {
       setMissingInputValues([]);
 
-      dispatch(
-        createContent(flattenToAppURL(nearest_container), {
-          title: title,
-          template_description: description || '',
-          blocks: content?.blocks || [],
-          blocks_layout: content?.blocks_layout || {},
-          '@type': 'Template',
-        }),
-      ).then((content) => {
+      dispatch(createContent(flattenToAppURL(nearest_container), {
+        title: title,
+        template_description: description || '',
+        blocks: content?.blocks || [],
+        blocks_layout: content?.blocks_layout || {},
+        '@type': 'Template',
+      })).then((content) => {
         if (content && content['@id']) {
           setTitle('');
           setDescription('');

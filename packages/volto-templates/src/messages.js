@@ -27,24 +27,20 @@ const messages = defineMessages({
   },
   templateFormTitle: {
     id: 'templateFormTitle',
-    defaultMessage: 'Title',
+    defaultMessage: 'Title'
   },
   templateFormDescription: {
     id: 'templateFormDescription',
-    defaultMessage: 'Description',
+    defaultMessage: 'Description'
   },
   createTemplateModalTitle: {
     id: 'createTemplateModalTitle',
-    defaultMessage: 'Create a new template',
+    defaultMessage: 'Create a new template'
   },
   templateFormRequiredField: {
     id: 'templateFormRequiredField',
-    defaultMessage: 'This field is required',
-  },
-  openImageInNewTab: {
-    id: 'openImageInNewTab',
-    defaultMessage: 'Open image in new tab',
-  },
+    defaultMessage: 'This field is required'
+  }
 });
 
 export default messages;

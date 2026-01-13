@@ -1,4 +1,4 @@
-import { GET_SELECTABLE_TEMPLATES } from '../../constants/ActionTypes';
+import {GET_SELECTABLE_TEMPLATES} from "../../constants/ActionTypes";
 
 export const initialState = {
   selectableTemplates: {
@@ -19,12 +19,12 @@ export default function templates(state = initialState, action) {
       return {
         ...state,
         thumbnailCallback: action.payload,
-      };
-    case 'CREATE_TEMPLATE_THUMBNAIL':
-      if (state.thumbnailCallback) {
-        state.thumbnailCallback(action.payload);
       }
-      return state;
+      case 'CREATE_TEMPLATE_THUMBNAIL':
+        if (state.thumbnailCallback) {
+          state.thumbnailCallback(action.payload);
+        }
+        return state;
 
     case 'TOGGLE_SHOW_TEMPLATES_MODAL':
       return {

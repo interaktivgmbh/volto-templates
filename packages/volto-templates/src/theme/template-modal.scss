@@ -1,9 +1,9 @@
 @use 'sass:map';
 
 $icons: (
-  arrow-right-up-line: '\ea70',
-  arrow-right-line: '\ea6c',
-  asterisk: '\ea81',
+        arrow-right-up-line: '\ea70',
+        arrow-right-line: '\ea6c',
+        asterisk: '\ea81',
 ) !default;
 
 @mixin use-icon($name, $family: 'remixicon') {
@@ -22,19 +22,6 @@ $icons: (
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-}
-
-body:not(.dimmable.dimmed.scrolling) {
-  .select-template-modal {
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-}
-
-.select-template-modal {
-  .actions::after {
-    display: none;
   }
 }
 
@@ -93,32 +80,17 @@ body:not(.dimmable.dimmed.scrolling) {
           font-size: 19px;
           line-height: 1.21428571em;
           outline: none;
-          transition:
-            color 0.1s ease,
-            border-color 0.1s ease;
+          transition: color 0.1s ease,
+          border-color 0.1s ease;
         }
+
       }
 
       @media (max-width: 768px) {
         flex-direction: column;
         gap: 15px;
       }
+
     }
   }
-}
-
-.toolbar-actions > * {
-  position: relative;
-}
-
-.toolbar-actions .overlap-action {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  opacity: 0;
 }
