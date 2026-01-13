@@ -1,3 +1,3 @@
 /* istanbul ignore file */
-export * from './templates'
-export { getTemplateContainers } from './templateContainer'
+export * from './templates';
+export { getTemplateContainers } from './templateContainer';

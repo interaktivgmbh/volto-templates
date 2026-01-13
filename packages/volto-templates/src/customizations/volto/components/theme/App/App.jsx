@@ -1,3 +1,3 @@
-import App from '../../../../../components/theme/App/App'
+import App from '../../../../../components/theme/App/App';
 
-export default App
+export default App;

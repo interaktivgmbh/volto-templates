@@ -9,10 +9,10 @@ import config from '@plone/volto/registry';
 import { toggleShowTemplatesModal } from '../../../actions';
 
 const Types = ({ types, pathname, content, currentLanguage }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const { items: templates = [] } = useSelector(
-    (state) => state?.templates.selectableTemplates || {}
+    (state) => state?.templates.selectableTemplates || {},
   );
 
   const { settings } = config;
@@ -46,10 +46,11 @@ const Types = ({ types, pathname, content, currentLanguage }) => {
                       className="item"
                       key={item.title}
                       onClick={
-                        item['@id'].slice(item['@id'].lastIndexOf('/') + 1) === 'Document' && templates.length !== 0
+                        item['@id'].slice(item['@id'].lastIndexOf('/') + 1) ===
+                          'Document' && templates.length !== 0
                           ? (event) => {
-                              event.preventDefault()
-                              dispatch(toggleShowTemplatesModal())
+                              event.preventDefault();
+                              dispatch(toggleShowTemplatesModal());
                             }
                           : undefined
                       }
@@ -131,13 +132,13 @@ Types.propTypes = {
       addable: PropTypes.bool,
       title: PropTypes.string,
     }),
-  ).isRequired
+  ).isRequired,
 };
 
 export default connect(
   (state) => ({
     types: filter(state.types.types, 'addable'),
-    currentLanguage: state.intl.locale
+    currentLanguage: state.intl.locale,
   }),
   {},
 )(Types);

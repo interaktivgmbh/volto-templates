@@ -37,11 +37,9 @@ export function initThumbnailHandler({
         if (!/\/edit(?:$|#|\?|\/)/.test(url) && pathname.includes(url)) {
           takeScreenshot(thumbnailRef.current)
             .then((image) => {
-              const {
-                data,
-                encoding,
-                contentType,
-              } = image.match(/^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/).groups;
+              const { data, encoding, contentType } = image.match(
+                /^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/,
+              ).groups;
 
               updateContent(url, {
                 template_thumbnail: {
@@ -50,10 +48,9 @@ export function initThumbnailHandler({
                   'content-type': contentType,
                   filename: 'thumbnail',
                 },
-              })
-                .catch((err) => {
-                  console.warn('Error whle trying to set thumbnail.', err);
-                });
+              }).catch((err) => {
+                console.warn('Error whle trying to set thumbnail.', err);
+              });
             })
             .catch((err) => {
               console.warn('Error whle trying to set thumbnail.', err);

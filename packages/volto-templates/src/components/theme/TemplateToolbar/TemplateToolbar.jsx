@@ -13,11 +13,13 @@ const TemplateToolbar = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const pathname = flattenToAppURL(getBaseUrl(location.pathname));
   const content = useSelector((state) => state?.content?.data) || [];
+  const pathname = flattenToAppURL(getBaseUrl(content['@id']));
+
   const [openModal, setOpenModal] = React.useState(false);
 
-  const { nearest_container } = useSelector((state) => state?.templateContainer) || {};
+  const { nearest_container } =
+    useSelector((state) => state?.templateContainer) || {};
 
   const inputRef = useRef(null);
   const backRef = useRef(null);
@@ -50,10 +52,7 @@ const TemplateToolbar = () => {
         onClick={onOpen}
         ref={backRef}
       >
-        <Icon
-          name={collectionSVG}
-          size="30px"
-        />
+        <Icon name={collectionSVG} size="30px" />
       </button>
       <CreateTemplateModal
         open={openModal}
@@ -63,7 +62,6 @@ const TemplateToolbar = () => {
       />
     </>
   );
-
 };
 
 export default TemplateToolbar;

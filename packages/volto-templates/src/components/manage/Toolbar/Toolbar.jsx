@@ -22,9 +22,19 @@ import Types from '@plone/volto/components/manage/Toolbar/Types';
 import PersonalInformation from '@plone/volto/components/manage/Preferences/PersonalInformation';
 import PersonalPreferences from '@plone/volto/components/manage/Preferences/PersonalPreferences';
 import StandardWrapper from '@plone/volto/components/manage/Toolbar/StandardWrapper';
-import { getTypes, listActions, setExpandedToolbar, unlockContent, } from '@plone/volto/actions';
+import {
+  getTypes,
+  listActions,
+  setExpandedToolbar,
+  unlockContent,
+} from '@plone/volto/actions';
 import { Icon } from '@plone/volto/components';
-import { BodyClass, getBaseUrl, getCookieOptions, hasApiExpander, } from '@plone/volto/helpers';
+import {
+  BodyClass,
+  getBaseUrl,
+  getCookieOptions,
+  hasApiExpander,
+} from '@plone/volto/helpers';
 import { Pluggable } from '@plone/volto/components/manage/Pluggable';
 
 import SelectTemplateModal from '../../theme/modals/SelectTemplateModal';
@@ -161,8 +171,8 @@ class Toolbar extends Component {
     showTemplatesModal: PropTypes.bool,
     backendAddons: PropTypes.objectOf({
       availableAddons: PropTypes.arrayOf(PropTypes.object),
-      installedAddons: PropTypes.arrayOf(PropTypes.object)
-    })
+      installedAddons: PropTypes.arrayOf(PropTypes.object),
+    }),
   };
 
   /**
@@ -190,7 +200,7 @@ class Toolbar extends Component {
       menuStyle: {},
       menuComponents: [],
       loadedComponents: [],
-      hideToolbarBody: false
+      hideToolbarBody: false,
     };
   }
 
@@ -243,7 +253,7 @@ class Toolbar extends Component {
 
     // Templates Modal
     if (nextProps.showTemplatesModal && !this.props.showTemplatesModal) {
-      this.closeMenu()
+      this.closeMenu();
     }
   }
 
@@ -625,7 +635,7 @@ export default compose(
       types: filter(state.types.types, 'addable'),
       unlockRequest: state.content.unlock,
       showTemplatesModal: state.templates.showTemplatesModal,
-      backendAddons: state.addons
+      backendAddons: state.addons,
     }),
     { getTypes, listActions, setExpandedToolbar, unlockContent },
   ),

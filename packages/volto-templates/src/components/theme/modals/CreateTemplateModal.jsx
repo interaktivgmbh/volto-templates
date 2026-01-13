@@ -1,4 +1,10 @@
-import { Button, Header, Modal, ModalActions, ModalContent } from 'semantic-ui-react';
+import {
+  Button,
+  Header,
+  Modal,
+  ModalActions,
+  ModalContent,
+} from 'semantic-ui-react';
 import messages from '../../../messages';
 import React, { forwardRef, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -69,7 +75,8 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
 
   const lastRef = useRef();
 
-  const { nearest_container } = useSelector((state) => state?.templateContainer) || {};
+  const { nearest_container } =
+    useSelector((state) => state?.templateContainer) || {};
   const { data: content } = useSelector((state) => state?.content) || {};
 
   const onSubmit = () => {
@@ -81,13 +88,15 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
     } else {
       setMissingInputValues([]);
 
-      dispatch(createContent(flattenToAppURL(nearest_container), {
-        title: title,
-        template_description: description || '',
-        blocks: content?.blocks || [],
-        blocks_layout: content?.blocks_layout || {},
-        '@type': 'Template',
-      })).then((content) => {
+      dispatch(
+        createContent(flattenToAppURL(nearest_container), {
+          title: title,
+          template_description: description || '',
+          blocks: content?.blocks || [],
+          blocks_layout: content?.blocks_layout || {},
+          '@type': 'Template',
+        }),
+      ).then((content) => {
         if (content && content['@id']) {
           setTitle('');
           setDescription('');
