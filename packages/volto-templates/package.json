@@ -2,7 +2,7 @@
   "name": "@interaktivgmbh/volto-templates",
   "version": "1.0.0",
   "description": "The Volto add-on for interaktiv.templates",
-  "main": "src/index.ts",
+  "main": "src/index.js",
   "license": "MIT",
   "keywords": [
     "volto-addon",
