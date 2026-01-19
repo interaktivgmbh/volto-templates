@@ -55,7 +55,11 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
       <Card.Content extra>
         <Button
           className="select-template-button"
-          onClick={() => onSelect(`${baseUrl}&template=${template.UID}`)}
+          onClick={() =>
+            onSelect(
+              `${baseUrl.replace('/add', '/template-add')}&template=${template.UID}`,
+            )
+          }
         >
           {intl.formatMessage(messages.selectTemplateButton)}
         </Button>
