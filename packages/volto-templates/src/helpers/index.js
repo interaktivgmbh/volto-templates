@@ -1,3 +1,9 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+import config from '@plone/volto/registry';
+import { getContent } from '@plone/volto/actions/content/content';
+
 /**
  * @param {object} arg0
  * @param {(cb: ((url: string) => void)) => void} arg0.setThumbnailCallback
@@ -34,28 +40,41 @@ export function initThumbnailHandler({
 
         // Used RegEx to differentiate between edit view and random paths containing the substring /edit
         if (!/\/edit(?:$|#|\?|\/)/.test(url) && pathname.includes(url)) {
-          takeScreenshot(thumbnailRef.current)
-            .then((image) => {
-              const { data, encoding, contentType } = image.match(
-                /^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/,
-              ).groups;
+          takeScreenshot(
+            isElement(thumbnailRef) ? thumbnailRef : thumbnailRef.current,
+          ).then((image) => {
+            const { data, encoding, contentType } = image.match(
+              /^data:(?<contentType>.*);(?<encoding>.*),(?<data>.*)$/,
+            ).groups;
 
-              updateContent(url, {
-                template_thumbnail: {
-                  data,
-                  encoding,
-                  'content-type': contentType,
-                  filename: 'thumbnail',
-                },
-              }).catch(() => {});
-            })
-            .catch(() => {});
+            updateContent(url, {
+              template_thumbnail: {
+                data,
+                encoding,
+                'content-type': contentType,
+                filename: 'thumbnail',
+              },
+            });
+          });
 
           clearInterval(interval);
         }
       }, 500);
     },
   );
+}
+
+function isElement(obj) {
+  try {
+    return obj instanceof HTMLElement;
+  } catch (e) {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      obj.nodeType === 1 &&
+      typeof obj.nodeName === 'string'
+    );
+  }
 }
 
 /**
@@ -125,3 +144,25 @@ export const modalKeyHandler = (event, firstRef, lastRef, onClose) => {
     onClose();
   }
 };
+
+/**
+ * Copied from https://github.com/plone/volto/blob/7daa83754c9383530d3c5c97181eda19e4d79583/packages/volto/src/helpers/Content/withClientSideContent.jsx#L20
+ * This function is included here because this addon may be used with older Volto versions
+ * where withClientSideContent is not available.
+ */
+export default function withClientSideContent(WrappedComponent) {
+  function WithClientSideContent(props) {
+    const { internalApiPath } = config.settings;
+    const dispatch = useDispatch();
+    const content = useSelector((state) => state.content);
+    const id = content.data?.['@id'];
+    useEffect(() => {
+      if (internalApiPath && id?.startsWith(internalApiPath)) {
+        dispatch(getContent(id.substring(internalApiPath.length)));
+      }
+    }, [internalApiPath, dispatch, id]);
+    return <WrappedComponent {...props} />;
+  }
+
+  return hoistNonReactStatics(WithClientSideContent, WrappedComponent);
+}
