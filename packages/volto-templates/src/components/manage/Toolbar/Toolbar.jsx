@@ -47,7 +47,7 @@ import moreSVG from '@plone/volto/icons/more.svg';
 import userSVG from '@plone/volto/icons/user.svg';
 import backSVG from '@plone/volto/icons/back.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
-import TemplateToolbar from '../../../appextras/TemplateToolbar';
+import TemplatesToolbar from '../../../appextras/TemplatesToolbar';
 
 const messages = defineMessages({
   edit: {
@@ -540,7 +540,7 @@ class Toolbar extends Component {
                           />
                         </button>
                       )}
-                    <TemplateToolbar />
+                    <TemplatesToolbar />
                     <div className="toolbar-button-spacer" />
                     <button
                       className="more"

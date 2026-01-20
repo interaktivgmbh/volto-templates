@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import CreateTemplateModal from '../modals/CreateTemplateModal';
 import { getTemplateContainers } from '../actions';
 
-const TemplateToolbar = () => {
+const TemplatesToolbar = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
@@ -66,4 +66,4 @@ const TemplateToolbar = () => {
   );
 };
 
-export default TemplateToolbar;
+export default TemplatesToolbar;
