@@ -18,9 +18,19 @@ msgstr ""
 "X-Is-Fallback-For: es-ar es-bo es-cl es-co es-cr es-do es-ec es-es es-sv es-gt es-hn es-mx es-ni es-pa es-py es-pe es-pr es-us es-uy es-ve\n"
 "X-Generator: Poedit 2.2.1\n"
 
+#. Default: "A short hint that describes the expected value within this block"
+#: messages
+msgid "A short hint that describes the expected value within this block"
+msgstr ""
+
 #. Default: "Add {type}"
 #: TemplateAdd
 msgid "Add {type}"
+msgstr ""
+
+#. Default: "Block settings"
+#: messages
+msgid "Block settings"
 msgstr ""
 
 #. Default: "Cancel"
@@ -34,6 +44,36 @@ msgstr ""
 msgid "Create template based on {page}"
 msgstr ""
 
+#. Default: "Default"
+#: messages
+msgid "Default"
+msgstr ""
+
+#. Default: "Disable creation of new blocks after this block"
+#: messages
+msgid "Disable creation of new blocks after this block"
+msgstr ""
+
+#. Default: "Disable drag & drop on this block"
+#: messages
+msgid "Disable drag & drop on this block"
+msgstr ""
+
+#. Default: "Disable editing on this block"
+#: messages
+msgid "Disable editing on this block"
+msgstr ""
+
+#. Default: "Disable new blocks"
+#: messages
+msgid "Disable new blocks"
+msgstr ""
+
+#. Default: "Don't allow deletion of this block"
+#: messages
+msgid "Don't allow deletion of this block"
+msgstr ""
+
 #. Default: "Edit {title}"
 #: TemplateEdit
 msgid "Edit {title}"
@@ -43,6 +83,26 @@ msgstr ""
 #: TemplateAdd
 #: TemplateEdit
 msgid "Error"
+msgstr ""
+
+#. Default: "Fixed position"
+#: messages
+msgid "Fixed position"
+msgstr ""
+
+#. Default: "Helper text"
+#: messages
+msgid "Helper text"
+msgstr ""
+
+#. Default: "Read-only"
+#: messages
+msgid "Read-only"
+msgstr ""
+
+#. Default: "Required"
+#: messages
+msgid "Required"
 msgstr ""
 
 #. Default: "Save"
