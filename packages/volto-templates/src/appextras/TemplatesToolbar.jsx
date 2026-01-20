@@ -1,34 +1,38 @@
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { matchRoutes } from 'react-router-config';
-import { useHistory } from 'react-router-dom';
-import { useIntl } from 'react-intl';
-import { useSelector, useDispatch } from 'react-redux';
-import { Plug } from '@plone/volto/components/manage/Pluggable';
-import { getBaseUrl, flattenToAppURL } from '@plone/volto/helpers';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers/Url/Url';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
-
-import SelectTemplateModal from '../modals/SelectTemplateModal';
-import CreateTemplateModal from '../modals/CreateTemplateModal';
 import messages from '../messages';
-import { getTemplateContainers, toggleShowTemplatesModal } from '../actions';
-import useRouteChange from '../hooks/useRouteChange';
 
 import collectionSVG from '@plone/volto/icons/collection.svg';
+import { useIntl } from 'react-intl';
+import CreateTemplateModal from '../modals/CreateTemplateModal';
+import { getTemplateContainers } from '../actions';
 
-function getSpreadObject(condition, obj) {
-  return condition ? obj : [];
-}
-
-function CreateTemplateAction({ setOpenCreateModal, backRef }) {
+const TemplatesToolbar = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const content = useSelector((state) => state.content?.data) || {};
-  const { nearest_container } = useSelector(
-    (state) => state?.templateContainer || {},
-  );
-
+  const content = useSelector((state) => state?.content?.data) || [];
   const pathname = flattenToAppURL(getBaseUrl(content['@id']));
+
+  const [openModal, setOpenModal] = React.useState(false);
+
+  const { nearest_container } =
+    useSelector((state) => state?.templateContainer) || {};
+
+  const inputRef = useRef(null);
+  const backRef = useRef(null);
+
+  const onOpen = () => {
+    setOpenModal(true);
+    inputRef.current?.focus();
+  };
+
+  const onClose = () => {
+    setOpenModal(false);
+    backRef.current?.focus();
+  };
 
   useEffect(() => {
     if (!nearest_container) {
@@ -36,149 +40,30 @@ function CreateTemplateAction({ setOpenCreateModal, backRef }) {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nearest_container, pathname]);
+  }, []);
 
   if (!content || content['@type'] !== 'Document' || !nearest_container) {
     return null;
   }
 
   return (
-    <button
-      title={intl.formatMessage(messages.createTemplateButton)}
-      aria-label={intl.formatMessage(messages.createTemplateButton)}
-      onClick={() => setOpenCreateModal(true)}
-      ref={backRef}
-    >
-      <Icon name={collectionSVG} size="30px" />
-    </button>
-  );
-}
-
-function RouteChangeHandler() {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const content = useSelector((state) => state.content?.data) || {};
-  const { items: templates = [] } = useSelector(
-    (state) => state?.templates.selectableTemplates || {},
-  );
-  const isTemplate = content?.['@type'] === 'Template';
-  const path = getBaseUrl(history.location.pathname);
-
-  const routes = useMemo(
-    () => [
-      ...getSpreadObject(templates.length > 0, [
-        {
-          path: ['/add', '/**/add'],
-          callback: (tx) => {
-            if (!/type=(Document|Template)/.test(tx.search)) {
-              return true;
-            }
-            if (tx.search.includes('type=Template')) {
-              history.push(`${path}/template-add${tx.search}`, {
-                byTemplate: true,
-              });
-              return false;
-            }
-            dispatch(toggleShowTemplatesModal());
-            return false;
-          },
-        },
-      ]),
-      ...getSpreadObject(isTemplate, [
-        {
-          path: ['/edit', '/**/edit'],
-          callback: (tx) => {
-            history.push(`${path}/template-edit${tx.search}`, {
-              byTemplate: true,
-            });
-            return false;
-          },
-        },
-      ]),
-    ],
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isTemplate, history, path, templates],
-  );
-
-  const onBlock = useCallback(
-    (tx, action) => {
-      if (tx.state?.byTemplate || action === 'POP') {
-        return true;
-      }
-
-      const match = matchRoutes(routes, tx.pathname);
-
-      if (match.length === 1) {
-        return match[0].route?.callback(tx, action) ?? true;
-      }
-
-      return true;
-    },
-    [routes],
-  );
-
-  useRouteChange(null, routes.length > 0 ? onBlock : null);
-
-  return null;
-}
-
-function TemplatesToolbar() {
-  const el = useRef(null);
-  const onClickHandler = useRef(null);
-  const inputRef = useRef(null);
-  const backRef = useRef(null);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const content = useSelector((state) => state.content?.data) || {};
-  const showTemplatesModal = useSelector(
-    (state) => state.templates.showTemplatesModal,
-  );
-
-  const onCloseCreateModal = () => {
-    setOpenCreateModal(false);
-    backRef.current?.focus();
-  };
-
-  useEffect(() => {
-    if (showTemplatesModal && onClickHandler.current) {
-      const toolbarMenu = document.querySelector(
-        '#toolbar .toolbar-content .pusher-puller',
-      );
-      if (toolbarMenu.hasChildNodes()) {
-        onClickHandler.current();
-      }
-    }
-  }, [showTemplatesModal]);
-
-  useEffect(() => {
-    if (!openCreateModal) return;
-    inputRef.current?.focus();
-  }, [openCreateModal]);
-
-  return (
     <>
-      <Plug pluggable="main.toolbar.top">
-        <CreateTemplateAction
-          setOpenCreateModal={setOpenCreateModal}
-          backRef={backRef}
-        />
-        <RouteChangeHandler />
-      </Plug>
-      <Plug pluggable="main.toolbar.bottom">
-        {(props) => {
-          onClickHandler.current = props.onClickHandler;
-          return <button ref={el} style={{ display: 'none' }} />;
-        }}
-      </Plug>
+      <button
+        title={intl.formatMessage(messages.createTemplateButton)}
+        aria-label={intl.formatMessage(messages.createTemplateButton)}
+        onClick={onOpen}
+        ref={backRef}
+      >
+        <Icon name={collectionSVG} size="30px" />
+      </button>
       <CreateTemplateModal
-        open={openCreateModal}
-        onClose={onCloseCreateModal}
+        open={openModal}
+        onClose={onClose}
         pageTitle={content.title}
         ref={inputRef}
       />
-      <SelectTemplateModal show={showTemplatesModal} />
     </>
   );
-}
+};
 
 export default TemplatesToolbar;

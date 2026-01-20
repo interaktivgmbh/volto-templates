@@ -1,7 +1,4 @@
-import { useEffect } from 'react';
-import { useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
+import React, { useEffect } from 'react';
 import {
   Button,
   Card,
@@ -12,11 +9,13 @@ import {
   ModalActions,
   ModalContent,
 } from 'semantic-ui-react';
-import propTypes from 'prop-types';
-import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { getSelectableTemplates, toggleShowTemplatesModal } from '../actions';
+import { useIntl } from 'react-intl';
+import propTypes from 'prop-types';
 import messages from '../messages';
+import { useHistory, useLocation } from 'react-router';
+import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
 
 const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
   const handleImageClick = () => {
@@ -55,11 +54,7 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
       <Card.Content extra>
         <Button
           className="select-template-button"
-          onClick={() =>
-            onSelect(
-              `${baseUrl.replace('/add', '/template-add')}&template=${template.UID}`,
-            )
-          }
+          onClick={() => onSelect(`${baseUrl}&template=${template.UID}`)}
         >
           {intl.formatMessage(messages.selectTemplateButton)}
         </Button>
@@ -117,7 +112,7 @@ const TemplateModal = ({ show = false }) => {
 
   const handleButtonClick = (url) => {
     dispatch(toggleShowTemplatesModal());
-    history.push(url, { byTemplate: true });
+    history.push(url);
   };
 
   useEffect(() => {
