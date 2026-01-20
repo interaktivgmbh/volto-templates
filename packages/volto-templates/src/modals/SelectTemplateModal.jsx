@@ -106,7 +106,7 @@ ModalButtons.propTypes = {
 
 const TemplateModal = ({ show = false }) => {
   const dispatch = useDispatch();
-  const { items: templates = [] } = useSelector(
+  const { items: templates = [], loaded } = useSelector(
     (state) => state?.templates.selectableTemplates || {},
   );
   const intl = useIntl();
@@ -121,10 +121,18 @@ const TemplateModal = ({ show = false }) => {
   };
 
   useEffect(() => {
-    dispatch(getSelectableTemplates());
-
+    if (show) {
+      dispatch(getSelectableTemplates());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
+
+  useEffect(() => {
+    if (show && loaded && templates.length === 0) {
+      handleButtonClick(baseUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show, loaded, templates.length]);
 
   if (!show) {
     return null;

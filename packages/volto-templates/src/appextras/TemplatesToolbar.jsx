@@ -58,32 +58,27 @@ function RouteChangeHandler() {
   const dispatch = useDispatch();
   const history = useHistory();
   const content = useSelector((state) => state.content?.data) || {};
-  const { items: templates = [] } = useSelector(
-    (state) => state?.templates.selectableTemplates || {},
-  );
   const isTemplate = content?.['@type'] === 'Template';
   const path = getBaseUrl(history.location.pathname);
 
   const routes = useMemo(
     () => [
-      ...getSpreadObject(templates.length > 0, [
-        {
-          path: ['/add', '/**/add'],
-          callback: (tx) => {
-            if (!/type=(Document|Template)/.test(tx.search)) {
-              return true;
-            }
-            if (tx.search.includes('type=Template')) {
-              history.push(`${path}/template-add${tx.search}`, {
-                byTemplate: true,
-              });
-              return false;
-            }
+      {
+        path: ['/add', '/**/add'],
+        callback: (tx) => {
+          if (tx.search.includes('type=Template')) {
+            history.push(`${path}/template-add${tx.search}`, {
+              byTemplate: true,
+            });
+            return false;
+          }
+          if (tx.search.includes('type=Document')) {
             dispatch(toggleShowTemplatesModal());
             return false;
-          },
+          }
+          return true;
         },
-      ]),
+      },
       ...getSpreadObject(isTemplate, [
         {
           path: ['/edit', '/**/edit'],
@@ -98,7 +93,7 @@ function RouteChangeHandler() {
     ],
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isTemplate, history, path, templates],
+    [isTemplate, history, path],
   );
 
   const onBlock = useCallback(
