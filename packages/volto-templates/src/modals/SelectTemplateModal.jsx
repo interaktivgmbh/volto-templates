@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
@@ -106,35 +106,50 @@ ModalButtons.propTypes = {
 
 const TemplateModal = ({ show = false }) => {
   const dispatch = useDispatch();
-  const { items: templates = [], loaded } = useSelector(
-    (state) => state?.templates.selectableTemplates || {},
-  );
+  const {
+    items: templates = [],
+    loaded,
+    loading,
+  } = useSelector((state) => state?.templates.selectableTemplates || {});
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
   const baseUrl =
     flattenToAppURL(getBaseUrl(location.pathname)) + '/add?type=Document';
 
-  const handleButtonClick = (url) => {
+  // Blocks redirect until fetch has started (prevents redirect with stale data)
+  const waitingForFetchRef = useRef(false);
+
+  const navigateTo = (url) => {
     dispatch(toggleShowTemplatesModal());
     history.push(url, { byTemplate: true });
   };
 
+  // Fetch templates when modal opens
   useEffect(() => {
     if (show) {
+      waitingForFetchRef.current = true;
       dispatch(getSelectableTemplates());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show]);
+  }, [show, dispatch]);
 
+  // Redirect if no templates exist (only after fetch completes)
   useEffect(() => {
-    if (show && loaded && templates.length === 0) {
-      handleButtonClick(baseUrl);
+    if (waitingForFetchRef.current && loading) {
+      waitingForFetchRef.current = false;
+    }
+    const fetchCompleted = loaded && !waitingForFetchRef.current;
+    const noTemplates = templates.length === 0;
+
+    if (show && fetchCompleted && noTemplates) {
+      navigateTo(baseUrl);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show, loaded, templates.length]);
+  }, [show, loaded, loading, templates.length]);
 
-  if (!show) {
+  // Only render when modal is open, fetch completed, and templates exist
+  const shouldRender = show && loaded && templates.length > 0;
+  if (!shouldRender) {
     return null;
   }
 
@@ -143,24 +158,20 @@ const TemplateModal = ({ show = false }) => {
       <Header>{intl.formatMessage(messages.templateModalTitle)}</Header>
       <ModalContent>
         <CardGroup itemsPerRow={3} className="selectable-templates">
-          {templates.length === 0 ? (
-            <strong>{intl.formatMessage(messages.noAvailableTemplates)}</strong>
-          ) : (
-            templates.map((template) => (
-              <TemplateCard
-                key={template.UID}
-                template={template}
-                baseUrl={baseUrl}
-                onSelect={handleButtonClick}
-                intl={intl}
-              />
-            ))
-          )}
+          {templates.map((template) => (
+            <TemplateCard
+              key={template.UID}
+              template={template}
+              baseUrl={baseUrl}
+              onSelect={navigateTo}
+              intl={intl}
+            />
+          ))}
         </CardGroup>
       </ModalContent>
       <ModalButtons
         onCancel={() => dispatch(toggleShowTemplatesModal())}
-        onContinueWithoutTemplate={handleButtonClick}
+        onContinueWithoutTemplate={navigateTo}
         baseUrl={baseUrl}
         intl={intl}
       />
