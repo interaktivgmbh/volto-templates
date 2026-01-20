@@ -5,15 +5,15 @@ import {
   ModalActions,
   ModalContent,
 } from 'semantic-ui-react';
-import messages from '../../../messages';
+import messages from '../messages';
 import React, { forwardRef, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { createContent } from '@plone/volto/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { createThumbnail } from '../../../actions';
+import { createThumbnail } from '../actions';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import { useHistory } from 'react-router';
-import { useModalKeyHandler } from '../../../helpers/hooks';
+import { useModalKeyHandler } from '../helpers/hooks';
 
 /**
  * @typedef {object} ModalButtonsProps

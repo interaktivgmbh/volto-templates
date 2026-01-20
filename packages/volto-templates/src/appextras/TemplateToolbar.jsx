@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers/Url/Url';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
-import messages from '../../../messages';
+import messages from '../messages';
 
 import collectionSVG from '@plone/volto/icons/collection.svg';
 import { useIntl } from 'react-intl';
 import CreateTemplateModal from '../modals/CreateTemplateModal';
-import { getTemplateContainers } from '../../../actions';
+import { getTemplateContainers } from '../actions';
 
 const TemplateToolbar = () => {
   const dispatch = useDispatch();

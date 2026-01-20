@@ -10,13 +10,10 @@ import {
   ModalContent,
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getSelectableTemplates,
-  toggleShowTemplatesModal,
-} from '../../../actions';
+import { getSelectableTemplates, toggleShowTemplatesModal } from '../actions';
 import { useIntl } from 'react-intl';
 import propTypes from 'prop-types';
-import messages from '../../../messages';
+import messages from '../messages';
 import { useHistory, useLocation } from 'react-router';
 import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
 
