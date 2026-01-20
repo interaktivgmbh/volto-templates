@@ -11,10 +11,20 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. Default: "A short hint that describes the expected value within this block"
+#: messages
+msgid "A short hint that describes the expected value within this block"
+msgstr "Ein kleiner Hinweis, um den Inhalt des Blocks zu beschreiben"
+
 #. Default: "Add {type}"
 #: TemplateAdd
 msgid "Add {type}"
 msgstr "{type} hinzufügen"
+
+#. Default: "Block settings"
+#: messages
+msgid "Block settings"
+msgstr "Block Einstellungen"
 
 #. Default: "Cancel"
 #: TemplateAdd
@@ -27,6 +37,36 @@ msgstr "Abbrechen"
 msgid "Create template based on {page}"
 msgstr "Template basierend auf {page} erstellen"
 
+#. Default: "Default"
+#: messages
+msgid "Default"
+msgstr ""
+
+#. Default: "Disable creation of new blocks after this block"
+#: messages
+msgid "Disable creation of new blocks after this block"
+msgstr "Erstellung neuer Blöcke nach diesem Block deaktivieren"
+
+#. Default: "Disable drag & drop on this block"
+#: messages
+msgid "Disable drag & drop on this block"
+msgstr "Drag & Drop für diesen Block deaktivieren"
+
+#. Default: "Disable editing on this block"
+#: messages
+msgid "Disable editing on this block"
+msgstr "Bearbeitung dieses Blocks deaktivieren"
+
+#. Default: "Disable new blocks"
+#: messages
+msgid "Disable new blocks"
+msgstr "Neue Blöcke deaktivieren"
+
+#. Default: "Don't allow deletion of this block"
+#: messages
+msgid "Don't allow deletion of this block"
+msgstr "Löschung dieses Blocks nicht zulassen"
+
 #. Default: "Edit {title}"
 #: TemplateEdit
 msgid "Edit {title}"
@@ -37,6 +77,26 @@ msgstr "{title} bearbeiten"
 #: TemplateEdit
 msgid "Error"
 msgstr "Fehler"
+
+#. Default: "Fixed position"
+#: messages
+msgid "Fixed position"
+msgstr "Feste Position"
+
+#. Default: "Helper text"
+#: messages
+msgid "Helper text"
+msgstr "Hilfstext"
+
+#. Default: "Read-only"
+#: messages
+msgid "Read-only"
+msgstr "Schreibgeschützt"
+
+#. Default: "Required"
+#: messages
+msgid "Required"
+msgstr "Notwendig"
 
 #. Default: "Save"
 #: TemplateAdd

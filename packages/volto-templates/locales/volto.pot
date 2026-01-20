@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plone\n"
-"POT-Creation-Date: 2026-01-09T13:43:32.263Z\n"
+"POT-Creation-Date: 2026-01-20T11:31:49.342Z\n"
 "Last-Translator: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -13,9 +13,19 @@ msgstr ""
 "Preferred-Encodings: utf-8\n"
 "Domain: volto\n"
 
+#. Default: "A short hint that describes the expected value within this block"
+#: messages
+msgid "A short hint that describes the expected value within this block"
+msgstr ""
+
 #. Default: "Add {type}"
 #: TemplateAdd
 msgid "Add {type}"
+msgstr ""
+
+#. Default: "Block settings"
+#: messages
+msgid "Block settings"
 msgstr ""
 
 #. Default: "Cancel"
@@ -29,6 +39,36 @@ msgstr ""
 msgid "Create template based on {page}"
 msgstr ""
 
+#. Default: "Default"
+#: messages
+msgid "Default"
+msgstr ""
+
+#. Default: "Disable creation of new blocks after this block"
+#: messages
+msgid "Disable creation of new blocks after this block"
+msgstr ""
+
+#. Default: "Disable drag & drop on this block"
+#: messages
+msgid "Disable drag & drop on this block"
+msgstr ""
+
+#. Default: "Disable editing on this block"
+#: messages
+msgid "Disable editing on this block"
+msgstr ""
+
+#. Default: "Disable new blocks"
+#: messages
+msgid "Disable new blocks"
+msgstr ""
+
+#. Default: "Don't allow deletion of this block"
+#: messages
+msgid "Don't allow deletion of this block"
+msgstr ""
+
 #. Default: "Edit {title}"
 #: TemplateEdit
 msgid "Edit {title}"
@@ -38,6 +78,26 @@ msgstr ""
 #: TemplateAdd
 #: TemplateEdit
 msgid "Error"
+msgstr ""
+
+#. Default: "Fixed position"
+#: messages
+msgid "Fixed position"
+msgstr ""
+
+#. Default: "Helper text"
+#: messages
+msgid "Helper text"
+msgstr ""
+
+#. Default: "Read-only"
+#: messages
+msgid "Read-only"
+msgstr ""
+
+#. Default: "Required"
+#: messages
+msgid "Required"
 msgstr ""
 
 #. Default: "Save"
