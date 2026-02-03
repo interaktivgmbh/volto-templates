@@ -13,7 +13,11 @@ import {
   ModalContent,
 } from 'semantic-ui-react';
 import propTypes from 'prop-types';
-import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
+import {
+  expandToBackendURL,
+  flattenToAppURL,
+  getBaseUrl,
+} from '@plone/volto/helpers';
 
 import { getSelectableTemplates, toggleShowTemplatesModal } from '../actions';
 import messages from '../messages';
@@ -42,7 +46,7 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
           aria-label={intl.formatMessage(messages.openImageInNewTab)}
         >
           <Image
-            src={`${template?.template_thumbnail}?ts=${new Date().getTime()}`}
+            src={expandToBackendURL(template.template_thumbnail)}
             wrapped
             ui={false}
           />
