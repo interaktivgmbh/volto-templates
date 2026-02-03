@@ -28,8 +28,8 @@ $icons: (
 body:not(.dimmable.dimmed.scrolling) {
   .select-template-modal {
     display: flex;
-    flex-direction: column;
     max-height: 90vh;
+    flex-direction: column;
 
     > .content {
       overflow-y: auto;
