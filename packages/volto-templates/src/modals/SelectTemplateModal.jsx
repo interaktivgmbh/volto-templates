@@ -13,11 +13,7 @@ import {
   ModalContent,
 } from 'semantic-ui-react';
 import propTypes from 'prop-types';
-import {
-  expandToBackendURL,
-  flattenToAppURL,
-  getBaseUrl,
-} from '@plone/volto/helpers';
+import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers';
 
 import { getSelectableTemplates, toggleShowTemplatesModal } from '../actions';
 import messages from '../messages';
