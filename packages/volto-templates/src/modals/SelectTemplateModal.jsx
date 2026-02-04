@@ -46,7 +46,7 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
           aria-label={intl.formatMessage(messages.openImageInNewTab)}
         >
           <Image
-            src={expandToBackendURL(template.template_thumbnail)}
+            src={`${window.location.origin}/++api++${template.template_thumbnail}`}
             wrapped
             ui={false}
           />
