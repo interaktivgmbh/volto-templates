@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import messages from '@interaktivgmbh/volto-templates/messages';
 
-const Schema = ({ intl, type }) => ({
+const Schema = ({ intl }) => ({
   title: intl.formatMessage(messages.blockSettings),
   fieldsets: [
     {
