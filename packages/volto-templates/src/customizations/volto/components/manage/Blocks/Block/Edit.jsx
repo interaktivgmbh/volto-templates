@@ -124,6 +124,7 @@ export class Edit extends Component {
     if (typeof schemaOrFactory === 'function') {
       return schemaOrFactory({
         intl: this.props.intl,
+        data: this.props.data,
       });
     }
     return schemaOrFactory;
