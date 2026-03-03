@@ -1,35 +1,50 @@
-import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateContent } from '@plone/volto/actions/content/content';
 import { setThumbnailCallback } from '../actions';
 import { initThumbnailHandler } from '../helpers';
-
-import withScreenshot from '../hoc/withScreenshot';
 
 function dispatchAction(dispatch, action) {
   return (...args) => dispatch(action(...args));
 }
 
-function TemplatesScreenshot(props) {
+function TemplatesScreenshotComponent({ takeScreenshot, pathname }) {
   const dispatch = useDispatch();
-  const pathname = useRef(props.pathname);
+  const pathnameRef = useRef(pathname);
 
   useEffect(() => {
-    pathname.current = props.pathname;
-  }, [props.pathname]);
+    pathnameRef.current = pathname;
+  }, [pathname]);
 
   useEffect(() => {
     initThumbnailHandler({
       setThumbnailCallback: dispatchAction(dispatch, setThumbnailCallback),
       updateContent: dispatchAction(dispatch, updateContent),
-      getPathname: () => pathname.current,
-      takeScreenshot: props.takeScreenshot,
+      getPathname: () => pathnameRef.current,
+      takeScreenshot,
       thumbnailRef: document.getElementById('main'),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathnameRef]);
 
   return null;
 }
 
-export default withScreenshot(TemplatesScreenshot);
+function TemplatesScreenshot(props) {
+  const token = useSelector((state) => state.userSession.token);
+  const [ScreenshotComponent, setScreenshotComponent] = useState(null);
+
+  useEffect(() => {
+    if (token && !ScreenshotComponent) {
+      import('../hoc/withScreenshot').then((mod) => {
+        setScreenshotComponent(() => mod.default(TemplatesScreenshotComponent));
+      });
+    }
+  }, [token, ScreenshotComponent]);
+
+  if (!token || !ScreenshotComponent) return null;
+
+  return <ScreenshotComponent {...props} />;
+}
+
+export default TemplatesScreenshot;
