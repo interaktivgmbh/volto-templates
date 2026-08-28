@@ -13,9 +13,34 @@ The Volto add-on for [interaktiv.templates](https://github.com/interaktivgmbh/in
 - Screenshot thumbnails are automatically generated for visual template preview
 - Templates can be organized in containers for better structure and management
 
+## Volto compatibility
+
+You are reading the `17.x` branch (Volto 17), maintenance (bugfixes only).
+Releases from this branch are versioned `1.1.x`; Volto 18 is served by `main` (`2.x`).
+
+Note on version numbers: `1.0.0` was an early, unpublished Volto 18 tag.
+The Volto 17 line starts at `1.1.0`, so `^1.1.0` resolves to Volto 17
+compatible releases only.
+
+The code in `TemplateAdd.jsx`, `TemplateEdit.jsx` and `customizations/volto/components/manage/Blocks/Block/Edit.jsx`
+is derived from `@plone/volto@17.23.0`; custom changes are marked with
+`volto-templates:` comments.
+
+## Requirements
+
+- Volto 17 (Yarn 3 project generated with `@plone/generator-volto`)
+- Node 20
+- The [interaktiv.templates](https://github.com/interaktivgmbh/interaktiv.templates)
+  add-on installed on the Plone backend
+- `de` and/or `en` in `config.settings.supportedLanguages` of your project
+  (the add-on ships translations for both; with other languages the English
+  default messages are used)
+
 ## Installation
 
-Add `@interaktivgmbh/volto-templates` to your package.json:
+### Option A: npm package (recommended once released)
+
+Add `@interaktivgmbh/volto-templates` to your `package.json`:
 
 ```JSON
 "addons": [
@@ -23,11 +48,64 @@ Add `@interaktivgmbh/volto-templates` to your package.json:
 ],
 
 "dependencies": {
-    "@interaktivgmbh/volto-templates": "1.0.0"
+    "@interaktivgmbh/volto-templates": "^1.1.0"
 }
 ```
 
-This addon requires the [interaktiv.templates](https://github.com/interaktivgmbh/interaktiv.templates) package to be installed on your Plone site.
+then run `yarn install`.
+
+### Option B: source checkout inside a Volto 17 project
+
+This repository is a pnpm monorepo. The add-on itself lives in
+`packages/volto-templates`, the repository root is only a development workspace.
+Therefore **installing via a Git URL** (`"@interaktivgmbh/volto-templates":
+"git+https://…"`) **does not work with Yarn** (it fails with
+`Assertion failed: Unsupported workflow`). Use a workspace checkout instead:
+
+1. Clone the `17.x` branch into `src/addons/volto-templates`:
+
+   ```bash
+   git clone -b 17.x https://github.com/interaktivgmbh/volto-templates.git src/addons/volto-templates
+   ```
+
+   or add it to `mrs.developer.json` and run `yarn missdev`:
+
+   ```JSON
+   "volto-templates": {
+     "package": "@interaktivgmbh/volto-templates",
+     "url": "https://github.com/interaktivgmbh/volto-templates.git",
+     "path": "packages/volto-templates/src",
+     "branch": "17.x"
+   }
+   ```
+
+2. Register the package folder as a workspace and add the add-on in
+   `package.json`:
+
+   ```JSON
+   "workspaces": [
+     "src/addons/volto-templates/packages/volto-templates"
+   ],
+   "addons": [
+     "@interaktivgmbh/volto-templates"
+   ],
+   "dependencies": {
+     "@interaktivgmbh/volto-templates": "workspace:*"
+   }
+   ```
+
+3. Add the path mapping to `tsconfig.json` (or `jsconfig.json`) – note: no
+   `/*` entry, Volto's add-on registry requires the plain path only:
+
+   ```JSON
+   "paths": {
+     "@interaktivgmbh/volto-templates": [
+       "addons/volto-templates/packages/volto-templates/src"
+     ]
+   }
+   ```
+
+4. `yarn install && yarn start`
 
 ## License
 
