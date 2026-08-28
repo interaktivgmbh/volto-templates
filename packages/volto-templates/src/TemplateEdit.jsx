@@ -5,47 +5,49 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Helmet from '@plone/volto/helpers/Helmet/Helmet';
-import { extractInvariantErrors } from '@plone/volto/helpers/FormValidation/FormValidation';
+import { Helmet } from '@plone/volto/helpers';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { asyncConnect } from '@plone/volto/helpers/AsyncConnect';
-import { hasApiExpander } from '@plone/volto/helpers/Utils/Utils';
+import { asyncConnect, hasApiExpander } from '@plone/volto/helpers';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Button, Grid, Menu } from 'semantic-ui-react';
-import { createPortal } from 'react-dom';
+import { Portal } from 'react-portal';
 import qs from 'query-string';
-import find from 'lodash/find';
+import { find } from 'lodash';
 import { toast } from 'react-toastify';
 
-import Forbidden from '@plone/volto/components/theme/Forbidden/Forbidden';
-import Icon from '@plone/volto/components/theme/Icon/Icon';
-import Sidebar from '@plone/volto/components/manage/Sidebar/Sidebar';
-import Toast from '@plone/volto/components/manage/Toast/Toast';
-import Toolbar from '@plone/volto/components/manage/Toolbar/Toolbar';
-import Unauthorized from '@plone/volto/components/theme/Unauthorized/Unauthorized';
-import CompareLanguages from '@plone/volto/components/manage/Multilingual/CompareLanguages';
-import TranslationObject from '@plone/volto/components/manage/Multilingual/TranslationObject';
-import { Form } from '@plone/volto/components/manage/Form';
+import {
+  Forbidden,
+  Form,
+  Icon,
+  Sidebar,
+  Toast,
+  Toolbar,
+  Unauthorized,
+  CompareLanguages,
+  TranslationObject,
+} from '@plone/volto/components';
 import {
   updateContent,
   getContent,
   lockContent,
   unlockContent,
-} from '@plone/volto/actions/content/content';
-import { getSchema } from '@plone/volto/actions/schema/schema';
-import { listActions } from '@plone/volto/actions/actions/actions';
-import { setFormData } from '@plone/volto/actions/form/form';
-import { flattenToAppURL, getBaseUrl } from '@plone/volto/helpers/Url/Url';
-import { hasBlocksData } from '@plone/volto/helpers/Blocks/Blocks';
+  getSchema,
+  listActions,
+  setFormData,
+} from '@plone/volto/actions';
+import {
+  flattenToAppURL,
+  getBaseUrl,
+  hasBlocksData,
+} from '@plone/volto/helpers';
 import { preloadLazyLibs } from '@plone/volto/helpers/Loadable';
-import { tryParseJSON } from '@plone/volto/helpers/FormValidation/FormValidation';
+import { tryParseJSON } from '@plone/volto/helpers';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
 
 import config from '@plone/volto/registry';
-import { createThumbnail } from './actions';
 
 const messages = defineMessages({
   edit: {
@@ -82,7 +84,6 @@ class Edit extends Component {
    * @static
    */
   static propTypes = {
-    templates: PropTypes.arrayOf(PropTypes.object),
     updateContent: PropTypes.func.isRequired,
     getContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
@@ -108,7 +109,6 @@ class Edit extends Component {
     schema: PropTypes.objectOf(PropTypes.any),
     objectActions: PropTypes.array,
     newId: PropTypes.string,
-    createThumbnail: PropTypes.func.isRequired,
   };
 
   /**
@@ -208,7 +208,9 @@ class Edit extends Component {
       const errorsList = tryParseJSON(error);
       let erroMessage;
       if (Array.isArray(errorsList)) {
-        const invariantErrors = extractInvariantErrors(errorsList);
+        const invariantErrors = errorsList
+          .filter((errorItem) => !('field' in errorItem))
+          .map((errorItem) => errorItem['message']);
         if (invariantErrors.length > 0) {
           // Plone invariant validation message.
           erroMessage = invariantErrors.join(' - ');
@@ -270,20 +272,7 @@ class Edit extends Component {
     if ('id' in data) {
       this.setState({ newId: data.id });
     }
-    this.props
-      .updateContent(getBaseUrl(this.props.pathname), data, headers)
-      .then((response) => {
-        if (
-          this.props.templates.some(
-            (template) => template.UID === this.props.content['UID'],
-          ) &&
-          Object.keys(data).length !== 0
-        ) {
-          this.props.createThumbnail(
-            flattenToAppURL(this.props.content['@id']),
-          );
-        }
-      });
+    this.props.updateContent(getBaseUrl(this.props.pathname), data, headers);
   }
 
   /**
@@ -318,21 +307,9 @@ class Edit extends Component {
   render() {
     const editPermission = find(this.props.objectActions, { id: 'edit' });
 
-    const isTemplate = this.props.content?.['@type'] === 'Template';
-
-    if (!isTemplate) {
-      return (
-        <Forbidden
-          pathname={this.props.pathname}
-          staticContext={this.props.staticContext}
-        />
-      );
-    }
-
     const pageEdit = (
       <Form
         isEditForm
-        isAdminForm
         ref={this.form}
         navRoot={this.props.content?.['@components']?.navroot?.navroot || {}}
         schema={this.props.schema}
@@ -356,10 +333,6 @@ class Edit extends Component {
           this.setState({ formSelected: 'editForm' });
         }}
         global
-        // Properties to pass to the BlocksForm to match the View ones
-        history={this.props.history}
-        location={this.props.location}
-        token={this.props.token}
       />
     );
 
@@ -371,15 +344,11 @@ class Edit extends Component {
               <>
                 <Helmet
                   title={
-                    this.props?.content?.title
+                    this.props?.schema?.title
                       ? this.props.intl.formatMessage(messages.edit, {
-                          title: this.props?.content?.title,
+                          title: this.props.schema.title,
                         })
-                      : this.props?.schema?.title
-                        ? this.props.intl.formatMessage(messages.edit, {
-                            title: this.props.schema.title,
-                          })
-                        : null
+                      : null
                   }
                 >
                   {this.props.content?.language && (
@@ -431,13 +400,11 @@ class Edit extends Component {
               </>
             )}
 
-            {editPermission &&
-              this.state.visual &&
-              this.state.isClient &&
-              createPortal(
-                <Sidebar settingsTab />,
-                document.getElementById('sidebar'),
-              )}
+            {editPermission && this.state.visual && this.state.isClient && (
+              <Portal node={document.getElementById('sidebar')}>
+                <Sidebar />
+              </Portal>
+            )}
           </>
         )}
         {!editPermission && (
@@ -455,8 +422,8 @@ class Edit extends Component {
             )}
           </>
         )}
-        {this.state.isClient &&
-          createPortal(
+        {this.state.isClient && (
+          <Portal node={document.getElementById('toolbar')}>
             <Toolbar
               pathname={this.props.pathname}
               hideDefaultViewButtons
@@ -478,7 +445,6 @@ class Edit extends Component {
                     />
                   </Button>
                   <Button
-                    type="button"
                     className="cancel"
                     aria-label={this.props.intl.formatMessage(messages.cancel)}
                     onClick={() => this.onCancel()}
@@ -505,9 +471,9 @@ class Edit extends Component {
                   )}
                 </>
               }
-            />,
-            document.getElementById('toolbar'),
-          )}
+            />
+          </Portal>
+        )}
       </div>
     );
   }
@@ -576,7 +542,6 @@ export default compose(
       updateRequest: state.content.update,
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
-      templates: state?.templates.selectableTemplates?.items || [],
     }),
     {
       updateContent,
@@ -585,7 +550,6 @@ export default compose(
       lockContent,
       unlockContent,
       setFormData,
-      createThumbnail,
     },
   ),
   preloadLazyLibs('cms'),
