@@ -1,6 +1,9 @@
 /**
  * Add container.
  * @module components/manage/Add/Add
+ *
+ * volto-templates: copy of Add/Add.jsx from @plone/volto@17.23.0.
+ * Custom changes are marked with "volto-templates:" comments.
  */
 
 import React, { Component } from 'react';
@@ -18,7 +21,6 @@ import { toast } from 'react-toastify';
 
 import {
   createContent,
-  getSchema,
   changeLanguage,
   setFormData,
 } from '@plone/volto/actions';
@@ -50,6 +52,8 @@ import config from '@plone/volto/registry';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
+// volto-templates: own getSchema (with template param) and createThumbnail
+import { createThumbnail, getSchema } from './actions';
 
 const messages = defineMessages({
   add: {
@@ -109,7 +113,10 @@ class Add extends Component {
       loaded: PropTypes.bool,
     }).isRequired,
     type: PropTypes.string,
+    // volto-templates: template id from ?template= query, thumbnail action
+    template: PropTypes.string,
     location: PropTypes.objectOf(PropTypes.any),
+    createThumbnail: PropTypes.func.isRequired,
   };
 
   /**
@@ -122,6 +129,7 @@ class Add extends Component {
     content: null,
     returnUrl: null,
     type: 'Default',
+    template: '',
   };
 
   /**
@@ -148,7 +156,12 @@ class Add extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    this.props.getSchema(this.props.type, getBaseUrl(this.props.pathname));
+    // volto-templates: pass template id to getSchema
+    this.props.getSchema(
+      this.props.type,
+      getBaseUrl(this.props.pathname),
+      this.props.template,
+    );
     this.setState({ isClient: true });
   }
 
@@ -215,18 +228,25 @@ class Add extends Component {
    * @returns {undefined}
    */
   onSubmit(data) {
-    this.props.createContent(getBaseUrl(this.props.pathname), {
-      ...data,
-      '@static_behaviors': this.props.schema.definitions
-        ? keys(this.props.schema.definitions)
-        : null,
-      '@type': this.props.type,
-      ...(config.settings.isMultilingual &&
-        this.props.location?.state?.translationOf && {
-          translation_of: this.props.location.state.translationOf,
-          language: this.props.location.state.language,
-        }),
-    });
+    this.props
+      .createContent(getBaseUrl(this.props.pathname), {
+        ...data,
+        '@static_behaviors': this.props.schema.definitions
+          ? keys(this.props.schema.definitions)
+          : null,
+        '@type': this.props.type,
+        ...(config.settings.isMultilingual &&
+          this.props.location?.state?.translationOf && {
+            translation_of: this.props.location.state.translationOf,
+            language: this.props.location.state.language,
+          }),
+      })
+      // volto-templates: create thumbnail for newly created templates
+      .then((response) => {
+        if (this.props.type === 'Template') {
+          this.props.createThumbnail(flattenToAppURL(response['@id']));
+        }
+      });
   }
 
   /**
@@ -344,7 +364,8 @@ class Add extends Component {
         <div id="page-add">
           <Helmet
             title={this.props.intl.formatMessage(messages.add, {
-              type: this.props.type,
+              // volto-templates: show schema title instead of type id
+              type: this.props?.schema?.title || this.props.type,
             })}
           />
           <Form
@@ -355,27 +376,30 @@ class Add extends Component {
             }
             schema={this.props.schema}
             type={this.props.type}
-            formData={{
-              ...(blocksFieldname && {
-                [blocksFieldname]:
-                  initialBlocks ||
-                  this.props.schema.properties[blocksFieldname]?.default,
-              }),
-              ...(blocksLayoutFieldname && {
-                [blocksLayoutFieldname]: {
-                  items:
-                    initialBlocksLayout ||
-                    this.props.schema.properties[blocksLayoutFieldname]?.default
-                      ?.items,
+            // volto-templates: prefill form from location.state.initialFormData
+            formData={
+              this.props.location?.state?.initialFormData || {
+                ...(blocksFieldname && {
+                  [blocksFieldname]:
+                    initialBlocks ||
+                    this.props.schema.properties[blocksFieldname]?.default,
+                }),
+                ...(blocksLayoutFieldname && {
+                  [blocksLayoutFieldname]: {
+                    items:
+                      initialBlocksLayout ||
+                      this.props.schema.properties[blocksLayoutFieldname]
+                        ?.default?.items,
+                  },
+                }),
+                // Copy the Language Independent Fields values from the to-be translated content
+                // into the default values of the translated content Add form.
+                ...lifData(),
+                parent: {
+                  '@id': this.props.content?.['@id'] || '',
                 },
-              }),
-              // Copy the Language Independent Fields values from the to-be translated content
-              // into the default values of the translated content Add form.
-              ...lifData(),
-              parent: {
-                '@id': this.props.content?.['@id'] || '',
-              },
-            }}
+              }
+            }
             requestError={this.state.error}
             onSubmit={this.onSubmit}
             hideActions
@@ -398,6 +422,8 @@ class Add extends Component {
           {this.state.isClient && (
             <Portal node={document.getElementById('toolbar')}>
               <Toolbar
+                // volto-templates: Template is an admin form
+                isAdminForm={this.props.type === 'Template'}
                 pathname={this.props.pathname}
                 hideDefaultViewButtons
                 inner={
@@ -417,7 +443,11 @@ class Add extends Component {
                         title={this.props.intl.formatMessage(messages.save)}
                       />
                     </Button>
-                    <Button className="cancel" onClick={() => this.onCancel()}>
+                    <Button
+                      className="cancel"
+                      onClick={() => this.onCancel()}
+                      type="button" // volto-templates: prevent form submit
+                    >
                       <Icon
                         name={clearSVG}
                         className="circled"
@@ -435,7 +465,8 @@ class Add extends Component {
           )}
           {visual && this.state.isClient && (
             <Portal node={document.getElementById('sidebar')}>
-              <Sidebar />
+              {/* volto-templates: settings tab for templates */}
+              <Sidebar settingsTab={this.props.type === 'Template'} />
             </Portal>
           )}
         </div>
@@ -499,8 +530,11 @@ export default compose(
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
       type: qs.parse(props.location.search).type,
+      // volto-templates: template id from query string
+      template: qs.parse(props.location.search).template,
     }),
-    { createContent, getSchema, changeLanguage, setFormData },
+    // volto-templates: local getSchema + createThumbnail
+    { createContent, getSchema, changeLanguage, setFormData, createThumbnail },
   ),
   preloadLazyLibs('cms'),
 )(Add);
