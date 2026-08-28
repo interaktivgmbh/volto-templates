@@ -15,20 +15,21 @@ The Volto add-on for [interaktiv.templates](https://github.com/interaktivgmbh/in
 
 ## Volto compatibility
 
-You are reading the `17.x` branch (Volto 17), maintenance (bugfixes only).
-Releases from this branch are versioned `1.1.x`; Volto 18 is served by `main` (`2.x`).
+You are reading the `16.x` branch (Volto 16, EOL), best effort only.
+Releases from this branch are versioned `0.16.x`; Volto 17 is served by `17.x` (`1.1.x`),
+Volto 18 by `main` (`2.x`).
 
 Note on version numbers: `1.0.0` was an early, unpublished Volto 18 tag.
-The Volto 17 line starts at `1.1.0`, so `^1.1.0` resolves to Volto 17
-compatible releases only.
+The Volto 17 line starts at `1.1.0`, the Volto 16 line uses `0.16.x`, so
+`^1.1.0` resolves to Volto 17 and `^0.16.0` to Volto 16 compatible releases only.
 
 The code in `TemplateAdd.jsx`, `TemplateEdit.jsx` and `customizations/volto/components/manage/Blocks/Block/Edit.jsx`
-is derived from `@plone/volto@17.23.0`; custom changes are marked with
+is derived from `@plone/volto@16.34.2`; custom changes are marked with
 `volto-templates:` comments.
 
 ## Requirements
 
-- Volto 17 (Yarn 3 project generated with `@plone/generator-volto`)
+- Volto 16 (Yarn 3 project generated with `@plone/generator-volto`)
 - Node 20
 - The [interaktiv.templates](https://github.com/interaktivgmbh/interaktiv.templates)
   add-on installed on the Plone backend
@@ -48,7 +49,7 @@ Add `@interaktivgmbh/volto-templates` to your `package.json`:
 ],
 
 "dependencies": {
-    "@interaktivgmbh/volto-templates": "^1.1.0"
+    "@interaktivgmbh/volto-templates": "^0.16.0"
 }
 ```
 
@@ -65,7 +66,7 @@ Therefore **installing via a Git URL** (`"@interaktivgmbh/volto-templates":
 1. Clone the `17.x` branch into `src/addons/volto-templates`:
 
    ```bash
-   git clone -b 17.x https://github.com/interaktivgmbh/volto-templates.git src/addons/volto-templates
+   git clone -b 16.x https://github.com/interaktivgmbh/volto-templates.git src/addons/volto-templates
    ```
 
    or add it to `mrs.developer.json` and run `yarn missdev`:
@@ -75,7 +76,7 @@ Therefore **installing via a Git URL** (`"@interaktivgmbh/volto-templates":
      "package": "@interaktivgmbh/volto-templates",
      "url": "https://github.com/interaktivgmbh/volto-templates.git",
      "path": "packages/volto-templates/src",
-     "branch": "17.x"
+     "branch": "16.x"
    }
    ```
 

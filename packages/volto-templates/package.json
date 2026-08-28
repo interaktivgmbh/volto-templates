@@ -1,6 +1,6 @@
 {
   "name": "@interaktivgmbh/volto-templates",
-  "version": "1.1.0-rc.1",
+  "version": "0.16.0",
   "description": "The Volto add-on for interaktiv.templates",
   "main": "src/index.js",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "use-react-screenshot": "^4.0.0"
   },
   "peerDependencies": {
-    "@plone/volto": "^17.0.0",
+    "@plone/volto": "^16.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
