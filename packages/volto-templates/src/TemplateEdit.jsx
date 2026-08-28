@@ -1,9 +1,6 @@
 /**
  * Edit container.
  * @module components/manage/Edit/Edit
- *
- * volto-templates: copy of Edit/Edit.jsx from @plone/volto@17.23.0.
- * Custom changes are marked with "volto-templates:" comments.
  */
 
 import React, { Component } from 'react';
@@ -37,7 +34,6 @@ import {
   unlockContent,
   getSchema,
   listActions,
-  setFormData,
 } from '@plone/volto/actions';
 import {
   flattenToAppURL,
@@ -45,14 +41,11 @@ import {
   hasBlocksData,
 } from '@plone/volto/helpers';
 import { preloadLazyLibs } from '@plone/volto/helpers/Loadable';
-import { tryParseJSON } from '@plone/volto/helpers';
 
 import saveSVG from '@plone/volto/icons/save.svg';
 import clearSVG from '@plone/volto/icons/clear.svg';
 
 import config from '@plone/volto/registry';
-// volto-templates: thumbnail action
-import { createThumbnail } from './actions';
 
 const messages = defineMessages({
   edit: {
@@ -71,10 +64,6 @@ const messages = defineMessages({
     id: 'Error',
     defaultMessage: 'Error',
   },
-  someErrors: {
-    id: 'There are some errors.',
-    defaultMessage: 'There are some errors.',
-  },
 });
 
 /**
@@ -89,8 +78,6 @@ class Edit extends Component {
    * @static
    */
   static propTypes = {
-    // volto-templates: selectable templates from store
-    templates: PropTypes.arrayOf(PropTypes.object),
     updateContent: PropTypes.func.isRequired,
     getContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
@@ -116,8 +103,6 @@ class Edit extends Component {
     schema: PropTypes.objectOf(PropTypes.any),
     objectActions: PropTypes.array,
     newId: PropTypes.string,
-    // volto-templates: thumbnail action
-    createThumbnail: PropTypes.func.isRequired,
   };
 
   /**
@@ -197,7 +182,6 @@ class Edit extends Component {
       });
     }
     if (this.props.updateRequest.loading && nextProps.updateRequest.loaded) {
-      this.props.setFormData({});
       this.props.history.push(
         this.props.returnUrl || getBaseUrl(this.props.pathname),
       );
@@ -214,30 +198,13 @@ class Edit extends Component {
         new DOMParser().parseFromString(message, 'text/html')?.all[0]
           ?.textContent || message;
 
-      const errorsList = tryParseJSON(error);
-      let erroMessage;
-      if (Array.isArray(errorsList)) {
-        const invariantErrors = errorsList
-          .filter((errorItem) => !('field' in errorItem))
-          .map((errorItem) => errorItem['message']);
-        if (invariantErrors.length > 0) {
-          // Plone invariant validation message.
-          erroMessage = invariantErrors.join(' - ');
-        } else {
-          // Error in specific field.
-          erroMessage = this.props.intl.formatMessage(messages.someErrors);
-        }
-      } else {
-        erroMessage = error;
-      }
-
       this.setState({ error: error });
 
       toast.error(
         <Toast
           error
           title={this.props.intl.formatMessage(messages.error)}
-          content={erroMessage}
+          content={`${nextProps.updateRequest.error.status} ${error}`}
         />,
       );
     }
@@ -281,21 +248,7 @@ class Edit extends Component {
     if ('id' in data) {
       this.setState({ newId: data.id });
     }
-    this.props
-      .updateContent(getBaseUrl(this.props.pathname), data, headers)
-      // volto-templates: re-create thumbnail after saving a template
-      .then((response) => {
-        if (
-          this.props.templates.some(
-            (template) => template.UID === this.props.content['UID'],
-          ) &&
-          Object.keys(data).length !== 0
-        ) {
-          this.props.createThumbnail(
-            flattenToAppURL(this.props.content['@id']),
-          );
-        }
-      });
+    this.props.updateContent(getBaseUrl(this.props.pathname), data, headers);
   }
 
   /**
@@ -304,7 +257,6 @@ class Edit extends Component {
    * @returns {undefined}
    */
   onCancel() {
-    this.props.setFormData({});
     this.props.history.push(
       this.props.returnUrl || getBaseUrl(this.props.pathname),
     );
@@ -330,22 +282,9 @@ class Edit extends Component {
   render() {
     const editPermission = find(this.props.objectActions, { id: 'edit' });
 
-    // volto-templates: this route is only for Template objects
-    const isTemplate = this.props.content?.['@type'] === 'Template';
-
-    if (!isTemplate) {
-      return (
-        <Forbidden
-          pathname={this.props.pathname}
-          staticContext={this.props.staticContext}
-        />
-      );
-    }
-
     const pageEdit = (
       <Form
         isEditForm
-        isAdminForm // volto-templates
         ref={this.form}
         navRoot={this.props.content?.['@components']?.navroot?.navroot || {}}
         schema={this.props.schema}
@@ -438,8 +377,7 @@ class Edit extends Component {
 
             {editPermission && this.state.visual && this.state.isClient && (
               <Portal node={document.getElementById('sidebar')}>
-                {/* volto-templates: settings tab */}
-                <Sidebar settingsTab />
+                <Sidebar />
               </Portal>
             )}
           </>
@@ -482,7 +420,6 @@ class Edit extends Component {
                     />
                   </Button>
                   <Button
-                    type="button" // volto-templates: prevent form submit
                     className="cancel"
                     aria-label={this.props.intl.formatMessage(messages.cancel)}
                     onClick={() => this.onCancel()}
@@ -580,8 +517,6 @@ export default compose(
       updateRequest: state.content.update,
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
-      // volto-templates: selectable templates
-      templates: state?.templates.selectableTemplates?.items || [],
     }),
     {
       updateContent,
@@ -589,8 +524,6 @@ export default compose(
       getSchema,
       lockContent,
       unlockContent,
-      setFormData,
-      createThumbnail, // volto-templates
     },
   ),
   preloadLazyLibs('cms'),
