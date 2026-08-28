@@ -57,7 +57,9 @@ const TemplateCard = ({ template, baseUrl, onSelect, intl }) => {
           className="select-template-button"
           onClick={() =>
             onSelect(
-              `${baseUrl.replace('/add', '/template-add')}&template=${template.UID}`,
+              `${baseUrl.replace('/add', '/template-add')}&template=${
+                template.UID
+              }`,
             )
           }
         >
