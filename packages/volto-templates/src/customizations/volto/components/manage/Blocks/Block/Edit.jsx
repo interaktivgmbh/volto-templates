@@ -1,9 +1,6 @@
 /**
  * Edit block.
  * @module components/manage/Blocks/Block/Edit
- *
- * volto-templates: customization based on @plone/volto@17.23.0.
- * Custom changes are marked with "volto-templates:" comments.
  */
 
 import React, { Component } from 'react';
@@ -115,23 +112,6 @@ export class Edit extends Component {
   blockNode = React.createRef();
 
   /**
-   * volto-templates: allow block schemas to be factory functions
-   * receiving { intl, data } (e.g. for translated schemas).
-   * Get schema - handles both function and object schemas
-   * @param {Object|Function} schemaOrFactory - Schema object or factory function
-   * @returns {Object} The schema object
-   */
-  getSchema(schemaOrFactory) {
-    if (typeof schemaOrFactory === 'function') {
-      return schemaOrFactory({
-        intl: this.props.intl,
-        data: this.props.data,
-      });
-    }
-    return schemaOrFactory;
-  }
-
-  /**
    * Render method.
    * @method render
    * @returns {string} Markup for the component.
@@ -149,10 +129,7 @@ export class Edit extends Component {
     ) {
       Block = blocksConfig?.[type]?.['view'] || ViewDefaultBlock;
     }
-    // volto-templates: resolve schema factory
-    const schemaOrFactory =
-      blocksConfig?.[type]?.['schema'] || BlockSettingsSchema;
-    const schema = this.getSchema(schemaOrFactory);
+    const schema = blocksConfig?.[type]?.['schema'] || BlockSettingsSchema;
     const blockHasOwnFocusManagement =
       blocksConfig?.[type]?.['blockHasOwnFocusManagement'] || null;
 
@@ -181,7 +158,7 @@ export class Edit extends Component {
                     )
                 : null
             }
-            className={cx('block', type, this.props.data.variation, {
+            className={cx(`block ${type} ${this.props.data.variation ?? ''}`, {
               selected: this.props.selected || this.props.multiSelected,
               multiSelected: this.props.multiSelected,
             })}
