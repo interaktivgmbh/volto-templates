@@ -2,7 +2,7 @@
   "name": "@interaktivgmbh/volto-templates",
   "version": "2.0.3",
   "description": "The Volto add-on for interaktiv.templates",
-  "main": "src/index.ts",
+  "main": "src/index.js",
   "license": "MIT",
   "keywords": [
     "volto-addon",
@@ -29,20 +29,15 @@
   "addons": [],
   "theme": "",
   "dependencies": {
+    "html2canvas": "^1.4.1",
     "use-react-screenshot": "^4.0.0"
   },
   "peerDependencies": {
+    "@plone/volto": "^17.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@plone/registry": "workspace:*",
-    "@plone/scripts": "workspace:*",
-    "@plone/types": "workspace:*",
-    "@plone/volto": "workspace:*",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "typescript": "^5.7.3",
     "release-it": "^19.0.5"
   }
 }
