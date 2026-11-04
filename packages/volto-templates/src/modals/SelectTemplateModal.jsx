@@ -114,8 +114,9 @@ const TemplateModal = ({ show = false }) => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
+  const contentType = useSelector((state) => state?.templates.modalContentType);
   const baseUrl =
-    flattenToAppURL(getBaseUrl(location.pathname)) + '/add?type=Document';
+    flattenToAppURL(getBaseUrl(location.pathname)) + `/add?type=${contentType}`;
 
   // Blocks redirect until fetch has started (prevents redirect with stale data)
   const waitingForFetchRef = useRef(false);
@@ -127,11 +128,11 @@ const TemplateModal = ({ show = false }) => {
 
   // Fetch templates when modal opens
   useEffect(() => {
-    if (show) {
+    if (show && contentType) {
       waitingForFetchRef.current = true;
-      dispatch(getSelectableTemplates());
+      dispatch(getSelectableTemplates(contentType));
     }
-  }, [show, dispatch]);
+  }, [show, contentType, dispatch]);
 
   // Redirect if no templates exist (only after fetch completes)
   useEffect(() => {
