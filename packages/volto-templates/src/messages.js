@@ -33,6 +33,14 @@ const messages = defineMessages({
     id: 'templateFormDescription',
     defaultMessage: 'Description',
   },
+  createTemplateError: {
+    id: 'createTemplateError',
+    defaultMessage: 'The template could not be created.',
+  },
+  error: {
+    id: 'Error',
+    defaultMessage: 'Error',
+  },
   createTemplateModalTitle: {
     id: 'createTemplateModalTitle',
     defaultMessage: 'Create a new template',
