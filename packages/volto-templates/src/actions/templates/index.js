@@ -24,19 +24,20 @@ export function getSchema(type, url, template) {
   };
 }
 
-export function getSelectableTemplates() {
+export function getSelectableTemplates(contentType) {
   return {
     type: GET_SELECTABLE_TEMPLATES,
     request: {
       op: 'get',
-      path: `/@search?portal_type=Template&metadata_fields=UID&metadata_fields=template_description&metadata_fields=template_thumbnail`,
+      path: `/@search?portal_type=Template&template_types=${encodeURIComponent(contentType)}&metadata_fields=UID&metadata_fields=template_description&metadata_fields=template_thumbnail`,
     },
   };
 }
 
-export function toggleShowTemplatesModal() {
+export function toggleShowTemplatesModal(contentType = null) {
   return {
     type: TOGGLE_SHOW_TEMPLATES_MODAL,
+    contentType,
   };
 }
 

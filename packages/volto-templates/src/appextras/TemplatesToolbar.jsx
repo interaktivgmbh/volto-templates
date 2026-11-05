@@ -12,6 +12,7 @@ import CreateTemplateModal from '../modals/CreateTemplateModal';
 import messages from '../messages';
 import { getTemplateContainers, toggleShowTemplatesModal } from '../actions';
 import useRouteChange from '../hooks/useRouteChange';
+import useTemplateTypes from '../hooks/useTemplateTypes';
 
 import collectionSVG from '@plone/volto/icons/collection.svg';
 
@@ -59,6 +60,7 @@ function RouteChangeHandler() {
   const history = useHistory();
   const content = useSelector((state) => state.content?.data) || {};
   const isTemplate = content?.['@type'] === 'Template';
+  const templateTypes = useTemplateTypes();
   const path = getBaseUrl(history.location.pathname);
 
   const routes = useMemo(
@@ -72,8 +74,9 @@ function RouteChangeHandler() {
             });
             return false;
           }
-          if (tx.search.includes('type=Document')) {
-            dispatch(toggleShowTemplatesModal());
+          const requestedType = new URLSearchParams(tx.search).get('type');
+          if (templateTypes.includes(requestedType)) {
+            dispatch(toggleShowTemplatesModal(requestedType));
             return false;
           }
           return true;
@@ -93,7 +96,7 @@ function RouteChangeHandler() {
     ],
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isTemplate, history, path],
+    [isTemplate, history, path, templateTypes],
   );
 
   const onBlock = useCallback(

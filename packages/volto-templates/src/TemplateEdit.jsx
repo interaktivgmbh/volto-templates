@@ -83,8 +83,6 @@ class Edit extends Component {
    * @static
    */
   static propTypes = {
-    // volto-templates: selectable templates from store
-    templates: PropTypes.arrayOf(PropTypes.object),
     updateContent: PropTypes.func.isRequired,
     getContent: PropTypes.func.isRequired,
     getSchema: PropTypes.func.isRequired,
@@ -262,9 +260,7 @@ class Edit extends Component {
       // volto-templates: re-create thumbnail after saving a template
       .then((response) => {
         if (
-          this.props.templates.some(
-            (template) => template.UID === this.props.content['UID'],
-          ) &&
+          this.props.content?.['@type'] === 'Template' &&
           Object.keys(data).length !== 0
         ) {
           this.props.createThumbnail(
@@ -555,8 +551,6 @@ export default compose(
       updateRequest: state.content.update,
       pathname: props.location.pathname,
       returnUrl: qs.parse(props.location.search).return_url,
-      // volto-templates: selectable templates
-      templates: state?.templates.selectableTemplates?.items || [],
     }),
     {
       updateContent,

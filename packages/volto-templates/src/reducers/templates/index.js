@@ -8,6 +8,8 @@ export const initialState = {
     items: [],
   },
   showTemplatesModal: false,
+  // content type whose /add navigation opened the modal
+  modalContentType: null,
   thumbnailCallback: null,
 };
 
@@ -26,11 +28,19 @@ export default function templates(state = initialState, action) {
       }
       return state;
 
-    case 'TOGGLE_SHOW_TEMPLATES_MODAL':
+    case 'TOGGLE_SHOW_TEMPLATES_MODAL': {
+      const show = !state.showTemplatesModal;
       return {
         ...state,
-        showTemplatesModal: !state.showTemplatesModal,
+        showTemplatesModal: show,
+        modalContentType: show ? action.contentType || null : null,
+        // templates are loaded per content type: drop the previous ones,
+        // otherwise the modal briefly shows them
+        selectableTemplates: show
+          ? initialState.selectableTemplates
+          : state.selectableTemplates,
       };
+    }
 
     /* SELECTABLE TEMPLATES */
 
