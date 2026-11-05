@@ -9,8 +9,10 @@ import {
   ModalActions,
   ModalContent,
 } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
 import { createContent } from '@plone/volto/actions';
 import { flattenToAppURL } from '@plone/volto/helpers';
+import Toast from '@plone/volto/components/manage/Toast/Toast';
 import messages from '../messages';
 import { createThumbnail } from '../actions';
 import { useModalKeyHandler } from '../hooks/useModalKeyHandler';
@@ -97,20 +99,32 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
           template_description: description || '',
           blocks: content?.blocks || [],
           blocks_layout: content?.blocks_layout || {},
+          template_types: [content?.['@type']],
           '@type': 'Template',
         }),
-      ).then((content) => {
-        if (content && content['@id']) {
-          setTitle('');
-          setDescription('');
+      )
+        .then((content) => {
+          if (content && content['@id']) {
+            setTitle('');
+            setDescription('');
+            setIsSubmitDisabled(false);
+
+            history.push(flattenToAppURL(content['@id']));
+            dispatch(createThumbnail(flattenToAppURL(content['@id'])));
+
+            onClose();
+          }
+        })
+        .catch(() => {
           setIsSubmitDisabled(false);
-
-          history.push(flattenToAppURL(content['@id']));
-          dispatch(createThumbnail(flattenToAppURL(content['@id'])));
-
-          onClose();
-        }
-      });
+          toast.error(
+            <Toast
+              error
+              title={intl.formatMessage(messages.error)}
+              content={intl.formatMessage(messages.createTemplateError)}
+            />,
+          );
+        });
     }
   };
 

@@ -120,6 +120,11 @@ msgstr ""
 msgid "createTemplateButton"
 msgstr ""
 
+#. Default: "The template could not be created."
+#: messages
+msgid "createTemplateError"
+msgstr ""
+
 #. Default: "Create a new template"
 #: messages
 msgid "createTemplateModalTitle"

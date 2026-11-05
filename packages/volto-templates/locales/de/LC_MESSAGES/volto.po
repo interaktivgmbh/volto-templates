@@ -120,6 +120,11 @@ msgstr "Nach {lang} übersetzen"
 msgid "createTemplateButton"
 msgstr "Vorlage erstellen"
 
+#. Default: "The template could not be created."
+#: messages
+msgid "createTemplateError"
+msgstr "Die Vorlage konnte nicht erstellt werden."
+
 #. Default: "Create a new template"
 #: messages
 msgid "createTemplateModalTitle"

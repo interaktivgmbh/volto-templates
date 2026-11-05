@@ -25,6 +25,7 @@ function CreateTemplateAction({ setOpenCreateModal, backRef }) {
   const intl = useIntl();
 
   const content = useSelector((state) => state.content?.data) || {};
+  const templateTypes = useTemplateTypes();
   const { nearest_container } = useSelector(
     (state) => state?.templateContainer || {},
   );
@@ -39,7 +40,11 @@ function CreateTemplateAction({ setOpenCreateModal, backRef }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nearest_container, pathname]);
 
-  if (!content || content['@type'] !== 'Document' || !nearest_container) {
+  if (
+    !content ||
+    !templateTypes.includes(content['@type']) ||
+    !nearest_container
+  ) {
     return null;
   }
 
