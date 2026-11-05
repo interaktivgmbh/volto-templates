@@ -162,9 +162,19 @@ msgstr ""
 msgid "selectTemplateButton"
 msgstr ""
 
+#. Default: "Content types"
+#: messages
+msgid "templateFormContentTypes"
+msgstr ""
+
 #. Default: "Description"
 #: messages
 msgid "templateFormDescription"
+msgstr ""
+
+#. Default: "No matching content types"
+#: messages
+msgid "templateFormNoContentTypes"
 msgstr ""
 
 #. Default: "This field is required"

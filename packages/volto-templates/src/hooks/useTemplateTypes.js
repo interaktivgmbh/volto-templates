@@ -8,9 +8,9 @@ import { TEMPLATE_TYPES_VOCABULARY } from '../constants/Vocabularies';
  * Content types a template can be released for (types with blocks),
  * provided by the backend vocabulary.
  *
- * @returns {string[]} portal type ids
+ * @returns {{ label: string, value: string }[]} vocabulary items
  */
-export default function useTemplateTypes() {
+export function useTemplateTypeOptions() {
   const dispatch = useDispatch();
   const vocabulary = useSelector(
     (state) => state.vocabularies?.[TEMPLATE_TYPES_VOCABULARY],
@@ -24,6 +24,13 @@ export default function useTemplateTypes() {
     }
   }, [vocabulary?.loaded, vocabulary?.loading, dispatch]);
 
-  const items = vocabulary?.items;
-  return useMemo(() => (items || []).map((item) => item.value), [items]);
+  return useMemo(() => vocabulary?.items || [], [vocabulary?.items]);
+}
+
+/**
+ * @returns {string[]} portal type ids a template can be released for
+ */
+export default function useTemplateTypes() {
+  const options = useTemplateTypeOptions();
+  return useMemo(() => options.map((option) => option.value), [options]);
 }

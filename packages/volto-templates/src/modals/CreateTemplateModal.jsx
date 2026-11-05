@@ -1,9 +1,10 @@
-import { useState, useRef, forwardRef } from 'react';
+import { useEffect, useState, useRef, forwardRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import {
   Button,
+  Dropdown,
   Header,
   Modal,
   ModalActions,
@@ -16,6 +17,7 @@ import Toast from '@plone/volto/components/manage/Toast/Toast';
 import messages from '../messages';
 import { createThumbnail } from '../actions';
 import { useModalKeyHandler } from '../hooks/useModalKeyHandler';
+import { useTemplateTypeOptions } from '../hooks/useTemplateTypes';
 
 /**
  * @typedef {object} ModalButtonsProps
@@ -75,6 +77,7 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [templateTypes, setTemplateTypes] = useState([]);
 
   const lastRef = useRef();
 
@@ -83,12 +86,28 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
   );
 
   const { data: content } = useSelector((state) => state?.content || {});
+  const templateTypeOptions = useTemplateTypeOptions();
+
+  const contentType = content?.['@type'];
+
+  // preselect the type of the page the template is created from
+  useEffect(() => {
+    if (open) {
+      setTemplateTypes(contentType ? [contentType] : []);
+      setMissingInputValues([]);
+    }
+  }, [open, contentType]);
 
   const onSubmit = () => {
     setIsSubmitDisabled(true);
 
-    if (title === '') {
-      setMissingInputValues((prev) => prev.concat(['template-title']));
+    const missing = [
+      ...(title === '' ? ['template-title'] : []),
+      ...(templateTypes.length === 0 ? ['template-types'] : []),
+    ];
+
+    if (missing.length > 0) {
+      setMissingInputValues(missing);
       setIsSubmitDisabled(false);
     } else {
       setMissingInputValues([]);
@@ -99,7 +118,7 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
           template_description: description || '',
           blocks: content?.blocks || [],
           blocks_layout: content?.blocks_layout || {},
-          template_types: [content?.['@type']],
+          template_types: templateTypes,
           '@type': 'Template',
         }),
       )
@@ -178,6 +197,42 @@ export const CreateTemplateModal = forwardRef((props, ref) => {
               placeholder={intl.formatMessage(messages.templateFormDescription)}
               onChange={(evt) => setDescription(evt.target.value)}
             />
+          </div>
+        </div>
+        <div className="fields template-types-row">
+          <div className="field required">
+            <label htmlFor="template-types">
+              {intl.formatMessage(messages.templateFormContentTypes)}
+            </label>
+            <Dropdown
+              className="template-types"
+              multiple
+              search
+              selection
+              fluid
+              searchInput={{ id: 'template-types' }}
+              disabled={isSubmitDisabled}
+              options={templateTypeOptions.map(({ label, value }) => ({
+                key: value,
+                text: label,
+                value,
+              }))}
+              value={templateTypes}
+              noResultsMessage={intl.formatMessage(
+                messages.templateFormNoContentTypes,
+              )}
+              onChange={(evt, { value }) => setTemplateTypes(value)}
+              onFocus={() =>
+                setMissingInputValues((prev) =>
+                  prev.filter((val) => val !== 'template-types'),
+                )
+              }
+            />
+            {missingInputValues.includes('template-types') ? (
+              <p className="required-field-popup">
+                {intl.formatMessage(messages.templateFormRequiredField)}
+              </p>
+            ) : null}
           </div>
         </div>
       </ModalContent>

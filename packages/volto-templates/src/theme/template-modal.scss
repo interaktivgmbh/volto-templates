@@ -53,6 +53,25 @@ body:not(.dimmable.dimmed.scrolling) {
       color: red;
     }
 
+    // keep the dropdown's own input out of the underlined field style
+    .field .ui.dropdown.template-types input.search {
+      height: auto;
+      padding: 0.58035714em 0;
+      border: none;
+      font-size: 1em;
+    }
+
+    // half width, so the open menu does not cover the right-aligned buttons
+    .fields.template-types-row .field {
+      flex: 0 0 calc(50% - 15px);
+    }
+
+    // about five entries, the rest scrolls (the field is searchable)
+    .field .ui.selection.dropdown.template-types .menu {
+      max-height: 13rem;
+      overflow-y: auto;
+    }
+
     .fields {
       display: flex;
       width: 100%;

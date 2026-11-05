@@ -33,6 +33,14 @@ const messages = defineMessages({
     id: 'templateFormDescription',
     defaultMessage: 'Description',
   },
+  templateFormContentTypes: {
+    id: 'templateFormContentTypes',
+    defaultMessage: 'Content types',
+  },
+  templateFormNoContentTypes: {
+    id: 'templateFormNoContentTypes',
+    defaultMessage: 'No matching content types',
+  },
   createTemplateError: {
     id: 'createTemplateError',
     defaultMessage: 'The template could not be created.',
