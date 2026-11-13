@@ -1,0 +1,1 @@
+The button to create a template is no longer shown on views with a reduced toolbar (edit, manage translations, add-on views such as translate), where it stood alone; it stays in the contents view.
