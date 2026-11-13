@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { matchRoutes } from 'react-router-config';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Plug } from '@plone/volto/components/manage/Pluggable';
@@ -23,6 +23,7 @@ function getSpreadObject(condition, obj) {
 function CreateTemplateAction({ setOpenCreateModal, backRef }) {
   const dispatch = useDispatch();
   const intl = useIntl();
+  const location = useLocation();
 
   const content = useSelector((state) => state.content?.data) || {};
   const templateTypes = useTemplateTypes();
@@ -44,6 +45,19 @@ function CreateTemplateAction({ setOpenCreateModal, backRef }) {
     !content ||
     !templateTypes.includes(content['@type']) ||
     !nearest_container
+  ) {
+    return null;
+  }
+
+  // Volto renders main.toolbar.top on views with a reduced toolbar too (edit,
+  // manage translations, add-on views such as translate), where the button
+  // would stand alone; getBaseUrl shortens exactly those. A template is made
+  // from saved content, not from content being edited. The contents view
+  // keeps the full toolbar.
+  const basePath = getBaseUrl(location.pathname);
+  if (
+    basePath !== location.pathname &&
+    location.pathname !== `${basePath}/contents`
   ) {
     return null;
   }
